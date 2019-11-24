@@ -15,13 +15,13 @@ public class App {
     public static void main(String[] args) {
 	System.out.println("Executing");
     }
-    
+
     /**
      * 
      * @return sum
      */
     public Integer onePlusOne() {
-	return 1+1;
+	return 1 + 1;
     }
 
 }
