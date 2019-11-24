@@ -19,6 +19,9 @@
       	<groupId>org.openjfx</groupId>
       	<artifactId>javafx-maven-plugin</artifactId>
       	<version>0.0.3</version>
+      	<configuration>
+      	  <mainClass>main.deliferoo.App</mainClass>
+      	</configuration>
       </plugin>
     </plugins>
   </build>
