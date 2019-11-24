@@ -1,5 +1,7 @@
 package main.deliferoo;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 /**
  * Main Application class for Del'IFeroo
  * 
