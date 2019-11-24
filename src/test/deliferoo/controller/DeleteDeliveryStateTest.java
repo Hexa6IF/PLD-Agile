@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 
 public class DeleteDeliveryStateTest {
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
+    @Test
+    public void test() {
+	fail("Not yet implemented");
+    }
 
 }
