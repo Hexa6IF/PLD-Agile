@@ -1,4 +1,4 @@
-package main.deliferoo.model;
+package model;
 
 public class Deliveries {
 

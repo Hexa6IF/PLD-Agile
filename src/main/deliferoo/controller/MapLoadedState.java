@@ -1,4 +1,4 @@
-package main.deliferoo.controller;
+package controller;
 
 public class MapLoadedState extends State {
 

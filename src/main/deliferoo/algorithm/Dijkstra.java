@@ -1,4 +1,4 @@
-package main.deliferoo.algorithm;
+package algorithm;
 
 public class Dijkstra {
 

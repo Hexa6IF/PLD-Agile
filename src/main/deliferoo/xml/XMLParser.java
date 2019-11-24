@@ -1,4 +1,4 @@
-package main.deliferoo.xml;
+package xml;
 
 public class XMLParser {
 
