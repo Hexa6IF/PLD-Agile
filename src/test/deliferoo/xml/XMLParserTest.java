@@ -1,4 +1,4 @@
-package test.deliferoo.xml;
+package xml;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
