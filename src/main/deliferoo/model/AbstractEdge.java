@@ -24,6 +24,17 @@ public abstract class AbstractEdge {
 	this.distance = nodeOrigin.calculateDistance(nodeDest);
     }
     /**
+     * @param nodeOrigin
+     * @param nodeDest
+     * @param distance
+     */
+    public AbstractEdge(Node nodeOrigin, Node nodeDest) {
+	this.nodeOrigin = nodeOrigin;
+	this.nodeDest = nodeDest;
+	this.distance = nodeOrigin.calculateDistance(nodeDest);
+    }
+
+    /**
      * @return the nodes
      */
     public Node[] getNodes() {
