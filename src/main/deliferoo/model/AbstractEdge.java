@@ -6,23 +6,23 @@ package model;
  */
 
 public abstract class AbstractEdge {
-    protected Node[] nodes;
     protected Node nodeOrigin;
     protected Node nodeDest;
     protected Float distance;
+    protected Edge[] edges;
     
     /**
-     * @param nodes
      * @param nodeOrigin
      * @param nodeDest
-     * @param distance
+     * @param edges
      */
-    public AbstractEdge(Node[] nodes, Node nodeOrigin, Node nodeDest) {
-	this.nodes = nodes;
+    public AbstractEdge(Node nodeOrigin, Node nodeDest, Edge[] edges) {
 	this.nodeOrigin = nodeOrigin;
 	this.nodeDest = nodeDest;
+	this.edges = edges;
 	this.distance = nodeOrigin.calculateDistance(nodeDest);
     }
+
     /**
      * @param nodeOrigin
      * @param nodeDest
@@ -34,18 +34,6 @@ public abstract class AbstractEdge {
 	this.distance = nodeOrigin.calculateDistance(nodeDest);
     }
 
-    /**
-     * @return the nodes
-     */
-    public Node[] getNodes() {
-        return this.nodes;
-    }
-    /**
-     * @param nodes the nodes to set
-     */
-    public void setNodes(Node[] nodes) {
-        this.nodes = nodes;
-    }
     /**
      * @return the nodeOrigin
      */
@@ -81,6 +69,20 @@ public abstract class AbstractEdge {
      */
     public void setDistance(Float distance) {
         this.distance = distance;
+    }
+
+    /**
+     * @return the edges
+     */
+    public Edge[] getEdges() {
+        return edges;
+    }
+
+    /**
+     * @param edges the edges to set
+     */
+    public void setEdges(Edge[] edges) {
+        this.edges = edges;
     }
     
     
