@@ -3,21 +3,33 @@ package view;
 import java.io.File;
 
 import controller.Controller;
+import javafx.geometry.Orientation;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Window {
     
-    private final Controller controller;
+    private Controller controller;
+    private Rectangle2D bounds;
     
     public Window(Controller controller) {
 	this.controller = controller;
+	this.bounds = Screen.getPrimary().getVisualBounds();
     }
     
     public void launchWindow() {
@@ -27,6 +39,11 @@ public class Window {
     
     private void buildAndShowStage(Stage stage) {
 	stage.setTitle("Del'IFeroo");
+	
+	stage.setX(this.bounds.getMinX());
+	stage.setY(this.bounds.getMinY());
+	stage.setWidth(this.bounds.getWidth());
+	stage.setHeight(this.bounds.getHeight());
 	
 	stage.setResizable(false);
 	
@@ -38,15 +55,17 @@ public class Window {
     private Scene getScene(Stage stage) {
 	BorderPane border = new BorderPane();
 	
-	VBox menu = createMenu(stage);
-	
-	border.setTop(menu);
+	border.setTop(createMenu(stage));
+	border.setRight(createSideBar());
+	border.setCenter(getMap());
 	
 	return new Scene(border);
     }
     
     private VBox createMenu(Stage stage) {
+	
 	FileChooser fileChooser = new FileChooser();
+	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
 	
 	Menu menuFile = new Menu("File");
 	Menu menuHelp = new Menu("Help");
@@ -75,5 +94,22 @@ public class Window {
 	return new VBox(menuBar);
     }
     
+    private VBox createSideBar() {	
+	VBox sideBar = new VBox();
+	
+	Rectangle rect = new Rectangle();
+	rect.setHeight(bounds.getHeight()/2);
+	rect.setWidth(bounds.getWidth()/3);
+	TableView<String> table = new TableView<String>();
+	table.setPrefSize(bounds.getWidth()/3, bounds.getHeight()/2);
+	
+	sideBar.setPrefWidth(bounds.getWidth()/3);
+	sideBar.getChildren().addAll(rect, table);
+
+	return sideBar;
+    }
     
+    private Rectangle getMap() {
+	return new Rectangle(500, 500);
+    }
 }
