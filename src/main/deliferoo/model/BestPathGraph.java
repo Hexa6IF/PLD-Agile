@@ -9,8 +9,8 @@ public class BestPathGraph extends AbstractGraph {
     /**
      * @param edges
      */
-    public BestPathGraph(BestPath[] edges) {
-	super(edges);
+    public BestPathGraph(BestPath[] edges, Node[] nodes) {
+	super(edges, nodes);
     }
     
 }

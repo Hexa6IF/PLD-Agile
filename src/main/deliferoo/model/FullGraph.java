@@ -10,8 +10,8 @@ public class FullGraph extends AbstractGraph {
     /**
      * @param edges
      */
-    public FullGraph(Edge[] edges) {
-	super(edges);
+    public FullGraph(Edge[] edges, Node[] nodes) {
+	super(edges, nodes);
     }
 
 }

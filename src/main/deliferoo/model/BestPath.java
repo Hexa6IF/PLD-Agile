@@ -6,14 +6,14 @@ package model;
  * @author louis
  */
 public class BestPath extends AbstractEdge {
+    private Edge[] edges;
 
     /**
-     * @param nodes
      * @param nodeOrigin
      * @param nodeDest
+     * @param edges
      */
-    public BestPath(Node[] nodes, Node nodeOrigin, Node nodeDest) {
-	super(nodes, nodeOrigin, nodeDest);
+    public BestPath(Node nodeOrigin, Node nodeDest, Edge[] edges) {
+	super(nodeOrigin, nodeDest, edges);
     }
-
 }
