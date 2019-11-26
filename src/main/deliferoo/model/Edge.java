@@ -1,5 +1,5 @@
 package model;
 
-public class Edge extends AbstractEdge {
+public class Edge {
 
 }

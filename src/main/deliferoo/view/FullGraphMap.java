@@ -2,12 +2,13 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
+
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ScatterChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
+import javafx.scene.shape.Circle;
 import model.Node;
-import model.AbstractEdge;
 
 /**
  * Class for displaying full map
@@ -15,13 +16,10 @@ import model.AbstractEdge;
  * @author sadsitha
  */
 public class FullGraphMap {
-    private final Float rectHeight = 400.0f;
-    private final Float rectWidth = 400.0f;
-    
-    private BorderPane pane;
+
+    private XYChart<Number, Number> chart;
     private List<Node> nodeList;
-    private Integer counter;
-    private Rectangle map;
+    private List<Circle> markerList;
 
     /**
      * Constructor
@@ -29,58 +27,93 @@ public class FullGraphMap {
      * @param nodeList List of nodes to display on graph
      */
     public FullGraphMap(List<Node> nodeList) {
-	this.pane = new BorderPane();
 	this.nodeList = nodeList;
-	this.map = new Rectangle();
-	this.counter = 0;
-	
-	this.setBaseMap();
+	this.markerList = new ArrayList<Circle>();
     }
-    
+
     /**
      * Constructor - with empty parameters
      * 
      */
     public FullGraphMap() {
-	this.pane = new BorderPane();
 	this.nodeList = new ArrayList<Node>();
-	this.map = new Rectangle();
-	this.counter = 0;
+	this.markerList = new ArrayList<Circle>();
 	
-	this.setBaseMap();
+	/* Create example node list */
+	this.nodeList.add(new Node(1l, 10.0f, 20.0f));
+	this.nodeList.add(new Node(2l, 20.0f, 10.0f));
+	this.nodeList.add(new Node(3l, 15.0f, 15.0f));
     }
 
     /*
-     * Returns a border pane containing the map
+     * Returns a chart representing the map
      * 
-     * @return pane BorderPane containing current map
+     * @return chart XYChart containing current map
      */
-    public BorderPane getMap() {
-	this.pane.setCenter(map);
-	return this.pane;
+    public XYChart<Number, Number> getMap() {
+	this.mapNodes();
+	return this.chart;
     }
-    
+
+    private void mapNodes() {
+
+	Float maxLatitude = Float.NEGATIVE_INFINITY;
+	Float minLatitude = Float.POSITIVE_INFINITY;
+	Float maxLongitude = Float.NEGATIVE_INFINITY;
+	Float minLongitude = Float.POSITIVE_INFINITY;
+
+	/* Get max/min longitude/latitude from node list */
+	for (Node node : this.nodeList) {
+	    if (node.getLatitude() > maxLatitude) {
+		maxLatitude = node.getLatitude();
+	    }
+
+	    if (node.getLatitude() < minLatitude) {
+		minLatitude = node.getLatitude();
+	    }
+
+	    if (node.getLongitude() > maxLongitude) {
+		maxLongitude = node.getLongitude();
+	    }
+
+	    if (node.getLongitude() < minLongitude) {
+		minLongitude = node.getLongitude();
+	    }
+	}
+	
+	/* get step */
+	Float stepX = ((maxLongitude - minLongitude)/10);
+	Float stepY = ((maxLatitude - minLatitude)/10);
+
+	NumberAxis xAxis = new NumberAxis(minLongitude-stepX, maxLongitude+stepX, stepX);
+	NumberAxis yAxis = new NumberAxis(minLatitude-stepY, maxLatitude+stepY, stepY);
+	this.chart = new ScatterChart<Number, Number>(xAxis, yAxis);
+	this.parametriseChart();
+
+	Series<Number, Number> intersectionMarkers = new Series<Number, Number>();
+	intersectionMarkers.setName("Intersection markers");
+
+	for (Node node : this.nodeList) {
+	    intersectionMarkers.getData()
+		    .add(new XYChart.Data<Number, Number>(node.getLongitude(), node.getLatitude()));
+	}
+
+	this.chart.getData().add(intersectionMarkers);
+
+    }
+
     /*
-     * Creates the map background
+     * Parametrises chart to desired look
      * 
-     * @return map Rectangle to represent map background
      */
-    private void setBaseMap() {
-	this.map.setWidth(rectWidth); 
-	this.map.setHeight(rectHeight);
-	this.map.setFill(Color.WHITE);
-    }
-    
-    private void mapNodes(Rectangle map) {
-	Double xOrigin = map.getX();
-	Double yOrigin = map.getY();
-	Double maxLatitude = Double.NEGATIVE_INFINITY;
-	Double minLatitude = Double.POSITIVE_INFINITY;
-	Double maxLongitude = Double.NEGATIVE_INFINITY;
-	Double minLongitude = Double.POSITIVE_INFINITY;
-	this.nodeList.forEach(node->{
-	    
-	});
+    private void parametriseChart() {
+	this.chart.setLegendVisible(false);
+	this.chart.setHorizontalGridLinesVisible(false);
+	this.chart.setVerticalGridLinesVisible(false);
+	this.chart.getYAxis().setTickLabelsVisible(false);
+	this.chart.getYAxis().setOpacity(0);
+	this.chart.getXAxis().setTickLabelsVisible(false);
+	this.chart.getXAxis().setOpacity(0);
     }
 
 }

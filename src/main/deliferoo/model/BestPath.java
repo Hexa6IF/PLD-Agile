@@ -1,5 +1,5 @@
 package model;
 
-public class BestPath extends AbstractEdge {
+public class BestPath {
 
 }
