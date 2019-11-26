@@ -10,11 +10,15 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Edge;
+import model.FullGraph;
+import model.Node;
 
 public class Window {
     
@@ -25,7 +29,18 @@ public class Window {
     public Window(Controller controller) {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
-	this.fullGraphMap = new FullGraphMap ();
+	
+	Node n1 = new Node(25175791l, 45.75406f, 4.857418f);
+	Node n2 = new Node(2129259178l, 45.750404f, 4.8744674f);
+	Node n3 = new Node(26086130l, 45.75871f, 4.8784823f);
+	
+	Edge e1 = new Edge(n1, n2, 10f, "ouais");
+	Edge e2 = new Edge(n2, n3, 20f, "yep");
+	
+	Edge[] e = {e1, e2};
+	Node[] n = {n1, n2, n3};
+	
+	this.fullGraphMap = new FullGraphMap(new FullGraph(e, n, 45.750404f, 45.75871f, 4.857418f, 4.8784823f), 400f);
     }
 
     public void launchWindow() {
@@ -49,10 +64,11 @@ public class Window {
 
     private Scene getScene(Stage stage) {
 	BorderPane border = new BorderPane();
+	
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
-	border.setCenter(getMap());
-	border.setLeft(this.fullGraphMap.getMap());
+	border.setCenter(this.fullGraphMap.getMap());
+	
 	return new Scene(border);
     }
 
@@ -101,9 +117,5 @@ public class Window {
 	sideBar.getChildren().addAll(rect, table);
 
 	return sideBar;
-    }
-    
-    private Rectangle getMap() {
-	return new Rectangle(500, 500);
     }
 }

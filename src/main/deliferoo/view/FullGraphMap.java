@@ -3,12 +3,21 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
+import javafx.geometry.Insets;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import model.Edge;
+import model.FullGraph;
 import model.Node;
 
 /**
@@ -18,107 +27,38 @@ import model.Node;
  */
 public class FullGraphMap {
 
-    private XYChart<Number, Number> chart;
-    private List<Node> nodeList;
-    private List<Circle> markerList;
-    private XYChart.Series series = new XYChart.Series();
+    private Pane map;
+    
+    private FullGraph mapGraph;
+    private Float dimension;
 
     /**
      * Constructor
      * 
      * @param nodeList List of nodes to display on graph
      */
-    public FullGraphMap(List<Node> nodeList) {
-	this.nodeList = nodeList;
-	this.markerList = new ArrayList<Circle>();
+    public FullGraphMap(FullGraph mapGraph, Float dimension) {
+	this.map = new Pane();
+	this.map.setPrefSize(500, 500);
+	this.mapGraph = mapGraph;
+	this.dimension = dimension;
     }
-
-    /**
-     * Constructor - with empty parameters
-     * 
-     */
-    public FullGraphMap() {
-	this.nodeList = new ArrayList<Node>();
-	this.markerList = new ArrayList<Circle>();
-	
-	/* Create example node list */
-	this.nodeList.add(new Node(1l, 10.0f, 20.0f));
-	this.nodeList.add(new Node(2l, 20.0f, 10.0f));
-	this.nodeList.add(new Node(3l, 15.0f, 15.0f));
-	this.nodeList.add(new Node(4l, 20.0f, 20.0f));
-	this.nodeList.add(new Node(5l, 17.0f, 20.0f));
+    
+    public Pane getMap() {
+	draw();
+	this.map.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, new Insets(5))));
+	return this.map;
     }
-
-    /*
-     * Returns a chart representing the map
-     * 
-     * @return chart XYChart containing current map
-     */
-    public XYChart<Number, Number> getMap() {
-	this.mapNodes();
-	return this.chart;
-    }
-
-    private void mapNodes() {
-
-	Float maxLatitude = Float.NEGATIVE_INFINITY;
-	Float minLatitude = Float.POSITIVE_INFINITY;
-	Float maxLongitude = Float.NEGATIVE_INFINITY;
-	Float minLongitude = Float.POSITIVE_INFINITY;
-
-	/* Get max/min longitude/latitude from node list */
-	for (Node node : this.nodeList) {
-	    if (node.getLatitude() > maxLatitude) {
-		maxLatitude = node.getLatitude();
-	    }
-
-	    if (node.getLatitude() < minLatitude) {
-		minLatitude = node.getLatitude();
-	    }
-
-	    if (node.getLongitude() > maxLongitude) {
-		maxLongitude = node.getLongitude();
-	    }
-
-	    if (node.getLongitude() < minLongitude) {
-		minLongitude = node.getLongitude();
-	    }
+    
+    public void draw() {
+	for(Edge e : (Edge[])mapGraph.getEdges()) {
+	    float x1 = this.dimension*((e.getNodeOrigin().getLatitude() - this.mapGraph.getMinLatitude()) / (this.mapGraph.getMaxLatitude() - this.mapGraph.getMinLatitude()));
+	    float y1 = this.dimension*((e.getNodeOrigin().getLongitude() - this.mapGraph.getMinLongitude()) / (this.mapGraph.getMaxLongitude() - this.mapGraph.getMinLongitude()));
+	    float x2 = this.dimension*((e.getNodeDest().getLatitude() - this.mapGraph.getMinLatitude()) / (this.mapGraph.getMaxLatitude() - this.mapGraph.getMinLatitude()));
+	    float y2 = this.dimension*((e.getNodeDest().getLongitude() - this.mapGraph.getMinLongitude()) / (this.mapGraph.getMaxLongitude() - this.mapGraph.getMinLongitude()));
+	    
+	    Line l = new Line(x1, y1, x2, y2);
+	    this.map.getChildren().add(l);
 	}
-	
-	/* get step */
-	Float stepX = ((maxLongitude - minLongitude)/10);
-	Float stepY = ((maxLatitude - minLatitude)/10);
-
-	NumberAxis xAxis = new NumberAxis(minLongitude-stepX, maxLongitude+stepX, stepX);
-	NumberAxis yAxis = new NumberAxis(minLatitude-stepY, maxLatitude+stepY, stepY);
-	this.chart = new LineChart<Number, Number>(xAxis, yAxis);
-	this.parametriseChart();
-
-
-	for (Node node : this.nodeList) {
-
-		Series<Number, Number> intersectionMarkers = new Series<Number, Number>();
-		intersectionMarkers.setName("Intersection markers");
-	    intersectionMarkers.getData()
-		    .add(new LineChart.Data<Number, Number>(node.getLongitude(), node.getLatitude()));
-	    this.chart.getData().add(intersectionMarkers);
-	}
-
-
     }
-
-    /*
-     * Parametrises chart to desired look
-     * 
-     */
-    private void parametriseChart() {
-	this.chart.setLegendVisible(false);
-	this.chart.setHorizontalGridLinesVisible(false);
-	this.chart.setVerticalGridLinesVisible(false);
-	this.chart.getYAxis().setTickLabelsVisible(false);
-	this.chart.getYAxis().setOpacity(0);
-	this.chart.getXAxis().setTickLabelsVisible(false);
-	this.chart.getXAxis().setOpacity(0);
-    }
-
 }
