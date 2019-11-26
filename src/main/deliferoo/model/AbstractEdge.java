@@ -6,35 +6,34 @@ package model;
  */
 
 public abstract class AbstractEdge {
-    protected Node[] nodes;
     protected Node nodeOrigin;
     protected Node nodeDest;
-    protected Long distance;
+    protected Float distance;
+    protected Edge[] edges;
     
     /**
-     * @param nodes
+     * @param nodeOrigin
+     * @param nodeDest
+     * @param edges
+     */
+    public AbstractEdge(Node nodeOrigin, Node nodeDest, Edge[] edges) {
+	this.nodeOrigin = nodeOrigin;
+	this.nodeDest = nodeDest;
+	this.edges = edges;
+	this.distance = nodeOrigin.calculateDistance(nodeDest);
+    }
+
+    /**
      * @param nodeOrigin
      * @param nodeDest
      * @param distance
      */
-    public AbstractEdge(Node[] nodes, Node nodeOrigin, Node nodeDest) {
-	this.nodes = nodes;
+    public AbstractEdge(Node nodeOrigin, Node nodeDest) {
 	this.nodeOrigin = nodeOrigin;
 	this.nodeDest = nodeDest;
-	//this.distance = 
+	this.distance = nodeOrigin.calculateDistance(nodeDest);
     }
-    /**
-     * @return the nodes
-     */
-    public Node[] getNodes() {
-        return this.nodes;
-    }
-    /**
-     * @param nodes the nodes to set
-     */
-    public void setNodes(Node[] nodes) {
-        this.nodes = nodes;
-    }
+
     /**
      * @return the nodeOrigin
      */
@@ -62,14 +61,28 @@ public abstract class AbstractEdge {
     /**
      * @return the distance
      */
-    public Long getDistance() {
+    public Float getDistance() {
         return this.distance;
     }
     /**
      * @param distance the distance to set
      */
-    public void setDistance(Long distance) {
+    public void setDistance(Float distance) {
         this.distance = distance;
+    }
+
+    /**
+     * @return the edges
+     */
+    public Edge[] getEdges() {
+        return edges;
+    }
+
+    /**
+     * @param edges the edges to set
+     */
+    public void setEdges(Edge[] edges) {
+        this.edges = edges;
     }
     
     
