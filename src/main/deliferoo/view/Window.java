@@ -3,6 +3,8 @@ package view;
 import java.io.File;
 
 import controller.Controller;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -17,15 +19,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import view.NodeTextView.NodeType;
 
 public class Window {
 
     private Controller controller;
     private Rectangle2D bounds;
+    private ObservableList<NodeTextView> nodeTextViews;
+    private TableBox tableBox;
 
     public Window(Controller controller) {
 	this.controller = controller;
@@ -54,11 +60,14 @@ public class Window {
 
     private Scene getScene(Stage stage) {
 	BorderPane border = new BorderPane();
+	
+	/* Initialise Node text view */
+	this.initialiseTable();
 
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
 	border.setCenter(getMap());
-
+	
 	return new Scene(border);
     }
 
@@ -104,9 +113,24 @@ public class Window {
 	table.setPrefSize(bounds.getWidth() / 3, bounds.getHeight() / 2);
 
 	sideBar.setPrefWidth(bounds.getWidth() / 3);
-	sideBar.getChildren().addAll(rect, table);
+	sideBar.getChildren().addAll(this.tableBox.getTable(), table);
 
 	return sideBar;
+    }
+
+    /*
+     * Creates the text view of special nodes
+     * 
+     */
+    private void initialiseTable() {
+	//example data to remove
+	this.nodeTextViews = FXCollections.observableArrayList(
+		new NodeTextView(1,Color.BLACK,NodeType.PICKUP,7f,"14h34"),
+		new NodeTextView(2,Color.BLACK,NodeType.PICKUP,10f,"14h34"),
+		new NodeTextView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"),
+		new NodeTextView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34")
+	);
+	this.tableBox = new TableBox(this.nodeTextViews);
     }
 
     private Rectangle getMap() {
