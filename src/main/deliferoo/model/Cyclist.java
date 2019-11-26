@@ -1,9 +1,9 @@
 package model;
 
 /**
- * Main Application class for Del'IFeroo
+ * Model class for representing the cyclist 
  * 
- * @author sadsitha
+ * @author louis
  */
 public class Cyclist {
     private String name;
