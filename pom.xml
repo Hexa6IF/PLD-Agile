@@ -6,7 +6,10 @@
   <name>PLD Agile</name>
   <description>Application to compute optimal paths for deliveries.</description>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/main/deliferoo</sourceDirectory>
+    <testSourceDirectory>src/test/deliferoo</testSourceDirectory>
+    <outputDirectory>target/classes</outputDirectory>
+    <testOutputDirectory>target/test-classes</testOutputDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
