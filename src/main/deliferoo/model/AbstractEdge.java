@@ -9,7 +9,7 @@ public abstract class AbstractEdge {
     protected Node[] nodes;
     protected Node nodeOrigin;
     protected Node nodeDest;
-    protected Long distance;
+    protected Float distance;
     
     /**
      * @param nodes
@@ -21,7 +21,7 @@ public abstract class AbstractEdge {
 	this.nodes = nodes;
 	this.nodeOrigin = nodeOrigin;
 	this.nodeDest = nodeDest;
-	//this.distance = 
+	this.distance = nodeOrigin.calculateDistance(nodeDest);
     }
     /**
      * @return the nodes
@@ -62,13 +62,13 @@ public abstract class AbstractEdge {
     /**
      * @return the distance
      */
-    public Long getDistance() {
+    public Float getDistance() {
         return this.distance;
     }
     /**
      * @param distance the distance to set
      */
-    public void setDistance(Long distance) {
+    public void setDistance(Float distance) {
         this.distance = distance;
     }
     
