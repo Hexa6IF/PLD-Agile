@@ -24,6 +24,7 @@ public class App extends Application {
     }
 
     /**
+     * Sums one and one
      * 
      * @return sum
      */
