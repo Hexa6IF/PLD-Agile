@@ -28,7 +28,7 @@ public class Delivery {
      * @return the deliveryNode
      */
     public Node getDeliveryNode() {
-        return deliveryNode;
+        return this.deliveryNode;
     }
     /**
      * @param deliveryNode the deliveryNode to set
@@ -40,7 +40,7 @@ public class Delivery {
      * @return the pickupNode
      */
     public Node getPickupNode() {
-        return pickupNode;
+        return this.pickupNode;
     }
     /**
      * @param pickupNode the pickupNode to set
@@ -52,7 +52,7 @@ public class Delivery {
      * @return the deliveryTimelength
      */
     public Integer getDeliveryTimelength() {
-        return deliveryTimelength;
+        return this.deliveryTimelength;
     }
     /**
      * @param deliveryTimelength the deliveryTimelength to set
@@ -64,7 +64,7 @@ public class Delivery {
      * @return the pickupTimelength
      */
     public Integer getPickupTimelength() {
-        return pickupTimelength;
+        return this.pickupTimelength;
     }
     /**
      * @param pickupTimelength the pickupTimelength to set

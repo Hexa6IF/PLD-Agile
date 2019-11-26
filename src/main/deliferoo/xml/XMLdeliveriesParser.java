@@ -26,7 +26,7 @@ public class XMLdeliveriesParser {
 	NodeList nInfo = doc.getElementsByTagName("entrepot");
 	
 	Node nNodeInfo = nInfo.item(0);
-	System.out.println("\nType de l'element courant :" + nNodeInfo.getNodeName());
+	//System.out.println("\nType de l'element courant :" + nNodeInfo.getNodeName());
 	
 	for (int temp1 = 0; temp1 < nInfo.getLength(); temp1++) {
 
@@ -50,10 +50,10 @@ public class XMLdeliveriesParser {
 			
 	System.out.println("*********************************");
 	NodeList nList = doc.getElementsByTagName("livraison");
-	System.out.println("-----------");
+	
 
 	
-	for (int temp = 1; temp < nList.getLength(); temp++) {
+	for (int temp = 0; temp < nList.getLength(); temp++) {
 
 		Node nNode = nList.item(temp);
 				
@@ -68,7 +68,7 @@ public class XMLdeliveriesParser {
 			System.out.println("Adresse de livraison : " + eElement.getAttribute("adresseLivraison"));
 			System.out.println("Adresse d'enlevement : " + eElement.getAttribute("adresseEnlevement"));
 			
-			count = count++;
+			count = count+1;
 
 		}
 		System.out.println("-----------");

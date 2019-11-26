@@ -26,7 +26,26 @@ class XMLdeliveriesParserTest {
     @Test
     void testsize1() throws SAXException, IOException {
 	
-	File fXmlFile = new File("C:\\Users\\greni\\Downloads\\fichiersXML2019\\fichiersXML2019\\demandePetit1.xml");
+	File fXmlFile = new File("resources\\demandePetit1.xml");
+	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder dBuilder = null;
+	try {
+	    dBuilder = dbFactory.newDocumentBuilder();
+	} catch (ParserConfigurationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	Document doc = dBuilder.parse(fXmlFile);
+	Integer count = XMLdeliveriesParser.parser(doc);
+	
+	assertEquals(1, count);
+	
+    }
+
+    @Test
+    void testsize2() throws SAXException, IOException {
+	
+	File fXmlFile = new File("resources\\demandePetit2.xml");
 	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 	DocumentBuilder dBuilder = null;
 	try {
@@ -41,10 +60,11 @@ class XMLdeliveriesParserTest {
 	assertEquals(2, count);
 	
     }
-
-    	void testsize2() throws SAXException, IOException {
+    
+    @Test
+    void testsize3() throws SAXException, IOException {
 	
-	File fXmlFile = new File("C:\\Users\\greni\\Downloads\\fichiersXML2019\\fichiersXML2019\\demandePetit2.xml");
+	File fXmlFile = new File("resources\\demandeMoyen3.xml");
 	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 	DocumentBuilder dBuilder = null;
 	try {
@@ -56,7 +76,64 @@ class XMLdeliveriesParserTest {
 	Document doc = dBuilder.parse(fXmlFile);
 	Integer count = XMLdeliveriesParser.parser(doc);
 	
-	assertEquals(2, count);
+	assertEquals(3, count);
+	
+    }
+    
+    @Test
+    void testsize5() throws SAXException, IOException {
+	
+	File fXmlFile = new File("resources\\demandeMoyen5.xml");
+	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder dBuilder = null;
+	try {
+	    dBuilder = dbFactory.newDocumentBuilder();
+	} catch (ParserConfigurationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	Document doc = dBuilder.parse(fXmlFile);
+	Integer count = XMLdeliveriesParser.parser(doc);
+	
+	assertEquals(5, count);
+	
+    }
+    
+    @Test
+    void testsize7() throws SAXException, IOException {
+	
+	File fXmlFile = new File("resources\\demandeGrand7.xml");
+	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder dBuilder = null;
+	try {
+	    dBuilder = dbFactory.newDocumentBuilder();
+	} catch (ParserConfigurationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	Document doc = dBuilder.parse(fXmlFile);
+	Integer count = XMLdeliveriesParser.parser(doc);
+	
+	assertEquals(7, count);
+	
+    }
+    
+    @Test
+    void testsize9() throws SAXException, IOException {
+	
+	File fXmlFile = new File("resources\\demandeGrand9.xml");
+	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder dBuilder = null;
+	try {
+	    dBuilder = dbFactory.newDocumentBuilder();
+	} catch (ParserConfigurationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	Document doc = dBuilder.parse(fXmlFile);
+	Integer count = XMLdeliveriesParser.parser(doc);
+	
+	assertEquals(9, count);
 	
     }
 
