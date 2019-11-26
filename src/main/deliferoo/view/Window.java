@@ -3,19 +3,13 @@ package view;
 import java.io.File;
 
 import controller.Controller;
-import javafx.geometry.Orientation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -26,17 +20,19 @@ public class Window {
     
     private Controller controller;
     private Rectangle2D bounds;
+    private FullGraphMap fullGraphMap;
     
     public Window(Controller controller) {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
+	this.fullGraphMap = new FullGraphMap ();
     }
-    
+
     public void launchWindow() {
 	Stage stage = new Stage();
-	buildAndShowStage(stage);	
+	buildAndShowStage(stage);
     }
-    
+
     private void buildAndShowStage(Stage stage) {
 	stage.setTitle("Del'IFeroo");
 	
@@ -46,51 +42,49 @@ public class Window {
 	stage.setHeight(this.bounds.getHeight());
 	
 	stage.setResizable(false);
-	
 	stage.setScene(getScene(stage));
-	
+
 	stage.show();
     }
-    
+
     private Scene getScene(Stage stage) {
 	BorderPane border = new BorderPane();
-	
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
 	border.setCenter(getMap());
-	
+	border.setLeft(this.fullGraphMap.getMap());
 	return new Scene(border);
     }
-    
+
     private VBox createMenu(Stage stage) {
 	
 	FileChooser fileChooser = new FileChooser();
 	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-	
+
 	Menu menuFile = new Menu("File");
 	Menu menuHelp = new Menu("Help");
-	
+
 	MenuItem loadMap = new MenuItem("Load Map...");
 	MenuItem loadDeliveries = new MenuItem("Load Deliveries...");
-	
+
 	MenuItem about = new MenuItem("About");
-	
+
 	MenuBar menuBar = new MenuBar();
-	
+
 	menuFile.getItems().add(loadMap);
 	menuFile.getItems().add(loadDeliveries);
-	
+
 	menuHelp.getItems().add(about);
-	
+
 	loadMap.setOnAction(e -> {
 	    File mapFile = fileChooser.showOpenDialog(stage);
 	});
 	loadDeliveries.setOnAction(e -> {
 	    File deliveriesFile = fileChooser.showOpenDialog(stage);
 	});
-	
+
 	menuBar.getMenus().addAll(menuFile, menuHelp);
-	
+
 	return new VBox(menuBar);
     }
     
