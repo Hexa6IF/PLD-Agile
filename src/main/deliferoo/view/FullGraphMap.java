@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -20,6 +21,7 @@ public class FullGraphMap {
     private XYChart<Number, Number> chart;
     private List<Node> nodeList;
     private List<Circle> markerList;
+    private XYChart.Series series = new XYChart.Series();
 
     /**
      * Constructor
@@ -43,6 +45,8 @@ public class FullGraphMap {
 	this.nodeList.add(new Node(1l, 10.0f, 20.0f));
 	this.nodeList.add(new Node(2l, 20.0f, 10.0f));
 	this.nodeList.add(new Node(3l, 15.0f, 15.0f));
+	this.nodeList.add(new Node(4l, 20.0f, 20.0f));
+	this.nodeList.add(new Node(5l, 17.0f, 20.0f));
     }
 
     /*
@@ -87,18 +91,19 @@ public class FullGraphMap {
 
 	NumberAxis xAxis = new NumberAxis(minLongitude-stepX, maxLongitude+stepX, stepX);
 	NumberAxis yAxis = new NumberAxis(minLatitude-stepY, maxLatitude+stepY, stepY);
-	this.chart = new ScatterChart<Number, Number>(xAxis, yAxis);
+	this.chart = new LineChart<Number, Number>(xAxis, yAxis);
 	this.parametriseChart();
 
-	Series<Number, Number> intersectionMarkers = new Series<Number, Number>();
-	intersectionMarkers.setName("Intersection markers");
 
 	for (Node node : this.nodeList) {
+
+		Series<Number, Number> intersectionMarkers = new Series<Number, Number>();
+		intersectionMarkers.setName("Intersection markers");
 	    intersectionMarkers.getData()
-		    .add(new XYChart.Data<Number, Number>(node.getLongitude(), node.getLatitude()));
+		    .add(new LineChart.Data<Number, Number>(node.getLongitude(), node.getLatitude()));
+	    this.chart.getData().add(intersectionMarkers);
 	}
 
-	this.chart.getData().add(intersectionMarkers);
 
     }
 
