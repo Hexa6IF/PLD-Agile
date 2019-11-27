@@ -10,8 +10,7 @@ import java.lang.Math;
  */
 
 public class Node {
-    private final Float EARTH_RADIUS =  Float.valueOf((float)6371.0);
-    private final Float PI_DEGREES = Float.valueOf((float)180.0);
+    
     private Long idNode;
     private Float latitude;
     private Float longitude;
@@ -26,29 +25,6 @@ public class Node {
 	this.idNode = idNode;
 	this.latitude = latitude;
 	this.longitude = longitude;
-    }
-    
-    
-    /**
-     * Calculate the distance between 2 Nodes in kilometers
-     * 
-     * @param otherNode
-     * @return distance
-     */
-    public Float calculateDistance(Node otherNode) {
-	Float lat1 = Float.valueOf(this.latitude * (float)Math.PI / PI_DEGREES);
-	Float lat2 = Float.valueOf(otherNode.getLatitude() * (float)Math.PI / PI_DEGREES);
-	Float long1 = Float.valueOf(this.longitude * (float)Math.PI / PI_DEGREES);
-	Float long2 = Float.valueOf(otherNode.getLongitude() * (float)Math.PI / PI_DEGREES);
-	
-	Float dLat = lat2 - lat1;
-	Float dLong = long2 - long1;
-	Float calcul1 = (float)(Math.sin(dLat / 2.0) * Math.sin(dLat / 2.0) +
-		Math.sin(dLong / 2.0) * Math.sin(dLong / 2.0) * Math.cos(lat1) *
-		Math.cos(lat2));
-	Float calcul2 = (float)(2.0 * Math.atan2((double)Math.sqrt(calcul1), (double)Math.sqrt(1.0 - calcul1)));
-	Float distance = EARTH_RADIUS * calcul2;
-	return distance;
     }
 
     /**

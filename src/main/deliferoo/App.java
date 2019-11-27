@@ -31,7 +31,4 @@ public class App extends Application {
     public Integer onePlusOne() {
 	return 1 + 1;
     }
-
-    
-
 }
