@@ -12,8 +12,8 @@ public class Edge extends AbstractEdge {
      * @param nodeOrigin
      * @param nodeDest
      */
-    public Edge(Node nodeOrigin, Node nodeDest) {
-	super(nodeOrigin, nodeDest);
+    public Edge(Node nodeOrigin, Node nodeDest, Float distance) {
+	super(nodeOrigin, nodeDest, distance);
     }
 
     /**
