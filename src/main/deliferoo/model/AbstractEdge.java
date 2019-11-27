@@ -16,11 +16,11 @@ public abstract class AbstractEdge {
      * @param nodeDest
      * @param edges
      */
-    public AbstractEdge(Node nodeOrigin, Node nodeDest, Edge[] edges) {
+    public AbstractEdge(Node nodeOrigin, Node nodeDest, Float distance, Edge[] edges) {
 	this.nodeOrigin = nodeOrigin;
 	this.nodeDest = nodeDest;
 	this.edges = edges;
-	this.distance = nodeOrigin.calculateDistance(nodeDest);
+	this.distance = distance;
     }
 
     /**
@@ -28,10 +28,10 @@ public abstract class AbstractEdge {
      * @param nodeDest
      * @param distance
      */
-    public AbstractEdge(Node nodeOrigin, Node nodeDest) {
+    public AbstractEdge(Node nodeOrigin, Node nodeDest, Float distance) {
 	this.nodeOrigin = nodeOrigin;
 	this.nodeDest = nodeDest;
-	this.distance = nodeOrigin.calculateDistance(nodeDest);
+	this.distance = distance;
     }
 
     /**
