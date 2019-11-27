@@ -9,21 +9,22 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
+
 public class XMLParserTest {
 
     @Test
     public void test() {
 
-	  try {
-	      File fXmlFile = new File("C:\\Users\\PC\\Downloads\\fichiersXML2019\\fichiersXML2019\\petitPlan.xml");
-	      DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-	      DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-             Document doc = dBuilder.parse(fXmlFile);
-             XMLParser.parserxml(doc);
-             assertEquals(616,XMLParser.get1());
-             assertEquals(308,XMLParser.get2());
-                }
-	  catch(Exception e) {}
+	try {
+	    File fXmlFile = new File("resources\\petitPlan.xml");
+	    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	    Document doc = dBuilder.parse(fXmlFile);
+	    XMLParser.parserxml(doc);
+	    assertEquals(616, XMLParser.get1());
+	    assertEquals(308, XMLParser.get2());
+	} catch (Exception e) {
+	}
     }
 
 }

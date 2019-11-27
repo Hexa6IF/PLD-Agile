@@ -1,7 +1,19 @@
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+
+import org.xml.sax.SAXException;
+
 import controller.Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.Window;
+import xml.XMLParser;
 /**
  * Main Application class for Del'IFeroo
  * 
@@ -20,7 +32,8 @@ public class App extends Application {
      * @param args
      */
     public static void main(String[] args) {
-	launch(args);
+	//launch(args);
+	
     }
 
     /**
