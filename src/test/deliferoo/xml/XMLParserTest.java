@@ -28,8 +28,8 @@ public class XMLParserTest {
 	    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 	    Document doc = dBuilder.parse(fXmlFile);
 	    parser.mapParser(doc);
-	    assertEquals(308, parser.get1());
-	    assertEquals(616, parser.get2());
+	    assertEquals(308, parser.getNbNodes());
+	    assertEquals(616, parser.getNbEdges());
 	} catch (Exception e) {
 	    fail(e);
 	}

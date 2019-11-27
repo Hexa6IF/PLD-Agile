@@ -11,8 +11,8 @@ import model.Edge;
 import model.FullGraph;
 
 public class XMLParser {
-    private Integer count1 = 0;
-    private Integer count2 = 0;
+    private Integer nbNodes = 0;
+    private Integer nbEdges = 0;
 
     public FullGraph mapParser(Document doc) {
 	LinkedList<model.Node> nodes = new LinkedList<model.Node>();
@@ -28,7 +28,7 @@ public class XMLParser {
 			    Float.parseFloat(eElement.getAttribute("latitude")),
 			    Float.parseFloat(eElement.getAttribute("longitude")));
 		    nodes.add(node);
-		    count1 = count1 + 1;
+		    nbNodes += 1;
 		}
 	    }
 	    for (int temp = 0; temp < List.getLength(); temp++) {
@@ -43,7 +43,7 @@ public class XMLParser {
 			    Float.parseFloat(eElement.getAttribute("longueur")),
 				    eElement.getAttribute("nomRue"));
 		    edges.add(edge);
-		    count2 = count2 + 1;
+		    nbEdges += 1;
 		}
 	    }
 	} catch (Exception e) {
@@ -64,11 +64,11 @@ public class XMLParser {
 	throw new Exception("node not found");
     }
 
-    public Integer get1() {
-	return this.count1;
+    public Integer getNbNodes() {
+	return this.nbNodes;
     }
 
-    public Integer get2() {
-	return this.count2;
+    public Integer getNbEdges() {
+	return this.nbEdges;
     }
 }
