@@ -1,5 +1,7 @@
 package model;
+
 import java.lang.Math;
+
 /**
  * Model class.
  * A node corresponds to a place within a city,
