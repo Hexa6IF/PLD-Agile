@@ -15,7 +15,6 @@ public class XMLParser {
     private Integer count2 = 0;
 
     public FullGraph mapParser(Document doc) {
-	System.out.println("beginning of parsing");
 	LinkedList<model.Node> nodes = new LinkedList<model.Node>();
 	LinkedList<Edge> edges = new LinkedList<Edge>();
 	try {
@@ -29,20 +28,12 @@ public class XMLParser {
 			    Float.parseFloat(eElement.getAttribute("latitude")),
 			    Float.parseFloat(eElement.getAttribute("longitude")));
 		    nodes.add(node);
-		    /*
-		     * System.out.println("id : " + eElement.getAttribute("id"));
-		     * System.out.println("latitude: " + eElement.getAttribute("latitude"));
-		     * System.out.println("longitude : " + eElement.getAttribute("longitude"));
-		     * System.out.println("------------------------------------------");
-		     */
 		    count1 = count1 + 1;
 		}
 	    }
-	    System.out.println("end of nodes");
 	    for (int temp = 0; temp < List.getLength(); temp++) {
 		Node node = List.item(temp);
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
-		    System.out.println("edge " + temp);
 		    Element eElement = (Element) node;
 		    model.Node dest = new model.Node(this.getNodeByIdFromList(nodes, 
 			    Long.parseLong(eElement.getAttribute("destination"))));
@@ -52,24 +43,15 @@ public class XMLParser {
 			    Float.parseFloat(eElement.getAttribute("longueur")),
 				    eElement.getAttribute("nomRue"));
 		    edges.add(edge);
-		    /*
-		     * System.out.println("destination: " + eElement.getAttribute("destination"));
-		     * System.out.println("longueur: " + eElement.getAttribute("longueur"));
-		     * System.out.println("nomRue : " + eElement.getAttribute("nomRue"));
-		     * System.out.println("origine : " + eElement.getAttribute("origine"));
-		     * System.out.println("------------------------------------------");
-		     */
 		    count2 = count2 + 1;
 		}
 	    }
-	    System.out.println("end of edges");
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	Edge[] edgeArrayForCasting = new Edge[1];
 	model.Node[] nodeArrayForCasting = new model.Node[1];
 	
-	System.out.println("end of parsing");
 	FullGraph graph = new FullGraph(edges.toArray(edgeArrayForCasting), nodes.toArray(nodeArrayForCasting));
 	return graph;
     }
