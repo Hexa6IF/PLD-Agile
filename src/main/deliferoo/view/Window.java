@@ -40,7 +40,7 @@ public class Window {
 	Edge[] e = {e1, e2};
 	Node[] n = {n1, n2, n3};
 	
-	this.fullGraphMap = new FullGraphMap(new FullGraph(e, n, 45.750404f, 45.75871f, 4.857418f, 4.8784823f), 400f);
+	this.fullGraphMap = new FullGraphMap(new FullGraph(e, n, 45.750404f, 45.75871f, 4.857418f, 4.8784823f), this.bounds.getHeight(), this.bounds.getWidth());
     }
 
     public void launchWindow() {

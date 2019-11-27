@@ -28,37 +28,54 @@ import model.Node;
 public class FullGraphMap {
 
     private Pane map;
-    
+
     private FullGraph mapGraph;
-    private Float dimension;
+    private Double height;
+    private Double width;
+
+    private Double offsetX;
+    private Double offsetY;
 
     /**
      * Constructor
      * 
      * @param nodeList List of nodes to display on graph
      */
-    public FullGraphMap(FullGraph mapGraph, Float dimension) {
+    public FullGraphMap(FullGraph mapGraph, Double screenHeight, Double screenWidth ) {
 	this.map = new Pane();
-	this.map.setPrefSize(500, 500);
 	this.mapGraph = mapGraph;
-	this.dimension = dimension;
+
+	this.height = screenHeight;
+	this.width = 2 * screenWidth / 3;
+
+	this.offsetX = 0.05 * this.width;
+	this.offsetY = 0.05 * this.height;
     }
-    
+
     public Pane getMap() {
 	draw();
-	this.map.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, new Insets(5))));
+	this.map.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), 
+		BorderWidths.DEFAULT, new Insets(10))));
 	return this.map;
     }
-    
-    public void draw() {
+
+    private void draw() {
+	Double dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);	
+	System.out.println(dimension);
 	for(Edge e : (Edge[])mapGraph.getEdges()) {
-	    float x1 = this.dimension*((e.getNodeOrigin().getLatitude() - this.mapGraph.getMinLatitude()) / (this.mapGraph.getMaxLatitude() - this.mapGraph.getMinLatitude()));
-	    float y1 = this.dimension*((e.getNodeOrigin().getLongitude() - this.mapGraph.getMinLongitude()) / (this.mapGraph.getMaxLongitude() - this.mapGraph.getMinLongitude()));
-	    float x2 = this.dimension*((e.getNodeDest().getLatitude() - this.mapGraph.getMinLatitude()) / (this.mapGraph.getMaxLatitude() - this.mapGraph.getMinLatitude()));
-	    float y2 = this.dimension*((e.getNodeDest().getLongitude() - this.mapGraph.getMinLongitude()) / (this.mapGraph.getMaxLongitude() - this.mapGraph.getMinLongitude()));
-	    
-	    Line l = new Line(x1, y1, x2, y2);
-	    this.map.getChildren().add(l);
+	    this.map.getChildren().add(createroad(e, dimension));
 	}
+    }
+
+    private Line createroad(Edge edge, Double dimension) {
+	Double x1 = this.offsetX + dimension * ((edge.getNodeOrigin().getLatitude() - this.mapGraph.getMinLatitude()) / 
+		(this.mapGraph.getMaxLatitude() - this.mapGraph.getMinLatitude()));
+	Double y1 = this.offsetY + dimension * ((edge.getNodeOrigin().getLongitude() - this.mapGraph.getMinLongitude()) / 
+		(this.mapGraph.getMaxLongitude() - this.mapGraph.getMinLongitude()));
+	Double x2 = this.offsetX + dimension * ((edge.getNodeDest().getLatitude() - this.mapGraph.getMinLatitude()) / 
+		(this.mapGraph.getMaxLatitude() - this.mapGraph.getMinLatitude()));
+	Double y2 = this.offsetY + dimension * ((edge.getNodeDest().getLongitude() - this.mapGraph.getMinLongitude()) / 
+		(this.mapGraph.getMaxLongitude() - this.mapGraph.getMinLongitude()));
+	return new Line(x1, y1, x2, y2);
     }
 }
