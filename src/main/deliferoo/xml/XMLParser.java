@@ -6,10 +6,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class XMLParser {
-    static Integer count1 = 0;
-    static Integer count2 = 0;
+    private Integer count1 = 0;
+    private Integer count2 = 0;
 
-    public static void parserxml(Document doc) {
+    public void mapParser(Document doc) {
 	try {
 	    //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 	    NodeList nList = doc.getElementsByTagName("noeud");
@@ -49,11 +49,11 @@ public class XMLParser {
 	}
     }
 
-    public static Integer get1() {
-	return count1;
+    public Integer get1() {
+	return this.count1;
     }
 
-    public static Integer get2() {
-	return count2;
+    public Integer get2() {
+	return this.count2;
     }
 }
