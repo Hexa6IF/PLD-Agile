@@ -28,6 +28,16 @@ public class Node {
 	this.longitude = longitude;
     }
     
+    /**
+     * Copy constructor
+     * @param otherNode
+     */
+    public Node(Node otherNode) {
+	this.idNode = otherNode.getIdNode();
+	this.latitude = otherNode.getLatitude();
+	this.longitude = otherNode.getLongitude();
+    }
+    
     
     /**
      * Calculate the distance between 2 Nodes in kilometers

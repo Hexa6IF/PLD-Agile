@@ -17,8 +17,8 @@ public abstract class AbstractEdge {
      * @param edges
      */
     public AbstractEdge(Node nodeOrigin, Node nodeDest, Float distance, Edge[] edges) {
-	this.nodeOrigin = nodeOrigin;
-	this.nodeDest = nodeDest;
+	this.nodeOrigin = new Node(nodeOrigin);
+	this.nodeDest = new Node(nodeDest);
 	this.edges = edges;
 	this.distance = distance;
     }
@@ -29,8 +29,8 @@ public abstract class AbstractEdge {
      * @param distance
      */
     public AbstractEdge(Node nodeOrigin, Node nodeDest, Float distance) {
-	this.nodeOrigin = nodeOrigin;
-	this.nodeDest = nodeDest;
+	this.nodeOrigin = new Node(nodeOrigin);
+	this.nodeDest = new Node(nodeDest);
 	this.distance = distance;
     }
 

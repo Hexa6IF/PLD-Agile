@@ -42,11 +42,12 @@ public class XMLParser {
 	    for (int temp = 0; temp < List.getLength(); temp++) {
 		Node node = List.item(temp);
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
+		    System.out.println("edge " + temp);
 		    Element eElement = (Element) node;
-		    model.Node dest = this.getNodeByIdFromList(nodes, 
-			    Long.parseLong(eElement.getAttribute("destination")));
-		    model.Node origin = this.getNodeByIdFromList(nodes, 
-			    Long.parseLong(eElement.getAttribute("origine")));
+		    model.Node dest = new model.Node(this.getNodeByIdFromList(nodes, 
+			    Long.parseLong(eElement.getAttribute("destination"))));
+		    model.Node origin = new model.Node(this.getNodeByIdFromList(nodes, 
+			    Long.parseLong(eElement.getAttribute("origine"))));
 		    Edge edge = new Edge(origin, dest, 
 			    Float.parseFloat(eElement.getAttribute("longueur")),
 				    eElement.getAttribute("nomRue"));
@@ -73,12 +74,12 @@ public class XMLParser {
 	return graph;
     }
     
-    private model.Node getNodeByIdFromList(LinkedList<model.Node> list, Long nodeID){
+    private model.Node getNodeByIdFromList(LinkedList<model.Node> list, Long nodeID) throws Exception{
 	for (int i = 0; i<list.size(); i++) {
-	    if (list.get(i).getIdNode() == nodeID) 
+	    if (list.get(i).getIdNode().equals(nodeID)) 
 		return list.get(i);
 	}
-	return null;
+	throw new Exception("node not found");
     }
 
     public Integer get1() {
