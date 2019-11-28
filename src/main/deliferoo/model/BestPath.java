@@ -13,7 +13,7 @@ public class BestPath extends AbstractEdge {
      * @param nodeDest
      * @param edges
      */
-    public BestPath(Node nodeOrigin, Node nodeDest, Edge[] edges, Float totalDistance) {
+    public BestPath(Node nodeOrigin, Node nodeDest, Edge[] edges, Double totalDistance) {
 	super(nodeOrigin, nodeDest, totalDistance);
 	this.edges = edges;
     }

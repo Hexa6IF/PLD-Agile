@@ -42,7 +42,4 @@ public class DeliveryTextView {
 	this.pickUpDuration = pickUpDuration;
 	this.dropOffDuration = dropOffDuration;
     }
-    
-    
-
 }

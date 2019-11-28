@@ -7,35 +7,56 @@ package model;
  */
 public class FullGraph extends AbstractGraph {
     
-    private Float minLatitude;
-    private Float maxLatitude;
-    private Float minLongitude;
-    private Float maxLongitude;   
+    private Double minLong;
+    private Double maxLong;
+    private Double minLat;
+    private Double maxLat;
     
     /**
      * @param edges
      */
-    public FullGraph(Edge[] edges, Node[] nodes, Float minLat, Float maxLat, Float minLong, Float maxLong) {
+    public FullGraph(Edge[] edges, Node[] nodes, Double minLong, Double maxLong, Double minLat, Double maxLat) {
 	super(edges, nodes);
-	this.minLatitude = minLat;
-	this.maxLatitude = maxLat;
-	this.minLongitude = minLong;
-	this.maxLongitude = maxLong;
+	this.minLong = minLong;
+	this.maxLong = maxLong;
+	this.minLat = minLat;
+	this.maxLat = maxLat;
     }
     
-    public Float getMinLatitude() {
-	return this.minLatitude;
+    public Double getRangeLongitude() {
+	return (this.maxLong - this.minLong);
     }
     
-    public Float getMaxLatitude() {
-	return this.maxLatitude;
+    public Double getRangeLatitude() {
+	return (this.maxLat - this.minLat);
     }
     
-    public Float getMinLongitude() {
-	return this.minLongitude;
+    public Double getMinLongitude() {
+	return this.minLong;
     }
     
-    public Float getMaxLongitude() {
-	return this.maxLongitude;
+    public Double getMaxLongitude() {
+	return this.maxLong;
+    }
+   
+    public Double getMinLatitude() {
+	return this.minLat;
+    }
+    
+    public Double getMaxLatitude() {
+	return this.maxLat;
+    }
+    
+    public String toString(){
+	String s  = ""; 
+	s += "Nodes : \r\n";
+	for (int i = 0; i < nodes.length; i++) {
+	    s += nodes[i].toString();
+	}
+	s += "\r\nEdges : \r\n";
+	for (int i = 0; i < edges.length; i++) {
+	    s += edges[i].toString();
+	}
+	return s;
     }
 }

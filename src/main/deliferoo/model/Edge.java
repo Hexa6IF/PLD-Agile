@@ -13,7 +13,17 @@ public class Edge extends AbstractEdge {
      * @param nodeOrigin
      * @param nodeDest
      */
-    public Edge(Node nodeOrigin, Node nodeDest, Float distance, String streetName) {
+    public Edge(Node nodeOrigin, Node nodeDest, Double distance) {
+	super(nodeOrigin, nodeDest, distance);
+    }
+    
+    /**
+     * @param nodeOrigin
+     * @param nodeDest
+     * @param distance
+     * @param streetname
+     */
+    public Edge(Node nodeOrigin, Node nodeDest, Double distance, String streetName) {
 	super(nodeOrigin, nodeDest, distance);
 	this.streetName = streetName;
     }
@@ -31,5 +41,9 @@ public class Edge extends AbstractEdge {
     public void setStreetName(String streetname) {
         this.streetName = streetname;
     }
-
+    
+    public String toString() {
+	return "[Edge origine=" + this.nodeOrigin.getIdNode() + " destination=" + this.nodeDest.getIdNode()
+		+ " longueur=" + this.distance + " nomRue=" + this.streetName + "]\r\n";
+    }; 
 }

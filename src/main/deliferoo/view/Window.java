@@ -5,7 +5,6 @@ import java.io.File;
 import controller.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -13,42 +12,40 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.Edge;
 import model.FullGraph;
-import model.Node;
 import view.NodeTextView.NodeType;
+import xml.XMLParser;
 
 public class Window {
     
     private Controller controller;
     private Rectangle2D bounds;
-    private FullGraphMap fullGraphMap;
+    private MapView fullGraphMap;
     private ObservableList<NodeTextView> nodeTextViews;
     private TableBox tableBox;
     
+    private FullGraph graph;
     
     public Window(Controller controller) {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
 	
-	Node n1 = new Node(25175791l, 45.75406f, 4.857418f);
-	Node n2 = new Node(2129259178l, 45.750404f, 4.8744674f);
-	Node n3 = new Node(26086130l, 45.75871f, 4.8784823f);
+	XMLParser parser = XMLParser.getInstance();
+	try {
+	    File fXmlFile = new File("src/main/resources/grandPlan.xml");
+	    this.graph = parser.parseMap(fXmlFile);
+	} catch(Exception e) {
+	    System.err.println(e);
+	}
 	
-	Edge e1 = new Edge(n1, n2, 10f, "ouais");
-	Edge e2 = new Edge(n2, n3, 20f, "yep");
+	this.fullGraphMap = new MapView(this.graph, this.bounds.getHeight(), this.bounds.getWidth());
 	
-	Edge[] e = {e1, e2};
-	Node[] n = {n1, n2, n3};
-	
-	this.fullGraphMap = new FullGraphMap(new FullGraph(e, n, 45.750404f, 45.75871f, 4.857418f, 4.8784823f), this.bounds.getHeight(), this.bounds.getWidth()); 	
     }
 
     public void launchWindow() {
@@ -79,7 +76,7 @@ public class Window {
 	
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
-	border.setCenter(this.fullGraphMap.getMap());
+	border.setCenter(this.fullGraphMap.getMapView());
 	
 	return new Scene(border);
     }

@@ -8,14 +8,14 @@ package model;
 public abstract class AbstractEdge {
     protected Node nodeOrigin;
     protected Node nodeDest;
-    protected Float distance;
+    protected Double distance;
     
     /**
      * @param nodeOrigin
      * @param nodeDest
      * @param edges
      */
-    public AbstractEdge(Node nodeOrigin, Node nodeDest, Float distance) {
+    public AbstractEdge(Node nodeOrigin, Node nodeDest, Double distance) {
 	this.nodeOrigin = nodeOrigin;
 	this.nodeDest = nodeDest;
 	this.distance = distance;
@@ -48,13 +48,13 @@ public abstract class AbstractEdge {
     /**
      * @return the distance
      */
-    public Float getDistance() {
+    public Double getDistance() {
         return this.distance;
     }
     /**
      * @param distance the distance to set
      */
-    public void setDistance(Float distance) {
+    public void setDistance(Double distance) {
         this.distance = distance;
     }    
 }

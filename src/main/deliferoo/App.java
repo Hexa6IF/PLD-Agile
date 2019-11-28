@@ -2,6 +2,7 @@ import controller.Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.Window;
+
 /**
  * Main Application class for Del'IFeroo
  * 

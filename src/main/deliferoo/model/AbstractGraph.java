@@ -17,7 +17,7 @@ public abstract class AbstractGraph {
 	this.nodes = nodes;
     }
     
-    public Node getNodeByID(Long nodeID) {
+    public Node getNodeByID(String nodeID) {
 	for (int i=0; i<nodes.length; i++) {
 	    if (nodes[i].getIdNode() == nodeID) {
 		return nodes[i];
