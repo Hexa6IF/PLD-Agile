@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import model.Edge;
-import model.FullGraph;
 import model.Node;
+import model.FullMap;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -33,8 +33,8 @@ public class XMLParser {
 	return instance; 
     }
 
-    public FullGraph parseMap(File mapFile) {
-	FullGraph mapGraph = null;
+    public FullMap parseMap(File mapFile) {
+	FullMap mapGraph = null;
 
 	Map<String, Node> nodeMap = new HashMap<String, Node>();
 	List<Edge> edges = new ArrayList<Edge>();
@@ -47,16 +47,17 @@ public class XMLParser {
 
 	try {
 	    XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(mapFile));
-	    
+
 	    while(streamReader.hasNext()) {
 		streamReader.next();
-		
+
 		if(streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
 		    if(streamReader.getLocalName().equalsIgnoreCase("noeud")) {
 			String id = streamReader.getAttributeValue(null, "id");
+
 			Double latitude = Double.parseDouble(streamReader.getAttributeValue(null, "latitude"));
 			Double longitude = Double.parseDouble(streamReader.getAttributeValue(null, "longitude"));
-			
+
 			if (latitude < minLat) {
 			    minLat = latitude;
 			}
@@ -75,30 +76,30 @@ public class XMLParser {
 
 			Node node = new Node(id, latitude, longitude);
 			nodeMap.put(id, node);
-		    }else if(streamReader.getLocalName().equalsIgnoreCase("troncon")) {
+		    } else if(streamReader.getLocalName().equalsIgnoreCase("troncon")) {
 			String origin = streamReader.getAttributeValue(null, "origine");
 			String destination = streamReader.getAttributeValue(null, "destination");
+
 			Double longueur = Double.parseDouble(streamReader.getAttributeValue(null, "longueur"));
 			String nomRue = streamReader.getAttributeValue(null, "nomRue");
-			Node originNode = new Node(nodeMap.get(origin));
-			Node destNode = new Node(nodeMap.get(destination));
+
+			Node originNode = nodeMap.get(origin);
+			Node destNode = nodeMap.get(destination);
 
 			Edge edge = new Edge(originNode, destNode, longueur, nomRue);
 			edges.add(edge);
 		    }
 		}
 	    }
-	    Edge[] edgeArrayForCasting = new Edge[1];
-	    Node[] nodeArrayForCasting = new Node[1];
-	    mapGraph = new FullGraph(edges.toArray(edgeArrayForCasting), nodeMap.values().toArray(nodeArrayForCasting), 
-		    minLong, maxLong, minLat, maxLat);
-	    
+
+	    mapGraph = new FullMap(minLong, maxLong, minLat, maxLat, nodeMap, edges);
+
 	} catch (XMLStreamException se) {
 	    System.err.println(se);
 	} catch (FileNotFoundException fe) {
 	    System.err.println(fe);
 	}
-	
+
 	return mapGraph;
     }
 }

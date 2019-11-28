@@ -92,6 +92,14 @@ public class FullMap {
     public void setMaxLat(Double maxLat) {
         this.maxLat = maxLat;
     }
+    
+    public Double getRangeLongitude() {
+	return this.maxLong - this.minLong;
+    }
+    
+    public Double getRangeLatitude() {
+	return this.maxLat - this.minLat;
+    }
 
     /**
      * @return the nodeMap

@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import model.Edge;
-import model.FullGraph;
+import model.FullMap;
 
 /**
  * Class for displaying full map
@@ -22,7 +22,7 @@ public class MapView {
 
     private Pane mapView;
 
-    private FullGraph mapGraph;
+    private FullMap map;
     private Double height;
     private Double width;
 
@@ -34,9 +34,9 @@ public class MapView {
      * 
      * @param nodeList List of nodes to display on graph
      */
-    public MapView(FullGraph mapGraph, Double screenHeight, Double screenWidth ) {
+    public MapView(FullMap map, Double screenHeight, Double screenWidth ) {
 	this.mapView = new Pane();
-	this.mapGraph = mapGraph;
+	this.map = map;
 
 	this.height = screenHeight;
 	this.width = 2 * screenWidth / 3;
@@ -54,21 +54,21 @@ public class MapView {
 
     private void draw() {
 	Double dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
-	for(Edge e : (Edge[])mapGraph.getEdges()) {
-	    this.mapView.getChildren().add(createRoad(e, dimension));
+	for(Edge edge : map.getEdgeList()) {
+	    this.mapView.getChildren().add(createRoad(edge, dimension));
 	}
     }
 
     private Line createRoad(Edge edge, Double dimension) {
-	Double x1 = this.offsetY + dimension * ((edge.getNodeOrigin().getLongitude() - this.mapGraph.getMinLongitude()) / 
-		this.mapGraph.getRangeLongitude());
-	Double y1 = this.offsetX + dimension * ((edge.getNodeOrigin().getLatitude() - this.mapGraph.getMinLatitude()) / 
-		this.mapGraph.getRangeLatitude());
+	Double x1 = this.offsetY + dimension * ((edge.getStart().getLongitude() - this.map.getMinLong()) / 
+		this.map.getRangeLongitude());
+	Double y1 = this.offsetX + dimension * ((edge.getStart().getLatitude() - this.map.getMinLat()) / 
+		this.map.getRangeLatitude());
 	
-	Double x2 = this.offsetY + dimension * ((edge.getNodeDest().getLongitude() - this.mapGraph.getMinLongitude()) / 
-		this.mapGraph.getRangeLongitude());
-	Double y2 = this.offsetX + dimension * ((edge.getNodeDest().getLatitude() - this.mapGraph.getMinLatitude()) / 
-		this.mapGraph.getRangeLatitude());
+	Double x2 = this.offsetY + dimension * ((edge.getEnd().getLongitude() - this.map.getMinLong()) / 
+		this.map.getRangeLongitude());
+	Double y2 = this.offsetX + dimension * ((edge.getEnd().getLatitude() - this.map.getMinLat()) / 
+		this.map.getRangeLatitude());
 	
 	Line road = new Line(x1, y1, x2, y2);
 	road.setStrokeWidth(2);

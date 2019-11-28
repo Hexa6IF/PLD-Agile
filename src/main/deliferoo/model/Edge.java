@@ -11,13 +11,16 @@ public class Edge {
     private Double distance;
 
     /**
-     * @param nodeOrigin
-     * @param nodeDest
+     * @param start
+     * @param end
+     * @param distance
+     * @param streetName
      */
-    public Edge(Node nodeOrigin, Node nodeDest, Double distance) {
-	this.start = nodeOrigin;
-	this.end = nodeDest;
+    public Edge(Node start, Node end, Double distance, String streetName) {
+	this.start = start;
+	this.end = end;
 	this.distance = distance;
+	this.streetName = streetName;
     }
 
     /**
