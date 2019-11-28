@@ -128,7 +128,4 @@ public class FullMap {
     public void setEdgeList(List<Edge> edgeList) {
         this.edgeList = edgeList;
     }
-    
-    
-
 }

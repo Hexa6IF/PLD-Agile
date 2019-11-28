@@ -13,7 +13,7 @@ import javafx.util.Callback;
  *
  * @author sadsitha
  */
-public class TableBox {
+public class SpecialNodeView {
 
     private TableView<NodeTextView> table;
 
@@ -22,8 +22,12 @@ public class TableBox {
      *
      * @param nodeTextViews List of Node text views
      */
-    public TableBox(ObservableList<NodeTextView> nodeTextViews) {
+    public SpecialNodeView(ObservableList<NodeTextView> nodeTextViews, Double prefHeight, Double prefWidth) {
 	this.table = new TableView<NodeTextView>(nodeTextViews);
+	
+	this.table.setPrefSize(prefWidth, prefHeight);
+	this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+	
 	this.setTableColumns();
     }
 

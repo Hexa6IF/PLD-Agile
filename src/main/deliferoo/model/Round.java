@@ -31,6 +31,5 @@ public class Round {
      */
     public void setResultPat(List<BestPath> resultPath) {
         this.resultPath = resultPath;
-    }
-    
+    }    
 }

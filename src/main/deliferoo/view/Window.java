@@ -28,7 +28,7 @@ public class Window {
     private Rectangle2D bounds;
     private MapView mapView;
     private ObservableList<NodeTextView> nodeTextViews;
-    private TableBox tableBox;
+    private SpecialNodeView tableBox;
 
     private FullMap map;
 
@@ -74,56 +74,25 @@ public class Window {
 	/* Initialise Node text view */
 	this.initialiseTable();
 
-	border.setTop(createMenu(stage));
+	border.setTop(new TopMenuBar(stage));
 	border.setRight(createSideBar());
 	border.setCenter(this.mapView.getMapView());
 
 	return new Scene(border);
     }
-
-    private VBox createMenu(Stage stage) {
-
-	FileChooser fileChooser = new FileChooser();
-	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
-
-	Menu menuFile = new Menu("File");
-	Menu menuHelp = new Menu("Help");
-
-	MenuItem loadMap = new MenuItem("Load Map...");
-	MenuItem loadDeliveries = new MenuItem("Load Deliveries...");
-
-	MenuItem about = new MenuItem("About");
-
-	MenuBar menuBar = new MenuBar();
-
-	menuFile.getItems().add(loadMap);
-	menuFile.getItems().add(loadDeliveries);
-
-	menuHelp.getItems().add(about);
-
-	loadMap.setOnAction(e -> {
-	    File mapFile = fileChooser.showOpenDialog(stage);
-	});
-	loadDeliveries.setOnAction(e -> {
-	    File deliveriesFile = fileChooser.showOpenDialog(stage);
-	});
-
-	menuBar.getMenus().addAll(menuFile, menuHelp);
-
-	return new VBox(menuBar);
-    }
-
+    
     private VBox createSideBar() {
 	VBox sideBar = new VBox();
 
-	Rectangle rect = new Rectangle();
-	rect.setHeight(bounds.getHeight() / 2);
-	rect.setWidth(bounds.getWidth() / 3);
-	TableView<String> table = new TableView<String>();
-	table.setPrefSize(bounds.getWidth() / 3, bounds.getHeight() / 2);
+	Rectangle rect1 = new Rectangle();
+	rect1.setHeight(bounds.getHeight() / 4);
+	rect1.setWidth(bounds.getWidth() / 3);
+	
+	Rectangle rect2 = new Rectangle();
+	rect2.setHeight(bounds.getHeight() / 4);
+	rect2.setWidth(bounds.getWidth() / 3);
 
-	sideBar.setPrefWidth(bounds.getWidth() / 3);
-	sideBar.getChildren().addAll(this.tableBox.getTable(), table);
+	sideBar.getChildren().addAll(rect1, this.tableBox.getTable(), rect2);	
 
 	return sideBar;
     }
@@ -140,6 +109,6 @@ public class Window {
 		new NodeTextView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"),
 		new NodeTextView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34")
 		);
-	this.tableBox = new TableBox(this.nodeTextViews);
+	this.tableBox = new SpecialNodeView(this.nodeTextViews, this.bounds.getWidth()/3, this.bounds.getHeight()/2);
     }
 }

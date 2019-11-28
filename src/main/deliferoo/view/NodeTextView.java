@@ -104,7 +104,4 @@ public class NodeTextView {
     public void setDeliveryIndex(Number deliveryIndex) {
         this.deliveryIndex = deliveryIndex;
     }
-    
-    
-
 }
