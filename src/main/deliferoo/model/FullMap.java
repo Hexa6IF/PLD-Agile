@@ -16,7 +16,7 @@ public class FullMap {
     private Double maxLong;
     private Double minLat;
     private Double maxLat;
-    private Map<Long, Node> nodeMap;
+    private Map<String, Node> nodeMap;
     private List<Edge> edgeList;
 
     /**
@@ -27,7 +27,7 @@ public class FullMap {
      * @param nodeMap
      * @param edgeList
      */
-    public FullMap(Double minLong, Double maxLong, Double minLat, Double maxLat, Map<Long, Node> nodeMap,
+    public FullMap(Double minLong, Double maxLong, Double minLat, Double maxLat, Map<String, Node> nodeMap,
 	    List<Edge> edgeList) {
 	this.minLong = minLong;
 	this.maxLong = maxLong;
@@ -96,14 +96,14 @@ public class FullMap {
     /**
      * @return the nodeMap
      */
-    public Map<Long, Node> getNodeMap() {
+    public Map<String, Node> getNodeMap() {
         return nodeMap;
     }
 
     /**
      * @param nodeMap the nodeMap to set
      */
-    public void setNodeMap(Map<Long, Node> nodeMap) {
+    public void setNodeMap(Map<String, Node> nodeMap) {
         this.nodeMap = nodeMap;
     }
 
