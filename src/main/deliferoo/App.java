@@ -2,6 +2,7 @@ import controller.Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.Window;
+
 /**
  * Main Application class for Del'IFeroo
  * 
@@ -24,13 +25,11 @@ public class App extends Application {
     }
 
     /**
+     * Sums one and one
      * 
      * @return sum
      */
     public Integer onePlusOne() {
 	return 1 + 1;
     }
-
-    
-
 }
