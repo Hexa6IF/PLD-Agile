@@ -53,4 +53,9 @@ public class SpecialNode {
     public void setPassageTime(Date passageTime) {
 	this.passageTime = passageTime;
     }
+
+    @Override
+    public String toString() {
+	return "SpecialNode [node=" + node.toString() + ", duration=" + duration + ", passageTime=" + passageTime + "]";
+    }
 }

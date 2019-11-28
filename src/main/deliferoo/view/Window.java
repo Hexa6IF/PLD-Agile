@@ -147,7 +147,7 @@ public class Window {
 	Random rand = new Random();
 
 	try {
-	    File deliveryFile = new File("src/main/resources/demandeMoyen5.xml");
+	    File deliveryFile = new File("src/main/resources/demandePetit1.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
 	} catch (Exception e) {
 	    System.err.println(e);
@@ -155,17 +155,21 @@ public class Window {
 	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
 
 	for (int i = 0; i < this.deliveries.size(); i++) {
+	    //System.out.println(deliveries.get(i).getDeliveryNode().toString());
+	    //System.out.println(deliveries.get(i).getPickupNode().toString());
 	    Double r = rand.nextDouble();
 	    Double g = rand.nextDouble();
 	    Double b = rand.nextDouble();
 	    Color randomColor = Color.color(r, g, b);
 	    try {
-		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
+		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
+			deliveries.get(i).getDeliveryNode()));
 	    } catch (Exception e) {
 		throw new Exception(e);
 	    }
 	    try {
-		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getPickupNode()));
+		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
+			deliveries.get(i).getPickupNode()));
 	    } catch (Exception e) {
 		throw new Exception(e);
 	    }

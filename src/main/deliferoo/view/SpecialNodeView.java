@@ -1,5 +1,8 @@
 package view;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javafx.scene.paint.Color;
 import model.SpecialNode;
 import model.SpecialNodeType;
@@ -50,13 +53,16 @@ public class SpecialNodeView {
 	else {
 	    this.type = node.getSpecialNodeType();
 	}
-	if (node.getDuration() == null) {
-	    throw new Exception("duration null");
+	if (node.getPassageTime() == null) {
+	    //throw new Exception("passage time null");
 	}
 	else {
-	    //this.time = node.getPassageTime().toString();
+	    String pattern = "HH:mm:ss";
+	    DateFormat df = new SimpleDateFormat(pattern);
+	    this.time = df.format(node.getPassageTime());
 	}
-	if (node.getPassageTime() == null) {
+	if (node.getDuration() == null) {
+	    throw new Exception("duration null");
 	}
 	else {
 	    this.duration = node.getDuration().floatValue();
