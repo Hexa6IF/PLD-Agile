@@ -1,7 +1,10 @@
 package view;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -147,33 +150,46 @@ public class Window {
 	Random rand = new Random();
 
 	try {
-	    File deliveryFile = new File("src/main/resources/demandePetit1.xml");
+	    File deliveryFile = new File("src/main/resources/demandeGrand7.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
 	} catch (Exception e) {
 	    System.err.println(e);
 	}
 	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
-
-	for (int i = 0; i < this.deliveries.size(); i++) {
-	    //System.out.println(deliveries.get(i).getDeliveryNode().toString());
-	    //System.out.println(deliveries.get(i).getPickupNode().toString());
-	    Double r = rand.nextDouble();
-	    Double g = rand.nextDouble();
-	    Double b = rand.nextDouble();
-	    Color randomColor = Color.color(r, g, b);
-	    try {
-		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
-			deliveries.get(i).getDeliveryNode()));
-	    } catch (Exception e) {
-		throw new Exception(e);
-	    }
-	    try {
-		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
-			deliveries.get(i).getPickupNode()));
-	    } catch (Exception e) {
-		throw new Exception(e);
-	    }
+	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+	Calendar c = Calendar.getInstance();
+	c.setTime(this.deliveries.get(0).getDeliveryNode().getPassageTime());
+	Double r = rand.nextDouble();
+	Double g = rand.nextDouble();
+	Double b = rand.nextDouble();
+	Color firstDeliveryColor = Color.color(r, g, b);
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, 
+			deliveries.get(0).getDeliveryNode()));
+	for (int i = 1; i < this.deliveries.size(); i++) {
+	      	r = rand.nextDouble();
+		g = rand.nextDouble();
+		b = rand.nextDouble();
+		Color randomColor = Color.color(r, g, b);
+		c.add(Calendar.MINUTE, (int)Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
+		deliveries.get(i).getDeliveryNode().setPassageTime(c.getTime());
+		c.add(Calendar.MINUTE, (int)Math.round(deliveries.get(i).getPickupNode().getDuration()));
+		deliveries.get(i).getPickupNode().setPassageTime(c.getTime());
+	    
+    	    try {
+    		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
+    			deliveries.get(i).getDeliveryNode()));
+    	    } catch (Exception e) {
+    		throw new Exception(e);
+    	    }
+    	    try {
+    		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
+    			deliveries.get(i).getPickupNode()));
+    	    } catch (Exception e) {
+    		throw new Exception(e);
+    	    }
 	}
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, 
+		deliveries.get(0).getPickupNode()));
 	this.specialNodeViews = FXCollections.observableArrayList(specialNodeViewTmpList);
 
 	// example data to remove

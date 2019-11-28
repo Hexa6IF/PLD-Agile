@@ -57,7 +57,7 @@ public class SpecialNodeView {
 	    //throw new Exception("passage time null");
 	}
 	else {
-	    String pattern = "HH:mm:ss";
+	    String pattern = "HH:mm";
 	    DateFormat df = new SimpleDateFormat(pattern);
 	    this.time = df.format(node.getPassageTime());
 	}
