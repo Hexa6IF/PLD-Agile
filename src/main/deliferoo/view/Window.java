@@ -3,6 +3,7 @@ package view;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import controller.Controller;
 import javafx.collections.FXCollections;
@@ -43,7 +44,7 @@ public class Window {
 	try {
 	    File fXmlFile = new File("src/main/resources/grandPlan.xml");
 	    this.map = parser.parseMap(fXmlFile);
-	} catch(Exception e) {
+	} catch (Exception e) {
 	    System.err.println(e);
 	}
 
@@ -143,36 +144,42 @@ public class Window {
      */
     private void initialiseTable() throws Exception {
 	XMLParser parser = XMLParser.getInstance();
+	Random rand = new Random();
+
 	try {
 	    File deliveryFile = new File("src/main/resources/demandeMoyen5.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
-	} catch(Exception e) {
+	} catch (Exception e) {
 	    System.err.println(e);
 	}
 	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
-	  for (int i=0; i < this.deliveries.size(); i++) {
-	      try {
-		  specialNodeViewTmpList.add(new SpecialNodeView(i, Color.BLACK,
-		      deliveries.get(i).getDeliveryNode()));
+
+	for (int i = 0; i < this.deliveries.size(); i++) {
+	    Double r = rand.nextDouble();
+	    Double g = rand.nextDouble();
+	    Double b = rand.nextDouble();
+	    Color randomColor = Color.color(r, g, b);
+	    try {
+		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
 	    } catch (Exception e) {
 		throw new Exception(e);
 	    }
-	      try {
-		  specialNodeViewTmpList.add(new SpecialNodeView(i, Color.BLACK,
-		      deliveries.get(i).getPickupNode()));
+	    try {
+		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getPickupNode()));
 	    } catch (Exception e) {
 		throw new Exception(e);
 	    }
-	  }
-	 this.specialNodeViews = FXCollections.observableArrayList(specialNodeViewTmpList);
-	
-	//example data to remove
-	/*this.specialNodeViews = FXCollections.observableArrayList(
-		new SpecialNodeView(1,Color.BLACK,NodeType.PICKUP,7f,"14h34"),
-		new SpecialNodeView(2,Color.BLACK,NodeType.PICKUP,10f,"14h34"),
-		new SpecialNodeView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"),
-		new SpecialNodeView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34")
-		);*/
+	}
+	this.specialNodeViews = FXCollections.observableArrayList(specialNodeViewTmpList);
+
+	// example data to remove
+	/*
+	 * this.specialNodeViews = FXCollections.observableArrayList( new
+	 * SpecialNodeView(1,Color.BLACK,NodeType.PICKUP,7f,"14h34"), new
+	 * SpecialNodeView(2,Color.BLACK,NodeType.PICKUP,10f,"14h34"), new
+	 * SpecialNodeView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"), new
+	 * SpecialNodeView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34") );
+	 */
 	this.tableBox = new TableBox(this.specialNodeViews);
     }
 }
