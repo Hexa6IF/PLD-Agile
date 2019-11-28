@@ -1,3 +1,10 @@
+/* Classname
+ * 
+ * version 4
+ * Derniere date de nodification : 28/11/2019
+ * 
+ * Auteure : GRENIER Marie marie.grenier@insa-lyon.fr
+ * */
 package xml;
 
 import org.w3c.dom.Document;
