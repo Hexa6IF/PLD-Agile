@@ -4,46 +4,48 @@ package model;
  * 
  * @author louis
  */
-public class Edge extends AbstractEdge {
-    
+public class Edge {
     private String streetName;
+    private Node start;
+    private Node end;
 
     /**
-     * @param nodes
      * @param nodeOrigin
      * @param nodeDest
      */
-    public Edge(Node nodeOrigin, Node nodeDest, Double distance) {
-	super(nodeOrigin, nodeDest, distance);
-    }
-    
-    /**
-     * @param nodeOrigin
-     * @param nodeDest
-     * @param distance
-     * @param streetname
-     */
-    public Edge(Node nodeOrigin, Node nodeDest, Double distance, String streetName) {
-	super(nodeOrigin, nodeDest, distance);
-	this.streetName = streetName;
+    public Edge(Node nodeOrigin, Node nodeDest) {
+	this.start=nodeOrigin;
+	this.end=nodeDest;
     }
 
     /**
      * @return the streetname
      */
     public String getStreetName() {
-        return streetName;
+	return streetName;
     }
 
     /**
      * @param streetname the streetname to set
      */
-    public void setStreetName(String streetname) {
-        this.streetName = streetname;
+    public void setStreetname(String streetName) {
+	this.streetName = streetName;
     }
-    
-    public String toString() {
-	return "[Edge origine=" + this.nodeOrigin.getIdNode() + " destination=" + this.nodeDest.getIdNode()
-		+ " longueur=" + this.distance + " nomRue=" + this.streetName + "]\r\n";
-    }; 
+
+    public Node getStart() {
+	return this.start;
+    }
+
+    public void setStart(Node start) {
+	this.start = start;
+    }
+
+    public Node getEnd() {
+	return end;
+    }
+
+    public void setEnd(Node end) {
+	this.end = end;
+    }
+
 }
