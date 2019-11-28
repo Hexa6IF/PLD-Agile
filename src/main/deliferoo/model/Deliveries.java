@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class Deliveries {
     private Delivery[] deliveries;
-    private Node warhouseAddress;
+    private Node warehouseAddress;
     private Date startTime;
     
     /**
@@ -19,22 +19,22 @@ public class Deliveries {
      */
     public Deliveries(Delivery[] deliveries, Node address, Date start) {
 	this.deliveries = deliveries;
-	this.warhouseAddress = address;
+	this.warehouseAddress = address;
 	this.startTime = start;
     }
 
     /**
      * @return the warhouseAddress
      */
-    public Node getWarhouseAddress() {
-        return this.warhouseAddress;
+    public Node getWarehouseAddress() {
+        return this.warehouseAddress;
     }
 
     /**
      * @param warhouseAddress the warhouseAddress to set
      */
-    public void setWarhouseAddress(Node warhouseAddress) {
-        this.warhouseAddress = warhouseAddress;
+    public void setWarhouseAddress(Node warehouseAddress) {
+        this.warehouseAddress = warehouseAddress;
     }
 
     /**
