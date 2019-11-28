@@ -1,74 +1,105 @@
 package xml;
 
-import java.util.LinkedList;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import model.Edge;
-import model.FullGraph;
+import model.Node;
+import model.FullMap;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 public class XMLParser {
-    private Integer nbNodes = 0;
-    private Integer nbEdges = 0;
 
-    public FullGraph mapParser(Document doc) {
-	LinkedList<model.Node> nodes = new LinkedList<model.Node>();
-	LinkedList<Edge> edges = new LinkedList<Edge>();
+    private static XMLParser instance;
+
+    private XMLInputFactory factory;
+
+    private XMLParser() {
+	factory = XMLInputFactory.newInstance();
+    }
+
+    public static XMLParser getInstance() { 
+	if(instance == null) {
+	    instance = new XMLParser();
+	}
+	return instance; 
+    }
+
+    public FullMap parseMap(File mapFile) {
+	FullMap mapGraph = null;
+
+	Map<String, Node> nodeMap = new HashMap<String, Node>();
+	List<Edge> edges = new ArrayList<Edge>();
+
+	Double minLat = Double.POSITIVE_INFINITY;
+	Double maxLat = Double.NEGATIVE_INFINITY;
+
+	Double minLong = Double.POSITIVE_INFINITY;
+	Double maxLong = Double.NEGATIVE_INFINITY;
+
 	try {
-	    NodeList nList = doc.getElementsByTagName("noeud");
-	    NodeList List = doc.getElementsByTagName("troncon");
-	    for (int temp = 0; temp < nList.getLength(); temp++) {
-		Node nNode = nList.item(temp);
-		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-		    Element eElement = (Element) nNode;
-		    model.Node node = new model.Node(Long.parseLong(eElement.getAttribute("id")),
-			    Float.parseFloat(eElement.getAttribute("latitude")),
-			    Float.parseFloat(eElement.getAttribute("longitude")));
-		    nodes.add(node);
-		    nbNodes += 1;
+	    XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(mapFile));
+
+	    while(streamReader.hasNext()) {
+		streamReader.next();
+
+		if(streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+		    if(streamReader.getLocalName().equalsIgnoreCase("noeud")) {
+			String id = streamReader.getAttributeValue(null, "id");
+
+			Double latitude = Double.parseDouble(streamReader.getAttributeValue(null, "latitude"));
+			Double longitude = Double.parseDouble(streamReader.getAttributeValue(null, "longitude"));
+
+			if (latitude < minLat) {
+			    minLat = latitude;
+			}
+
+			if (latitude > maxLat) {
+			    maxLat = latitude;
+			}
+
+			if (longitude < minLong) {
+			    minLong = longitude;
+			}
+
+			if (longitude > maxLong) {
+			    maxLong = longitude;
+			}
+
+			Node node = new Node(id, latitude, longitude);
+			nodeMap.put(id, node);
+		    } else if(streamReader.getLocalName().equalsIgnoreCase("troncon")) {
+			String origin = streamReader.getAttributeValue(null, "origine");
+			String destination = streamReader.getAttributeValue(null, "destination");
+
+			Double longueur = Double.parseDouble(streamReader.getAttributeValue(null, "longueur"));
+			String nomRue = streamReader.getAttributeValue(null, "nomRue");
+
+			Node originNode = nodeMap.get(origin);
+			Node destNode = nodeMap.get(destination);
+
+			Edge edge = new Edge(originNode, destNode, longueur, nomRue);
+			edges.add(edge);
+		    }
 		}
 	    }
-	    for (int temp = 0; temp < List.getLength(); temp++) {
-		Node node = List.item(temp);
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-		    Element eElement = (Element) node;
-		    model.Node dest = new model.Node(this.getNodeByIdFromList(nodes, 
-			    Long.parseLong(eElement.getAttribute("destination"))));
-		    model.Node origin = new model.Node(this.getNodeByIdFromList(nodes, 
-			    Long.parseLong(eElement.getAttribute("origine"))));
-		    Edge edge = new Edge(origin, dest, 
-			    Float.parseFloat(eElement.getAttribute("longueur")),
-				    eElement.getAttribute("nomRue"));
-		    edges.add(edge);
-		    nbEdges += 1;
-		}
-	    }
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	Edge[] edgeArrayForCasting = new Edge[1];
-	model.Node[] nodeArrayForCasting = new model.Node[1];
-	
-	FullGraph graph = new FullGraph(edges.toArray(edgeArrayForCasting), nodes.toArray(nodeArrayForCasting));
-	return graph;
-    }
-    
-    private model.Node getNodeByIdFromList(LinkedList<model.Node> list, Long nodeID) throws Exception{
-	for (int i = 0; i<list.size(); i++) {
-	    if (list.get(i).getIdNode().equals(nodeID)) 
-		return list.get(i);
-	}
-	throw new Exception("node not found");
-    }
 
-    public Integer getNbNodes() {
-	return this.nbNodes;
-    }
+	    mapGraph = new FullMap(minLong, maxLong, minLat, maxLat, nodeMap, edges);
 
-    public Integer getNbEdges() {
-	return this.nbEdges;
+	} catch (XMLStreamException se) {
+	    System.err.println(se);
+	} catch (FileNotFoundException fe) {
+	    System.err.println(fe);
+	}
+
+	return mapGraph;
     }
 }

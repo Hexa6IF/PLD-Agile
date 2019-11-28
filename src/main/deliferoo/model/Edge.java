@@ -4,41 +4,60 @@ package model;
  * 
  * @author louis
  */
-public class Edge extends AbstractEdge {
-    private String streetname;
+public class Edge {
+    private String streetName;
+    private Node start;
+    private Node end;
+    private Double distance;
 
     /**
-     * @param nodes
-     * @param nodeOrigin
-     * @param nodeDest
+     * @param start
+     * @param end
+     * @param distance
+     * @param streetName
      */
-    public Edge(Node nodeOrigin, Node nodeDest, Float distance) {
-	super(nodeOrigin, nodeDest, distance);
+    public Edge(Node start, Node end, Double distance, String streetName) {
+	this.start = start;
+	this.end = end;
+	this.distance = distance;
+	this.streetName = streetName;
+    }
+
+    /**
+     * @return the streetName
+     */
+    public String getStreetName() {
+	return streetName;
+    }
+
+    /**
+     * @param streetname the streetName to set
+     */
+    public void setStreetName(String streetName) {
+	this.streetName = streetName;
+    }
+
+    public Node getStart() {
+	return this.start;
+    }
+
+    public void setStart(Node start) {
+	this.start = start;
+    }
+
+    public Node getEnd() {
+	return this.end;
+    }
+
+    public void setEnd(Node end) {
+	this.end = end;
+    }
+
+    public Double getDistance() {
+	return this.distance;
     }
     
-    /**
-     * @param nodeOrigin
-     * @param nodeDest
-     * @param distance
-     * @param streetname
-     */
-    public Edge(Node nodeOrigin, Node nodeDest, Float distance, String streetname) {
-	super(nodeOrigin, nodeDest, distance);
-	this.streetname = streetname;
+    public void setDistance(Double distance) {
+	this.distance = distance;
     }
-
-    /**
-     * @return the streetname
-     */
-    public String getStreetname() {
-        return this.streetname;
-    }
-
-    /**
-     * @param streetname the streetname to set
-     */
-    public void setStreetname(String streetname) {
-        this.streetname = streetname;
-    }
-
 }

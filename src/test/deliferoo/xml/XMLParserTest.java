@@ -53,7 +53,7 @@ public class XMLParserTest {
 	    assertEquals((long)2129259180, edges[2].getNodeDest().getIdNode());
 	    assertEquals((long)2129259178, edges[2].getNodeOrigin().getIdNode());
 	    assertEquals((float)25.26484, edges[2].getDistance());
-	    assertEquals("Avenue Lacassagne", edges[3].getStreetname());
+	    assertEquals("Avenue Lacassagne", edges[3].getStreetName());
 	    
 	} catch (Exception e) {
 	    fail(e);
