@@ -5,10 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +113,6 @@ public class XMLParser {
 
 	ArrayList<Delivery> listDeliveries = new ArrayList<Delivery>();
 	Node warehouseAddress = null;
-	DateTimeFormatter startTimeFormatter = DateTimeFormatter.ofPattern("H:m:s");
 	Date startTime = null;
 	Map<String, Node> nodeMap = map.getNodeMap();
 	
@@ -132,13 +128,12 @@ public class XMLParser {
 			
 			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");
 
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 			try {
 			    startTime = sdf.parse(heureDepart);
 			} catch (ParseException e) {
 			    e.printStackTrace();
 			}
-			//startTime = LocalDateTime.parse(date, startTimeFormatter);
 			
 			warehouseAddress = (Node) nodeMap.get(streamReader.getAttributeValue(null, "adresse"));
 			

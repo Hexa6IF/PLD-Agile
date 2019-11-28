@@ -1,10 +1,8 @@
 package view;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -147,59 +145,42 @@ public class Window {
      */
     private void initialiseTable() throws Exception {
 	XMLParser parser = XMLParser.getInstance();
-	Random rand = new Random();
-
+	
 	try {
-	    File deliveryFile = new File("src/main/resources/demandeGrand7.xml");
+	    File deliveryFile = new File("src/main/resources/demandeMoyen5.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
 	} catch (Exception e) {
 	    System.err.println(e);
 	}
-	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
-	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+	this.specialNodeViews = FXCollections.observableArrayList(createSpecialNodeViewList());
+	this.tableBox = new TableBox(this.specialNodeViews);
+    }
+    
+    private ArrayList<SpecialNodeView> createSpecialNodeViewList() throws Exception{
+	Random rand = new Random();
 	Calendar c = Calendar.getInstance();
+	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
 	c.setTime(this.deliveries.get(0).getDeliveryNode().getPassageTime());
 	Double r = rand.nextDouble();
 	Double g = rand.nextDouble();
 	Double b = rand.nextDouble();
 	Color firstDeliveryColor = Color.color(r, g, b);
-	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, 
-			deliveries.get(0).getDeliveryNode()));
+	
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getDeliveryNode()));
 	for (int i = 1; i < this.deliveries.size(); i++) {
-	      	r = rand.nextDouble();
-		g = rand.nextDouble();
-		b = rand.nextDouble();
-		Color randomColor = Color.color(r, g, b);
-		c.add(Calendar.MINUTE, (int)Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
-		deliveries.get(i).getDeliveryNode().setPassageTime(c.getTime());
-		c.add(Calendar.MINUTE, (int)Math.round(deliveries.get(i).getPickupNode().getDuration()));
-		deliveries.get(i).getPickupNode().setPassageTime(c.getTime());
-	    
-    	    try {
-    		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
-    			deliveries.get(i).getDeliveryNode()));
-    	    } catch (Exception e) {
-    		throw new Exception(e);
-    	    }
-    	    try {
-    		specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, 
-    			deliveries.get(i).getPickupNode()));
-    	    } catch (Exception e) {
-    		throw new Exception(e);
-    	    }
+	    r = rand.nextDouble();
+	    g = rand.nextDouble();
+	    b = rand.nextDouble();
+	    Color randomColor = Color.color(r, g, b);
+	    c.add(Calendar.MINUTE, (int) Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
+	    deliveries.get(i).getDeliveryNode().setPassageTime(c.getTime());
+	    c.add(Calendar.MINUTE, (int) Math.round(deliveries.get(i).getPickupNode().getDuration()));
+	    deliveries.get(i).getPickupNode().setPassageTime(c.getTime());
+	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
+	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getPickupNode()));
 	}
-	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, 
-		deliveries.get(0).getPickupNode()));
-	this.specialNodeViews = FXCollections.observableArrayList(specialNodeViewTmpList);
-
-	// example data to remove
-	/*
-	 * this.specialNodeViews = FXCollections.observableArrayList( new
-	 * SpecialNodeView(1,Color.BLACK,NodeType.PICKUP,7f,"14h34"), new
-	 * SpecialNodeView(2,Color.BLACK,NodeType.PICKUP,10f,"14h34"), new
-	 * SpecialNodeView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"), new
-	 * SpecialNodeView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34") );
-	 */
-	this.tableBox = new TableBox(this.specialNodeViews);
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getPickupNode()));
+	
+	return specialNodeViewTmpList;
     }
 }

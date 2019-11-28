@@ -47,29 +47,12 @@ public class SpecialNodeView {
 	this.node = node;
 	this.deliveryIndex = deliveryIndex;
 	this.color = color;
-	if (node.getSpecialNodeType() == null) {
-	    throw new Exception(" special node type null");
-	}
-	else {
-	    this.type = node.getSpecialNodeType();
-	}
-	if (node.getPassageTime() == null) {
-	    //throw new Exception("passage time null");
-	}
-	else {
-	    String pattern = "HH:mm";
-	    DateFormat df = new SimpleDateFormat(pattern);
+	this.type = node.getSpecialNodeType();
+	DateFormat df = new SimpleDateFormat("HH:mm");
+	if (node.getPassageTime() != null) {
 	    this.time = df.format(node.getPassageTime());
 	}
-	if (node.getDuration() == null) {
-	    throw new Exception("duration null");
-	}
-	else {
-	    this.duration = node.getDuration().floatValue();
-	}
-	/*this.type = node.getSpecialNodeType();
-	this.time = "8h";
-	this.duration = Float.valueOf((float)8.0);*/
+	this.duration = node.getDuration().floatValue();
     }
 
     /**
