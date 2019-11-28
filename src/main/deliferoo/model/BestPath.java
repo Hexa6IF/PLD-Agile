@@ -18,8 +18,10 @@ public class BestPath {
      * @param nodeDest
      * @param edges
      */
-    public BestPath(SpecialNode nodeOrigin, SpecialNode nodeDest) {
-	this.start=nodeOrigin; this.end=nodeDest;
+    public BestPath(SpecialNode nodeOrigin, SpecialNode nodeDest, List<Edge> path) {
+	this.start = nodeOrigin; 
+	this.end = nodeDest;
+	this.path = path;
     }
 
     public SpecialNode getStart() {

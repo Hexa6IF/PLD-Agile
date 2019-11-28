@@ -29,7 +29,7 @@ public class Round {
     /**
      * @param resultPath the resultPath to set
      */
-    public void setResultPat(List<BestPath> resultPath) {
+    public void setResultPath(List<BestPath> resultPath) {
         this.resultPath = resultPath;
     }    
 }

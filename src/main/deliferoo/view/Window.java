@@ -12,6 +12,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -95,6 +96,11 @@ public class Window {
 	sideBar.getChildren().addAll(rect1, this.tableBox.getTable(), rect2);	
 
 	return sideBar;
+    }
+    
+    private GridPane createDetailView() {
+	GridPane grid = new GridPane();	
+	return grid;
     }
 
     /*
