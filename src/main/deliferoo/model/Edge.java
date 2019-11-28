@@ -8,27 +8,29 @@ public class Edge {
     private String streetName;
     private Node start;
     private Node end;
+    private Double distance;
 
     /**
      * @param nodeOrigin
      * @param nodeDest
      */
-    public Edge(Node nodeOrigin, Node nodeDest) {
-	this.start=nodeOrigin;
-	this.end=nodeDest;
+    public Edge(Node nodeOrigin, Node nodeDest, Double distance) {
+	this.start = nodeOrigin;
+	this.end = nodeDest;
+	this.distance = distance;
     }
 
     /**
-     * @return the streetname
+     * @return the streetName
      */
     public String getStreetName() {
 	return streetName;
     }
 
     /**
-     * @param streetname the streetname to set
+     * @param streetname the streetName to set
      */
-    public void setStreetname(String streetName) {
+    public void setStreetName(String streetName) {
 	this.streetName = streetName;
     }
 
@@ -41,11 +43,18 @@ public class Edge {
     }
 
     public Node getEnd() {
-	return end;
+	return this.end;
     }
 
     public void setEnd(Node end) {
 	this.end = end;
     }
 
+    public Double getDistance() {
+	return this.distance;
+    }
+    
+    public void setDistance(Double distance) {
+	this.distance = distance;
+    }
 }
