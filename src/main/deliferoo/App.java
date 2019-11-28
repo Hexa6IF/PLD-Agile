@@ -3,8 +3,6 @@ import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 
 import org.xml.sax.SAXException;
@@ -12,6 +10,7 @@ import org.xml.sax.SAXException;
 import controller.Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.FullGraph;
 import view.Window;
 import xml.XMLParser;
 /**
@@ -33,7 +32,6 @@ public class App extends Application {
      */
     public static void main(String[] args) {
 	//launch(args);
-	
     }
 
     /**

@@ -1,59 +1,74 @@
 package xml;
 
+import java.util.LinkedList;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class XMLParser {
-    static Integer count1 = 0;
-    static Integer count2 = 0;
+import model.Edge;
+import model.FullGraph;
 
-    public static void parserxml(Document doc) {
+public class XMLParser {
+    private Integer nbNodes = 0;
+    private Integer nbEdges = 0;
+
+    public FullGraph mapParser(Document doc) {
+	LinkedList<model.Node> nodes = new LinkedList<model.Node>();
+	LinkedList<Edge> edges = new LinkedList<Edge>();
 	try {
-	    //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 	    NodeList nList = doc.getElementsByTagName("noeud");
 	    NodeList List = doc.getElementsByTagName("troncon");
-	    //System.out.println("----------------------------");
 	    for (int temp = 0; temp < nList.getLength(); temp++) {
 		Node nNode = nList.item(temp);
 		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 		    Element eElement = (Element) nNode;
-		    /*
-		     * System.out.println("id : " + eElement.getAttribute("id"));
-		     * System.out.println("latitude: " + eElement.getAttribute("latitude"));
-		     * System.out.println("longitude : " + eElement.getAttribute("longitude"));
-		     * System.out.println("------------------------------------------");
-		     */
-		    count1 = count1 + 1;
+		    model.Node node = new model.Node(Long.parseLong(eElement.getAttribute("id")),
+			    Float.parseFloat(eElement.getAttribute("latitude")),
+			    Float.parseFloat(eElement.getAttribute("longitude")));
+		    nodes.add(node);
+		    nbNodes += 1;
 		}
 	    }
-	    //System.out.println("count is " + count1);
-	    for (int temp = 0; temp < nList.getLength(); temp++) {
+	    for (int temp = 0; temp < List.getLength(); temp++) {
 		Node node = List.item(temp);
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
 		    Element eElement = (Element) node;
-		    /*
-		     * System.out.println("destination: " + eElement.getAttribute("destination"));
-		     * System.out.println("longueur: " + eElement.getAttribute("longueur"));
-		     * System.out.println("nomRue : " + eElement.getAttribute("nomRue"));
-		     * System.out.println("origine : " + eElement.getAttribute("origine"));
-		     * System.out.println("------------------------------------------");
-		     */
-		    count2 = count2 + 1;
+		    model.Node dest = new model.Node(this.getNodeByIdFromList(nodes, 
+			    Long.parseLong(eElement.getAttribute("destination"))));
+		    model.Node origin = new model.Node(this.getNodeByIdFromList(nodes, 
+			    Long.parseLong(eElement.getAttribute("origine"))));
+		    Edge edge = new Edge(origin, dest, 
+			    Float.parseFloat(eElement.getAttribute("longueur")),
+				    eElement.getAttribute("nomRue"));
+		    edges.add(edge);
+		    nbEdges += 1;
 		}
 	    }
-	    //System.out.println("count is " + count2);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
+	Edge[] edgeArrayForCasting = new Edge[1];
+	model.Node[] nodeArrayForCasting = new model.Node[1];
+	
+	FullGraph graph = new FullGraph(edges.toArray(edgeArrayForCasting), nodes.toArray(nodeArrayForCasting));
+	return graph;
+    }
+    
+    private model.Node getNodeByIdFromList(LinkedList<model.Node> list, Long nodeID) throws Exception{
+	for (int i = 0; i<list.size(); i++) {
+	    if (list.get(i).getIdNode().equals(nodeID)) 
+		return list.get(i);
+	}
+	throw new Exception("node not found");
     }
 
-    public static Integer get1() {
-	return count1;
+    public Integer getNbNodes() {
+	return this.nbNodes;
     }
 
-    public static Integer get2() {
-	return count2;
+    public Integer getNbEdges() {
+	return this.nbEdges;
     }
 }
