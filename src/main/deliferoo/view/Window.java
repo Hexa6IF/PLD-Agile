@@ -1,6 +1,8 @@
 package view;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import controller.Controller;
 import javafx.collections.FXCollections;
@@ -18,8 +20,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Delivery;
 import model.FullMap;
-import view.NodeTextView.NodeType;
 import xml.XMLParser;
 
 public class Window {
@@ -27,10 +29,11 @@ public class Window {
     private Controller controller;
     private Rectangle2D bounds;
     private MapView mapView;
-    private ObservableList<NodeTextView> nodeTextViews;
+    private ObservableList<SpecialNodeView> specialNodeViews;
     private TableBox tableBox;
 
     private FullMap map;
+    private List<Delivery> deliveries;
 
     public Window(Controller controller) {
 	this.controller = controller;
@@ -72,7 +75,13 @@ public class Window {
 	BorderPane border = new BorderPane();
 
 	/* Initialise Node text view */
-	this.initialiseTable();
+	try {
+	    this.initialiseTable();
+	} catch (Exception e) {
+	    // TODO Auto-generated catch block
+	    System.err.println("init failed");
+	    e.printStackTrace();
+	}
 
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
@@ -132,14 +141,38 @@ public class Window {
      * Creates the text view of special nodes
      * 
      */
-    private void initialiseTable() {
+    private void initialiseTable() throws Exception {
+	XMLParser parser = XMLParser.getInstance();
+	try {
+	    File deliveryFile = new File("src/main/resources/demandeMoyen5.xml");
+	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
+	} catch(Exception e) {
+	    System.err.println(e);
+	}
+	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
+	  for (int i=0; i < this.deliveries.size(); i++) {
+	      try {
+		  specialNodeViewTmpList.add(new SpecialNodeView(i, Color.BLACK,
+		      deliveries.get(i).getDeliveryNode()));
+	    } catch (Exception e) {
+		throw new Exception(e);
+	    }
+	      try {
+		  specialNodeViewTmpList.add(new SpecialNodeView(i, Color.BLACK,
+		      deliveries.get(i).getPickupNode()));
+	    } catch (Exception e) {
+		throw new Exception(e);
+	    }
+	  }
+	 this.specialNodeViews = FXCollections.observableArrayList(specialNodeViewTmpList);
+	
 	//example data to remove
-	this.nodeTextViews = FXCollections.observableArrayList(
-		new NodeTextView(1,Color.BLACK,NodeType.PICKUP,7f,"14h34"),
-		new NodeTextView(2,Color.BLACK,NodeType.PICKUP,10f,"14h34"),
-		new NodeTextView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"),
-		new NodeTextView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34")
-		);
-	this.tableBox = new TableBox(this.nodeTextViews);
+	/*this.specialNodeViews = FXCollections.observableArrayList(
+		new SpecialNodeView(1,Color.BLACK,NodeType.PICKUP,7f,"14h34"),
+		new SpecialNodeView(2,Color.BLACK,NodeType.PICKUP,10f,"14h34"),
+		new SpecialNodeView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"),
+		new SpecialNodeView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34")
+		);*/
+	this.tableBox = new TableBox(this.specialNodeViews);
     }
 }

@@ -3,9 +3,13 @@ package xml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +117,7 @@ public class XMLParser {
 	ArrayList<Delivery> listDeliveries = new ArrayList<Delivery>();
 	Node warehouseAddress = null;
 	DateTimeFormatter startTimeFormatter = DateTimeFormatter.ofPattern("H:m:s");
-	LocalDateTime startTime = LocalDateTime.now();
+	Date startTime = null;
 	Map<String, Node> nodeMap = map.getNodeMap();
 	
 	try {
@@ -127,7 +131,14 @@ public class XMLParser {
 		    if (streamReader.getLocalName().equalsIgnoreCase("entrepot")) {
 			
 			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");
-			startTime = LocalDateTime.parse(heureDepart, startTimeFormatter);
+
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			try {
+			    startTime = sdf.parse(heureDepart);
+			} catch (ParseException e) {
+			    e.printStackTrace();
+			}
+			//startTime = LocalDateTime.parse(date, startTimeFormatter);
 			
 			warehouseAddress = (Node) nodeMap.get(streamReader.getAttributeValue(null, "adresse"));
 			

@@ -15,22 +15,22 @@ import javafx.util.Callback;
  */
 public class TableBox {
 
-    private TableView<NodeTextView> table;
+    private TableView<SpecialNodeView> table;
 
     /**
      * Constructor
      *
-     * @param nodeTextViews List of Node text views
+     * @param specialNodeViews List of Node text views
      */
-    public TableBox(ObservableList<NodeTextView> nodeTextViews) {
-	this.table = new TableView<NodeTextView>(nodeTextViews);
+    public TableBox(ObservableList<SpecialNodeView> specialNodeViews) {
+	this.table = new TableView<SpecialNodeView>(specialNodeViews);
 	this.setTableColumns();
     }
 
     /**
      * @return the table
      */
-    public TableView<NodeTextView> getTable() {
+    public TableView<SpecialNodeView> getTable() {
 	return this.table;
     }
 
@@ -39,23 +39,23 @@ public class TableBox {
      * 
      */
     private void setTableColumns() {
-	TableColumn<NodeTextView, String> indexColumn = new TableColumn<NodeTextView, String>("Delivery index");
-	indexColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, String>("deliveryIndex"));
+	TableColumn<SpecialNodeView, String> indexColumn = new TableColumn<SpecialNodeView, String>("Delivery index");
+	indexColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, String>("deliveryIndex"));
 	indexColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
 
-	TableColumn<NodeTextView, String> typeColumn = new TableColumn<NodeTextView, String>("Type");
-	typeColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, String>("type"));
+	TableColumn<SpecialNodeView, String> typeColumn = new TableColumn<SpecialNodeView, String>("Type");
+	typeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, String>("type"));
 	typeColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
 
-	TableColumn<NodeTextView, Number> durationColumn = new TableColumn<NodeTextView, Number>("Duration (min)");
-	durationColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, Number>("duration"));
+	TableColumn<SpecialNodeView, Number> durationColumn = new TableColumn<SpecialNodeView, Number>("Duration (min)");
+	durationColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, Number>("duration"));
 	durationColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
 
-	TableColumn<NodeTextView, String> timeColumn = new TableColumn<NodeTextView, String>("Time");
-	timeColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, String>("time"));
+	TableColumn<SpecialNodeView, String> timeColumn = new TableColumn<SpecialNodeView, String>("Time");
+	timeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, String>("time"));
 	timeColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
 
-	TableColumn<NodeTextView, String> colorColumn = this.setColorColumn();
+	TableColumn<SpecialNodeView, String> colorColumn = this.setColorColumn();
 	colorColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
 
 	table.getColumns().setAll(indexColumn, typeColumn, durationColumn, timeColumn, colorColumn);
@@ -67,12 +67,12 @@ public class TableBox {
      * 
      * @return colorColumn
      */
-    private TableColumn<NodeTextView, String> setColorColumn() {
-	TableColumn<NodeTextView, String> colorColumn = new TableColumn<NodeTextView, String>("Color code");
-	colorColumn.setCellFactory(new Callback<TableColumn<NodeTextView, String>, TableCell<NodeTextView, String>>() {
+    private TableColumn<SpecialNodeView, String> setColorColumn() {
+	TableColumn<SpecialNodeView, String> colorColumn = new TableColumn<SpecialNodeView, String>("Color code");
+	colorColumn.setCellFactory(new Callback<TableColumn<SpecialNodeView, String>, TableCell<SpecialNodeView, String>>() {
 	    @Override
-	    public TableCell<NodeTextView, String> call(TableColumn<NodeTextView, String> param) {
-		return new TableCell<NodeTextView, String>() {
+	    public TableCell<SpecialNodeView, String> call(TableColumn<SpecialNodeView, String> param) {
+		return new TableCell<SpecialNodeView, String>() {
 		    @Override
 		    protected void updateItem(String item, boolean empty) {
 			if (!empty) {

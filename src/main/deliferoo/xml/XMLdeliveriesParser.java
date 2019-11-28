@@ -18,16 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import model.Delivery;
-import model.FullMap;
-import model.SpecialNode;
-import model.SpecialNodeType;
-
 
 
 public class XMLdeliveriesParser {
 
-    public enum EnumXMLdeliveriesParser {
+    /*public enum EnumXMLdeliveriesParser {
 	INSTANCE;
     }
 
@@ -116,6 +111,6 @@ public class XMLdeliveriesParser {
 	    e.printStackTrace();
 	}
 	return listDeliveries;
-    }
+    }*/
 
 }

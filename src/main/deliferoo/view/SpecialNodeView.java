@@ -1,6 +1,8 @@
 package view;
 
 import javafx.scene.paint.Color;
+import model.SpecialNode;
+import model.SpecialNodeType;
 
 /**
  * Class to represent the text view of a special node
@@ -8,17 +10,14 @@ import javafx.scene.paint.Color;
  * @author sadsitha
  *
  */
-public class NodeTextView {
-
-    public enum NodeType {
-	DROPOFF, PICKUP, NORMAL;
-    }
+public class SpecialNodeView {
 
     private Number deliveryIndex;
     private Color color;
-    private NodeType type;
+    private SpecialNodeType type;
     private Float duration;
     private String time;
+    private SpecialNode node; 
 
     /**
      * @param deliveryIndex
@@ -27,12 +26,44 @@ public class NodeTextView {
      * @param duration
      * @param time
      */
-    public NodeTextView(Number deliveryIndex, Color color, NodeType type, Float duration, String time) {
+    public SpecialNodeView(Number deliveryIndex, Color color, SpecialNodeType type, Float duration, String time) {
 	this.deliveryIndex = deliveryIndex;
 	this.color = color;
 	this.type = type;
 	this.duration = duration;
 	this.time = time;
+    }
+
+    /**
+     * @param deliveryIndex
+     * @param color
+     * @param node
+     * @throws Exception 
+     */
+    public SpecialNodeView(Number deliveryIndex, Color color, SpecialNode node) throws Exception {
+	this.node = node;
+	this.deliveryIndex = deliveryIndex;
+	this.color = color;
+	if (node.getSpecialNodeType() == null) {
+	    throw new Exception(" special node type null");
+	}
+	else {
+	    this.type = node.getSpecialNodeType();
+	}
+	if (node.getDuration() == null) {
+	    throw new Exception("duration null");
+	}
+	else {
+	    //this.time = node.getPassageTime().toString();
+	}
+	if (node.getPassageTime() == null) {
+	}
+	else {
+	    this.duration = node.getDuration().floatValue();
+	}
+	/*this.type = node.getSpecialNodeType();
+	this.time = "8h";
+	this.duration = Float.valueOf((float)8.0);*/
     }
 
     /**
@@ -52,14 +83,14 @@ public class NodeTextView {
     /**
      * @return the type
      */
-    public NodeType getType() {
+    public SpecialNodeType getType() {
         return type;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(NodeType type) {
+    public void setType(SpecialNodeType type) {
         this.type = type;
     }
 
@@ -104,7 +135,19 @@ public class NodeTextView {
     public void setDeliveryIndex(Number deliveryIndex) {
         this.deliveryIndex = deliveryIndex;
     }
-    
-    
+
+    /**
+     * @return the node
+     */
+    public SpecialNode getNode() {
+        return node;
+    }
+
+    /**
+     * @param node the node to set
+     */
+    public void setNode(SpecialNode node) {
+        this.node = node;
+    }
 
 }
