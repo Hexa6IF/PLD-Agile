@@ -12,6 +12,7 @@ public class BestPath {
     private SpecialNode start;
     private SpecialNode end;
     private List<Edge> path;
+    private Double distance;
 
     /**
      * @param nodeOrigin
@@ -22,6 +23,10 @@ public class BestPath {
 	this.start = nodeOrigin; 
 	this.end = nodeDest;
 	this.path = path;
+	distance = 0.0;
+	for (int i = 0; i<path.size(); i++) {
+	    distance += path.get(i).getDistance();
+	}
     }
 
     public SpecialNode getStart() {
@@ -47,4 +52,19 @@ public class BestPath {
     public void setPath(List<Edge> path) {
 	this.path = path;
     }
+
+    /**
+     * @return the distance
+     */
+    public Double getDistance() {
+        return distance;
+    }
+
+    /**
+     * @param distance the distance to set
+     */
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+    
 }
