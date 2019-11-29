@@ -137,12 +137,12 @@ public class MapView {
 	String textToDisplay = node.getSpecialNodeType() + " : " + node.getDuration();
 
 	if (node.getSpecialNodeType() == SpecialNodeType.PICKUP) {
-	    marker = new Circle(x, y, 5.0, paint);
+	    marker = new Circle(x, y, 10.0, paint);
 	} else if (node.getSpecialNodeType() == SpecialNodeType.DROPOFF) {
-	    marker = new Rectangle(x - 5, y - 5, 10, 10);
+	    marker = new Rectangle(x - 10, y - 10, 20, 20);
 	    marker.setFill(paint);
 	} else {
-	    marker = new Circle(x, y, 5.0, paint);
+	    marker = new Circle(x, y, 10, paint);
 	}
 
 	Tooltip.install(marker, new Tooltip(textToDisplay));
@@ -155,16 +155,16 @@ public class MapView {
 	for (BestPath bestPath : bestPaths) {
 	    List<Edge> path = bestPath.getPath();
 	    for (Edge edge : path) {
-		
-		Double x1 = this.offsetX
-			+ dimension * (edge.getStart().getLongitude() - this.map.getMinLong()) / this.map.getRangeLongitude();
-		Double y1 = this.offsetY
-			+ dimension * (this.map.getMaxLat() - edge.getStart().getLatitude()) / this.map.getRangeLatitude();
 
-		Double x2 = this.offsetX
-			+ dimension * (edge.getEnd().getLongitude() - this.map.getMinLong()) / this.map.getRangeLongitude();
-		Double y2 = this.offsetY
-			+ dimension * (this.map.getMaxLat() - edge.getEnd().getLatitude()) / this.map.getRangeLatitude();
+		Double x1 = this.offsetX + dimension * (edge.getStart().getLongitude() - this.map.getMinLong())
+			/ this.map.getRangeLongitude();
+		Double y1 = this.offsetY + dimension * (this.map.getMaxLat() - edge.getStart().getLatitude())
+			/ this.map.getRangeLatitude();
+
+		Double x2 = this.offsetX + dimension * (edge.getEnd().getLongitude() - this.map.getMinLong())
+			/ this.map.getRangeLongitude();
+		Double y2 = this.offsetY + dimension * (this.map.getMaxLat() - edge.getEnd().getLatitude())
+			/ this.map.getRangeLatitude();
 		round.getPoints().addAll(new Double[] { x1, y1, x2, y2 });
 	    }
 	}
