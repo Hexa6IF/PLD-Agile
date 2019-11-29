@@ -151,7 +151,7 @@ public class MapView {
 
     public Shape drawRound(List<BestPath> bestPaths) {
 	Polyline round = new Polyline();
-	Double dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);e
+	Double dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
 	for (BestPath bestPath : bestPaths) {
 	    List<Edge> path = bestPath.getPath();
 	    for (Edge edge : path) {
@@ -167,8 +167,8 @@ public class MapView {
 			+ dimension * (this.map.getMaxLat() - edge.getEnd().getLatitude()) / this.map.getRangeLatitude();
 		round.getPoints().addAll(new Double[] { x1, y1, x2, y2 });
 	    }
-
 	}
+	return round;
     }
 
 }
