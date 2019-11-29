@@ -2,9 +2,14 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import model.BestPath;
 
 public abstract class TemplateTSP implements TSP {
 	
+    	private BestPath[] bestPathSolution;
 	private Integer[] bestSolution;
 	private int bestSolutionCost = 0;
 	private Boolean timeLimitReached;
@@ -24,6 +29,47 @@ public abstract class TemplateTSP implements TSP {
 		branchAndBound(0, undiscovered, discovered, 0, cost, duration, System.currentTimeMillis(), timeLimit);
 	}
 	
+	public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph) {
+	    timeLimitReached = false;
+	    bestSolutionCost = Integer.MAX_VALUE;
+	    int nbNodes = graph.size();
+	    int[][] cost = this.createCostFromGraph(graph);
+	    int [] duration = this.createDurationFromGraph(graph);
+	    bestSolution = new Integer[nbNodes];
+	    ArrayList<Integer> undiscovered = new ArrayList<Integer>();
+	    for (int i=1; i<nbNodes; i++) undiscovered.add(i);
+	    ArrayList<Integer> discovered = new ArrayList<Integer>(nbNodes);
+	    discovered.add(0); // le premier sommet visite est 0
+	    branchAndBound(0, undiscovered, discovered, 0, cost, duration, System.currentTimeMillis(), timeLimit);
+	}
+	
+	private int[][] createCostFromGraph(Map<String, Map<String, BestPath>> graph){
+	    int nbNodes = graph.size();
+	    int[][] cost = new int[nbNodes][nbNodes];//to do : convert to double
+	    List<String> keysNodeOrigin = new ArrayList<String>(graph.keySet());
+	    for (int i=0; i<nbNodes; i++) {
+		String nodeOrigin = keysNodeOrigin.get(i);
+		List<String> keysNodeDest = new ArrayList<String>(graph.get(nodeOrigin).keySet());
+		for (int j=0; j<nbNodes; j++) {
+		    String nodeDest = keysNodeDest.get(j);
+		    int distanceFromOrigintoDest = graph.get(nodeOrigin).get(nodeDest).getDistance().intValue();
+		    cost[i][j]= distanceFromOrigintoDest;
+		}
+	    }
+	    return cost;
+	}
+	
+	private int[] createDurationFromGraph(Map<String, Map<String, BestPath>> graph) {
+	    int nbNodes = graph.size();
+	    int [] duration = new int[nbNodes];
+	    String[] nodeList = graph.keySet().toArray(new String[1]);
+	    Map<String, BestPath> firstEntry = graph.get(nodeList[0]);
+	    for (int i=0; i<nbNodes; i++) {
+		duration[i]= firstEntry.get(nodeList[i]).getStart().getDuration().intValue();
+	    }
+	    return duration;
+	}
+	
 	public Integer getBestSolution(int i){
 		if ((bestSolution == null) || (i<0) || (i>=bestSolution.length))
 			return null;
@@ -33,6 +79,15 @@ public abstract class TemplateTSP implements TSP {
 	public int getBestSolutionCost(){
 		return bestSolutionCost;
 	}
+	
+	/*public BestPath[] getBestPathSolution() {
+	    if ((bestSolution == null))
+		return null;
+	    else {
+		for (int)
+	    }
+	    return this.bestPathSolution;
+	}*/
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
