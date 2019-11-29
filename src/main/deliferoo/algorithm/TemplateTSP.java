@@ -9,10 +9,11 @@ import model.BestPath;
 
 public abstract class TemplateTSP implements TSP {
 	
-    	private BestPath[] bestPathSolution;
+    	private ArrayList<BestPath> bestPathSolution;
 	private Integer[] bestSolution;
 	private int bestSolutionCost = 0;
 	private Boolean timeLimitReached;
+	private Map<String, Map<String, BestPath>> graph;
 	
 	public Boolean getTimeLimitReached(){
 		return timeLimitReached;
@@ -30,11 +31,12 @@ public abstract class TemplateTSP implements TSP {
 	}
 	
 	public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph) {
+	    this.graph = graph;
 	    timeLimitReached = false;
 	    bestSolutionCost = Integer.MAX_VALUE;
 	    int nbNodes = graph.size();
-	    int[][] cost = this.createCostFromGraph(graph);
-	    int [] duration = this.createDurationFromGraph(graph);
+	    int[][] cost = this.createCostFromGraph();
+	    int [] duration = this.createDurationFromGraph();
 	    bestSolution = new Integer[nbNodes];
 	    ArrayList<Integer> undiscovered = new ArrayList<Integer>();
 	    for (int i=1; i<nbNodes; i++) undiscovered.add(i);
@@ -43,27 +45,27 @@ public abstract class TemplateTSP implements TSP {
 	    branchAndBound(0, undiscovered, discovered, 0, cost, duration, System.currentTimeMillis(), timeLimit);
 	}
 	
-	private int[][] createCostFromGraph(Map<String, Map<String, BestPath>> graph){
-	    int nbNodes = graph.size();
+	private int[][] createCostFromGraph(){
+	    int nbNodes = this.graph.size();
 	    int[][] cost = new int[nbNodes][nbNodes];//to do : convert to double
-	    List<String> keysNodeOrigin = new ArrayList<String>(graph.keySet());
+	    List<String> keysNodeOrigin = new ArrayList<String>(this.graph.keySet());
 	    for (int i=0; i<nbNodes; i++) {
 		String nodeOrigin = keysNodeOrigin.get(i);
-		List<String> keysNodeDest = new ArrayList<String>(graph.get(nodeOrigin).keySet());
+		List<String> keysNodeDest = new ArrayList<String>(this.graph.get(nodeOrigin).keySet());
 		for (int j=0; j<nbNodes; j++) {
 		    String nodeDest = keysNodeDest.get(j);
-		    int distanceFromOrigintoDest = graph.get(nodeOrigin).get(nodeDest).getDistance().intValue();
+		    int distanceFromOrigintoDest = this.graph.get(nodeOrigin).get(nodeDest).getDistance().intValue();
 		    cost[i][j]= distanceFromOrigintoDest;
 		}
 	    }
 	    return cost;
 	}
 	
-	private int[] createDurationFromGraph(Map<String, Map<String, BestPath>> graph) {
-	    int nbNodes = graph.size();
+	private int[] createDurationFromGraph() {
+	    int nbNodes = this.graph.size();
 	    int [] duration = new int[nbNodes];
-	    String[] nodeList = graph.keySet().toArray(new String[1]);
-	    Map<String, BestPath> firstEntry = graph.get(nodeList[0]);
+	    String[] nodeList = this.graph.keySet().toArray(new String[1]);
+	    Map<String, BestPath> firstEntry = this.graph.get(nodeList[0]);
 	    for (int i=0; i<nbNodes; i++) {
 		duration[i]= firstEntry.get(nodeList[i]).getStart().getDuration().intValue();
 	    }
@@ -80,10 +82,21 @@ public abstract class TemplateTSP implements TSP {
 		return bestSolutionCost;
 	}
 	
-    /*
-     * public BestPath[] getBestPathSolution() { if ((bestSolution == null)) return
-     * null; else { } return this.bestPathSolution; }
-     */
+    
+      public List<BestPath> getBestPathSolution() {
+	  if (this.bestSolution == null)
+	      return null;
+	  else {
+	      List<String> keysNode = new ArrayList<String>(this.graph.keySet());
+	      for (int i=0; i<this.bestSolution.length-1; i+=2) {
+		  String nodeOriginID = keysNode.get(bestSolution[i]);
+		  String nodeDestID = keysNode.get(bestSolution[i+1]);
+		  this.bestPathSolution = new ArrayList<BestPath>();
+		  this.bestPathSolution.add(this.graph.get(nodeOriginID).get(nodeDestID));
+	      }
+	  } 
+	  return this.bestPathSolution; }
+     
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
