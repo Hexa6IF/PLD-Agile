@@ -67,7 +67,7 @@ public class MapView {
 	Double g = rand.nextDouble();
 	Double b = rand.nextDouble();
 	Color color = Color.color(r, g, b);
-	draw(bestPaths.get("143403").getPath(), color, 5);
+	draw(bestPaths.get("25173820").getPath(), color, 5);
 
 	this.mapView.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), 
 		BorderWidths.DEFAULT, new Insets(10))));
@@ -95,7 +95,7 @@ public class MapView {
 	Line road = new Line(x1, y1, x2, y2);
 	road.setStroke(color);
 	road.setStrokeWidth(width);
-	Tooltip.install(road, new Tooltip(edge.getStreetName()));
+	Tooltip.install(road, new Tooltip(edge.getStreetName() + " " + edge.getStart().getNodeId() + " | " + edge.getEnd().getNodeId() + " | " + edge.getDistance()));
 
 	return road;
     }

@@ -43,7 +43,7 @@ public class Window {
 
 	XMLParser parser = XMLParser.getInstance();
 	try {
-	    File fXmlFile = new File("src/main/resources/grandPlan.xml");
+	    File fXmlFile = new File("src/main/resources/petitPlan.xml");
 	    this.map = parser.parseMap(fXmlFile);
 	} catch (Exception e) {
 	    System.err.println(e);
@@ -127,7 +127,7 @@ public class Window {
 	XMLParser parser = XMLParser.getInstance();
 	
 	try {
-	    File deliveryFile = new File("src/main/resources/demandeGrand7.xml");
+	    File deliveryFile = new File("src/main/resources/demandePetit1.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
 	} catch (Exception e) {
 	    System.err.println(e);

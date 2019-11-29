@@ -72,6 +72,8 @@ public class Dijkstra {
 	    settledNodes.add(currentNode.getKey());
 	}
 	
+	
+	
 	return getBestPaths(map, deliveries, startNode, predecessor, neighborGraph);
     }
     
@@ -121,6 +123,8 @@ public class Dijkstra {
 	    neighbors.get(startId).put(endId, edge);
 	    neighbors.get(endId).put(startId, edge);	    
 	}
+	
+	System.out.println(neighbors.get("208769457").size());
 	
 	return neighbors;
     }
