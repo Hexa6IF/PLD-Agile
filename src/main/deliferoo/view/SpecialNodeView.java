@@ -2,6 +2,7 @@ package view;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 
 import javafx.scene.paint.Color;
 import model.SpecialNode;
@@ -48,7 +49,7 @@ public class SpecialNodeView {
 	this.deliveryIndex = deliveryIndex;
 	this.color = color;
 	this.type = node.getSpecialNodeType();
-	DateFormat df = new SimpleDateFormat("HH:mm");
+	DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm");
 	if (node.getPassageTime() != null) {
 	    this.time = df.format(node.getPassageTime());
 	}

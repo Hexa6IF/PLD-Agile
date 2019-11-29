@@ -3,10 +3,9 @@ package xml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +112,8 @@ public class XMLParser {
 
 	ArrayList<Delivery> listDeliveries = new ArrayList<Delivery>();
 	Node warehouseAddress = null;
-	Date startTime = null;
+	DateTimeFormatter startTimeFormatter = DateTimeFormatter.ofPattern("H:m:s");
+	LocalTime startTime = null;
 	Map<String, Node> nodeMap = map.getNodeMap();
 	
 	try {
@@ -127,14 +127,9 @@ public class XMLParser {
 		    if (streamReader.getLocalName().equalsIgnoreCase("entrepot")) {
 			
 			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");
-
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-			try {
-			    startTime = sdf.parse(heureDepart);
-			} catch (ParseException e) {
-			    e.printStackTrace();
-			}
 			
+			startTime = LocalTime.parse(heureDepart, startTimeFormatter);
+
 			warehouseAddress = (Node) nodeMap.get(streamReader.getAttributeValue(null, "adresse"));
 			
 			SpecialNode wareHouseSrt = new SpecialNode(warehouseAddress, SpecialNodeType.START, 0.0,

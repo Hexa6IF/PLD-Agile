@@ -24,6 +24,7 @@ public class TableBox {
      */
     public TableBox(ObservableList<SpecialNodeView> specialNodeViews) {
 	this.table = new TableView<SpecialNodeView>(specialNodeViews);
+	this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	this.setTableColumns();
     }
 
@@ -57,7 +58,7 @@ public class TableBox {
 
 	TableColumn<SpecialNodeView, String> colorColumn = this.setColorColumn();
 	colorColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
-
+	
 	table.getColumns().setAll(indexColumn, typeColumn, durationColumn, timeColumn, colorColumn);
     }
 

@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalTime;;
 
 /**
  * Model class.
@@ -12,9 +12,9 @@ public class SpecialNode {
     private Node node;
     private SpecialNodeType specialNodeType;
     private Double duration;
-    private Date passageTime;
+    private LocalTime passageTime;
 
-    public SpecialNode(Node node, SpecialNodeType specialNodeType, Double duration, Date passageTime) {
+    public SpecialNode(Node node, SpecialNodeType specialNodeType, Double duration, LocalTime passageTime) {
 	this.node = node;
 	this.specialNodeType = specialNodeType;
 	this.duration = duration;
@@ -45,11 +45,11 @@ public class SpecialNode {
 	this.duration = duration;
     }
     
-    public Date getPassageTime() {
+    public LocalTime getPassageTime() {
 	return this.passageTime;
     }
     
-    public void setPassageTime(Date passageTime) {
+    public void setPassageTime(LocalTime passageTime) {
 	this.passageTime = passageTime;
     }
 

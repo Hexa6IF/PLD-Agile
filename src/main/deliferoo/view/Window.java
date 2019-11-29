@@ -1,8 +1,13 @@
 package view;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -158,9 +163,10 @@ public class Window {
     
     private ArrayList<SpecialNodeView> createSpecialNodeViewList() throws Exception{
 	Random rand = new Random();
-	Calendar c = Calendar.getInstance();
+	//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+	LocalTime now = this.deliveries.get(0).getDeliveryNode().getPassageTime();
 	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
-	c.setTime(this.deliveries.get(0).getDeliveryNode().getPassageTime());
+	
 	Double r = rand.nextDouble();
 	Double g = rand.nextDouble();
 	Double b = rand.nextDouble();
@@ -172,10 +178,11 @@ public class Window {
 	    g = rand.nextDouble();
 	    b = rand.nextDouble();
 	    Color randomColor = Color.color(r, g, b);
-	    c.add(Calendar.MINUTE, (int) Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
-	    deliveries.get(i).getDeliveryNode().setPassageTime(c.getTime());
-	    c.add(Calendar.MINUTE, (int) Math.round(deliveries.get(i).getPickupNode().getDuration()));
-	    deliveries.get(i).getPickupNode().setPassageTime(c.getTime());
+	    
+	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
+	    deliveries.get(i).getDeliveryNode().setPassageTime(now);
+	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getPickupNode().getDuration()));
+	    deliveries.get(i).getPickupNode().setPassageTime(now);
 	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
 	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getPickupNode()));
 	}
