@@ -80,14 +80,10 @@ public abstract class TemplateTSP implements TSP {
 		return bestSolutionCost;
 	}
 	
-	/*public BestPath[] getBestPathSolution() {
-	    if ((bestSolution == null))
-		return null;
-	    else {
-		for (int)
-	    }
-	    return this.bestPathSolution;
-	}*/
+    /*
+     * public BestPath[] getBestPathSolution() { if ((bestSolution == null)) return
+     * null; else { } return this.bestPathSolution; }
+     */
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -129,7 +125,8 @@ public abstract class TemplateTSP implements TSP {
 	    if (undiscovered.size() == 0){ // tous les sommets ont ete visites
 	    	discoveredCost += cost[currentNode][0];
 	    	if (discoveredCost < bestSolutionCost){ // on a trouve une solution meilleure que bestSolution
-	    		discovered.toArray(bestSolution);
+	    	    	//discovered.toArray(bestSolution);
+	    	    	this.bestSolution = discovered.toArray(bestSolution);
 	    		bestSolutionCost = discoveredCost;
 	    	}
 	    } else if (discoveredCost + bound(currentNode, undiscovered, cost, duration) < bestSolutionCost){
