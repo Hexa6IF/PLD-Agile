@@ -1,101 +1,140 @@
 package view;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import java.time.format.DateTimeFormatter;
+
 import javafx.scene.paint.Color;
-import javafx.util.Callback;
+import model.SpecialNode;
+import model.SpecialNodeType;
 
 /**
- * Class for displaying table of special nodes (pickup and delivery nodes)
- *
+ * Class to represent the text view of a special node
+ * 
  * @author sadsitha
+ *
  */
 public class SpecialNodeView {
 
-    private TableView<NodeTextView> table;
+    private Number deliveryIndex;
+    private Color color;
+    private SpecialNodeType type;
+    private Float duration;
+    private String time;
+    private SpecialNode node; 
 
     /**
-     * Constructor
-     *
-     * @param nodeTextViews List of Node text views
+     * @param deliveryIndex
+     * @param color
+     * @param type
+     * @param duration
+     * @param time
      */
-    public SpecialNodeView(ObservableList<NodeTextView> nodeTextViews, Double prefHeight, Double prefWidth) {
-	this.table = new TableView<NodeTextView>(nodeTextViews);
-	
-	this.table.setPrefSize(prefWidth, prefHeight);
-	this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-	
-	this.setTableColumns();
+    public SpecialNodeView(Number deliveryIndex, Color color, SpecialNodeType type, Float duration, String time) {
+	this.deliveryIndex = deliveryIndex;
+	this.color = color;
+	this.type = type;
+	this.duration = duration;
+	this.time = time;
     }
 
     /**
-     * @return the table
+     * @param deliveryIndex
+     * @param color
+     * @param node
+     * @throws Exception 
      */
-    public TableView<NodeTextView> getTable() {
-	return this.table;
+    public SpecialNodeView(Number deliveryIndex, Color color, SpecialNode node) throws Exception {
+	this.node = node;
+	this.deliveryIndex = deliveryIndex;
+	this.color = color;
+	this.type = node.getSpecialNodeType();
+	DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm");
+	if (node.getPassageTime() != null) {
+	    this.time = df.format(node.getPassageTime());
+	}
+	this.duration = node.getDuration().floatValue();
     }
 
-    /*
-     * Sets the table columns
-     * 
+    /**
+     * @return the color
      */
-    private void setTableColumns() {
-	TableColumn<NodeTextView, String> indexColumn = new TableColumn<NodeTextView, String>("Delivery index");
-	indexColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, String>("deliveryIndex"));
-	indexColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
-
-	TableColumn<NodeTextView, String> typeColumn = new TableColumn<NodeTextView, String>("Type");
-	typeColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, String>("type"));
-	typeColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
-
-	TableColumn<NodeTextView, Number> durationColumn = new TableColumn<NodeTextView, Number>("Duration (min)");
-	durationColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, Number>("duration"));
-	durationColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
-
-	TableColumn<NodeTextView, String> timeColumn = new TableColumn<NodeTextView, String>("Time");
-	timeColumn.setCellValueFactory(new PropertyValueFactory<NodeTextView, String>("time"));
-	timeColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
-
-	TableColumn<NodeTextView, String> colorColumn = this.setColorColumn();
-	colorColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
-
-	table.getColumns().setAll(indexColumn, typeColumn, durationColumn, timeColumn, colorColumn);
+    public Color getColor() {
+        return color;
     }
 
-    /*
-     * Set color column - use color of NodeTextView to create custom css to set
-     * background color of cells
-     * 
-     * @return colorColumn
+    /**
+     * @param color the color to set
      */
-    private TableColumn<NodeTextView, String> setColorColumn() {
-	TableColumn<NodeTextView, String> colorColumn = new TableColumn<NodeTextView, String>("Color code");
-	colorColumn.setCellFactory(new Callback<TableColumn<NodeTextView, String>, TableCell<NodeTextView, String>>() {
-	    @Override
-	    public TableCell<NodeTextView, String> call(TableColumn<NodeTextView, String> param) {
-		return new TableCell<NodeTextView, String>() {
-		    @Override
-		    protected void updateItem(String item, boolean empty) {
-			if (!empty) {
-			    /* get index of item in collection */
-			    int currentIndex = indexProperty().getValue() < 0 ? 0 : indexProperty().getValue();
-			    /* get color of item */
-			    Color color = param.getTableView().getItems().get(currentIndex).getColor();
-			    /* set background color of cell */
-			    Double r = color.getRed() * 255;
-			    Double g = color.getGreen() * 255;
-			    Double b = color.getBlue() * 255;
-			    setStyle("-fx-background-color: rgb(" + r + "," + g + ", " + b + ");");
-			}
-		    }
-		};
-	    }
-
-	});
-	return colorColumn;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
+    /**
+     * @return the type
+     */
+    public SpecialNodeType getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(SpecialNodeType type) {
+        this.type = type;
+    }
+
+    /**
+     * @return the duration
+     */
+    public Float getDuration() {
+        return duration;
+    }
+
+    /**
+     * @param duration the duration to set
+     */
+    public void setDuration(Float duration) {
+        this.duration = duration;
+    }
+
+    /**
+     * @return the time
+     */
+    public String getTime() {
+        return time;
+    }
+
+    /**
+     * @param time the time to set
+     */
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    /**
+     * @return the deliveryIndex
+     */
+    public Number getDeliveryIndex() {
+        return deliveryIndex;
+    }
+
+    /**
+     * @param deliveryIndex the deliveryIndex to set
+     */
+    public void setDeliveryIndex(Number deliveryIndex) {
+        this.deliveryIndex = deliveryIndex;
+    }
+
+    /**
+     * @return the node
+     */
+    public SpecialNode getNode() {
+        return node;
+    }
+
+    /**
+     * @param node the node to set
+     */
+    public void setNode(SpecialNode node) {
+        this.node = node;
+    }
 }

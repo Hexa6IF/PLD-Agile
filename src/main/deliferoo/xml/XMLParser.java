@@ -3,13 +3,18 @@ package xml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.Delivery;
 import model.Edge;
 import model.Node;
+import model.SpecialNode;
+import model.SpecialNodeType;
 import model.FullMap;
 
 import javax.xml.stream.XMLInputFactory;
@@ -26,11 +31,11 @@ public class XMLParser {
 	factory = XMLInputFactory.newInstance();
     }
 
-    public static XMLParser getInstance() { 
-	if(instance == null) {
+    public static XMLParser getInstance() {
+	if (instance == null) {
 	    instance = new XMLParser();
 	}
-	return instance; 
+	return instance;
     }
 
     public FullMap parseMap(File mapFile) {
@@ -48,11 +53,11 @@ public class XMLParser {
 	try {
 	    XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(mapFile));
 
-	    while(streamReader.hasNext()) {
+	    while (streamReader.hasNext()) {
 		streamReader.next();
 
-		if(streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-		    if(streamReader.getLocalName().equalsIgnoreCase("noeud")) {
+		if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+		    if (streamReader.getLocalName().equalsIgnoreCase("noeud")) {
 			String id = streamReader.getAttributeValue(null, "id");
 
 			Double latitude = Double.parseDouble(streamReader.getAttributeValue(null, "latitude"));
@@ -76,7 +81,7 @@ public class XMLParser {
 
 			Node node = new Node(id, latitude, longitude);
 			nodeMap.put(id, node);
-		    } else if(streamReader.getLocalName().equalsIgnoreCase("troncon")) {
+		    } else if (streamReader.getLocalName().equalsIgnoreCase("troncon")) {
 			String origin = streamReader.getAttributeValue(null, "origine");
 			String destination = streamReader.getAttributeValue(null, "destination");
 
@@ -102,4 +107,68 @@ public class XMLParser {
 
 	return mapGraph;
     }
+
+    public List<Delivery> parseDeliveries(File deliveriesFile, FullMap map) {
+
+	ArrayList<Delivery> listDeliveries = new ArrayList<Delivery>();
+	Node warehouseAddress = null;
+	DateTimeFormatter startTimeFormatter = DateTimeFormatter.ofPattern("H:m:s");
+	LocalTime startTime = null;
+	Map<String, Node> nodeMap = map.getNodeMap();
+	
+	try {
+	    XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(deliveriesFile));
+	    Integer deliveryCount = 0;
+	    
+	    while (streamReader.hasNext()) {
+		streamReader.next();
+
+		if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+		    
+		    if (streamReader.getLocalName().equalsIgnoreCase("entrepot")) {
+			
+			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");
+			
+			startTime = LocalTime.parse(heureDepart, startTimeFormatter);
+
+			warehouseAddress = (Node) nodeMap.get(streamReader.getAttributeValue(null, "adresse"));
+			
+			SpecialNode wareHouseSrt = new SpecialNode(warehouseAddress, SpecialNodeType.START, 0.0,
+				startTime);
+			SpecialNode wareHouseFin = new SpecialNode(warehouseAddress, SpecialNodeType.FINISH, 0.0, null);
+			Delivery wareHouseDel = new Delivery(wareHouseSrt, wareHouseFin, deliveryCount);
+			listDeliveries.add(wareHouseDel);
+			deliveryCount += 1;
+
+		    } else if (streamReader.getLocalName().equalsIgnoreCase("livraison")) {
+			
+			Integer dureeLivr = Integer.parseInt(streamReader.getAttributeValue(null, "dureeLivraison"));
+			Double delivDuration = dureeLivr / 60.0;
+			
+			Integer dureeEnlev = Integer.parseInt(streamReader.getAttributeValue(null, "dureeEnlevement"));
+			Double pickDuration = dureeEnlev / 60.0;
+			
+			Node delivAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseLivraison"));
+			
+			Node pickAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseEnelvement"));
+
+			SpecialNode startNode = new SpecialNode(pickAdr, SpecialNodeType.PICKUP, pickDuration, null);
+			SpecialNode endNode = new SpecialNode(delivAdr, SpecialNodeType.DROPOFF, delivDuration, null);
+			Delivery delivery = new Delivery(endNode, startNode, deliveryCount);
+			listDeliveries.add(delivery);
+			deliveryCount += 1;
+			
+		    }
+		}
+	    }
+
+	} catch (XMLStreamException se) {
+	    System.err.println(se);
+	} catch (FileNotFoundException fe) {
+	    System.err.println(fe);
+	}
+
+	return listDeliveries;
+    }
+
 }

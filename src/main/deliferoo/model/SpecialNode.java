@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalTime;
+import java.time.LocalTime;;
 
 /**
  * Model class.
@@ -51,5 +51,10 @@ public class SpecialNode {
     
     public void setPassageTime(LocalTime passageTime) {
 	this.passageTime = passageTime;
+    }
+
+    @Override
+    public String toString() {
+	return "SpecialNode [node=" + node.toString() + ", duration=" + duration + ", passageTime=" + passageTime + "]";
     }
 }
