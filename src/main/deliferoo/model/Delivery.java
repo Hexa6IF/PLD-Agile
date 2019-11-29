@@ -9,14 +9,16 @@ package model;
 public class Delivery {
     private SpecialNode deliveryNode;
     private SpecialNode pickupNode;
+    private Integer deliveryIndex;
     
     /**
      * @param deliveryNode
      * @param pickupNode
      */
-    public Delivery(SpecialNode deliveryNode, SpecialNode pickupNode) {
+    public Delivery(SpecialNode deliveryNode, SpecialNode pickupNode, Integer deliveryIndex) {
 	this.deliveryNode = deliveryNode;
 	this.pickupNode = pickupNode;
+	this.deliveryIndex = deliveryIndex;
     }
     /**
      * @return the deliveryNode
@@ -43,5 +45,7 @@ public class Delivery {
         this.pickupNode = pickupNode;
     }
     
-    
+    public Integer getDeliveryIndex() {
+	return this.deliveryIndex;
+    }    
 }

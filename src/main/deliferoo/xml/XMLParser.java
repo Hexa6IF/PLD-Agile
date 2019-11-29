@@ -118,7 +118,8 @@ public class XMLParser {
 	
 	try {
 	    XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(deliveriesFile));
-
+	    Integer deliveryCount = 0;
+	    
 	    while (streamReader.hasNext()) {
 		streamReader.next();
 
@@ -135,8 +136,9 @@ public class XMLParser {
 			SpecialNode wareHouseSrt = new SpecialNode(warehouseAddress, SpecialNodeType.START, 0.0,
 				startTime);
 			SpecialNode wareHouseFin = new SpecialNode(warehouseAddress, SpecialNodeType.FINISH, 0.0, null);
-			Delivery wareHouseDel = new Delivery(wareHouseSrt, wareHouseFin);
+			Delivery wareHouseDel = new Delivery(wareHouseSrt, wareHouseFin, deliveryCount);
 			listDeliveries.add(wareHouseDel);
+			deliveryCount += 1;
 
 		    } else if (streamReader.getLocalName().equalsIgnoreCase("livraison")) {
 			
@@ -152,9 +154,10 @@ public class XMLParser {
 
 			SpecialNode startNode = new SpecialNode(pickAdr, SpecialNodeType.PICKUP, pickDuration, null);
 			SpecialNode endNode = new SpecialNode(delivAdr, SpecialNodeType.DROPOFF, delivDuration, null);
-			Delivery delivery = new Delivery(endNode, startNode);
+			Delivery delivery = new Delivery(endNode, startNode, deliveryCount);
 			listDeliveries.add(delivery);
-
+			deliveryCount += 1;
+			
 		    }
 		}
 	    }
