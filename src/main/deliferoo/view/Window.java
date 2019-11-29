@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 import algorithm.Dijkstra;
+import algorithm.TSP1;
 import controller.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,7 +44,7 @@ public class Window {
 
 	XMLParser parser = XMLParser.getInstance();
 	try {
-	    File fXmlFile = new File("src/main/resources/grandPlan.xml");
+	    File fXmlFile = new File("src/main/resources/moyenPlan.xml");
 	    this.map = parser.parseMap(fXmlFile);
 	} catch (Exception e) {
 	    System.err.println(e);
@@ -88,13 +89,19 @@ public class Window {
 	border.setTop(new TopMenuBar(stage));
 	border.setRight(createSideBar());
 	
+	/** calculate best paths **/
+	
 	Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
 	
-	for(String s : bestPaths.keySet()) {
-	    System.out.println(s);
-	}
-	
-	border.setCenter(this.mapView.getMapView(bestPaths.get("2774590477")));
+	/** calculate round **/
+	TSP1 tsp = new TSP1();
+	tsp.searchSolution(3000, bestPaths);
+	List<BestPath> round = tsp.getBestPathSolution();
+	/** print map**/
+	border.setCenter(this.mapView.getMapView());
+	/** draw parcours **/
+	this.mapView.drawRound(round);
+	/** draw delivery markers **/
 	this.mapView.drawMarkers(this.deliveries);
 	
 	return new Scene(border);
@@ -133,7 +140,7 @@ public class Window {
 	XMLParser parser = XMLParser.getInstance();
 	
 	try {
-	    File deliveryFile = new File("src/main/resources/demandeGrand7.xml");
+	    File deliveryFile = new File("src/main/resources/demandeMoyen3.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
 	} catch (Exception e) {
 	    System.err.println(e);

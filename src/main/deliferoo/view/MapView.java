@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -58,24 +59,24 @@ public class MapView {
 	this.offsetY = 0.05 * this.height;
     }
 
-    public Pane getMapView(Map<String, BestPath> bestPaths) {
+    public Pane getMapView() {
 	this.mapView = new Pane();
 	draw(map.getEdgeList(), Color.BLACK, 2);
 
-	Random rand = new Random();
-
-	for (String s : bestPaths.keySet()) {
-	    System.out.println(s);
-	}
-
-	// 342873658
-	// 208769039
-	// 25173820
-	Double r = rand.nextDouble();
-	Double g = rand.nextDouble();
-	Double b = rand.nextDouble();
-	Color color = Color.color(r, g, b);
-	draw(bestPaths.get("34401989").getPath(), color, 5);
+//	Random rand = new Random();
+//
+//	for (String s : bestPaths.keySet()) {
+//	    System.out.println(s);
+//	}
+//
+//	// 342873658
+//	// 208769039
+//	// 25173820
+//	Double r = rand.nextDouble();
+//	Double g = rand.nextDouble();
+//	Double b = rand.nextDouble();
+//	Color color = Color.color(r, g, b);
+//	draw(bestPaths.get("34401989").getPath(), color, 5);
 
 	this.mapView.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5),
 		BorderWidths.DEFAULT, new Insets(10))));
@@ -149,8 +150,10 @@ public class MapView {
 	return marker;
     }
 
-    public Shape drawRound(List<BestPath> bestPaths) {
+    public void drawRound(List<BestPath> bestPaths) {
 	Polyline round = new Polyline();
+	round.setStroke(Color.HOTPINK);
+	round.setStrokeWidth(3);
 	Double dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
 	for (BestPath bestPath : bestPaths) {
 	    List<Edge> path = bestPath.getPath();
@@ -168,7 +171,8 @@ public class MapView {
 		round.getPoints().addAll(new Double[] { x1, y1, x2, y2 });
 	    }
 	}
-	return round;
+
+	this.mapView.getChildren().add(round);
     }
 
 }
