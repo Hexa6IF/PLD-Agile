@@ -136,7 +136,7 @@ public class XMLParser {
 			SpecialNode wareHouseSrt = new SpecialNode(warehouseAddress, SpecialNodeType.START, 0.0,
 				startTime);
 			SpecialNode wareHouseFin = new SpecialNode(warehouseAddress, SpecialNodeType.FINISH, 0.0, null);
-			Delivery wareHouseDel = new Delivery(wareHouseSrt, wareHouseFin, deliveryCount);
+			Delivery wareHouseDel = new Delivery(wareHouseFin, wareHouseSrt, deliveryCount);
 			listDeliveries.add(wareHouseDel);
 			deliveryCount += 1;
 

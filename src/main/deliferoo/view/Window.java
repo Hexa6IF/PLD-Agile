@@ -164,30 +164,30 @@ public class Window {
     private ArrayList<SpecialNodeView> createSpecialNodeViewList() throws Exception{
 	Random rand = new Random();
 	//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-	LocalTime now = this.deliveries.get(0).getDeliveryNode().getPassageTime();
+	LocalTime now = this.deliveries.get(0).getPickupNode().getPassageTime();
 	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
 	
 	Double r = rand.nextDouble();
 	Double g = rand.nextDouble();
 	Double b = rand.nextDouble();
 	Color firstDeliveryColor = Color.color(r, g, b);
-	
-	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getDeliveryNode()));
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getPickupNode()));
 	for (int i = 1; i < this.deliveries.size(); i++) {
 	    r = rand.nextDouble();
 	    g = rand.nextDouble();
 	    b = rand.nextDouble();
 	    Color randomColor = Color.color(r, g, b);
 	    
-	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
-	    deliveries.get(i).getDeliveryNode().setPassageTime(now);
 	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getPickupNode().getDuration()));
 	    deliveries.get(i).getPickupNode().setPassageTime(now);
+	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
+	    deliveries.get(i).getDeliveryNode().setPassageTime(now);
 	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
 	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getPickupNode()));
 	}
-	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getPickupNode()));
-	
+	deliveries.get(0).getDeliveryNode().setPassageTime(now);
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getDeliveryNode()));
+
 	return specialNodeViewTmpList;
     }
 }
