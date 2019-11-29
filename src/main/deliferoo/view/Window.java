@@ -94,8 +94,9 @@ public class Window {
 	    System.out.println(s);
 	}
 	
-	border.setCenter(this.mapView.getMapView(bestPaths.get("1362781062")));
-
+	border.setCenter(this.mapView.getMapView(bestPaths.get("2774590477")));
+	this.mapView.drawMarkers(this.deliveries);
+	
 	return new Scene(border);
     }
     

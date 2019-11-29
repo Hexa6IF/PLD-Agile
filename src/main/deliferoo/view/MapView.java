@@ -13,10 +13,17 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import model.BestPath;
+import model.Delivery;
 import model.Edge;
 import model.FullMap;
+import model.SpecialNode;
+import model.SpecialNodeType;
 
 /**
  * Class for displaying full map
@@ -39,7 +46,7 @@ public class MapView {
      * 
      * @param nodeList List of nodes to display on graph
      */
-    public MapView(FullMap map, Double screenHeight, Double screenWidth ) {
+    public MapView(FullMap map, Double screenHeight, Double screenWidth) {
 	this.mapView = new Pane();
 	this.map = map;
 
@@ -99,4 +106,45 @@ public class MapView {
 	
 	return road;
     }
+
+    public void drawMarkers(List<Delivery> deliveries) {
+	Double dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
+
+	for (Delivery delivery : deliveries) {
+	    Random rand = new Random();
+	    Double r = rand.nextDouble();
+	    Double g = rand.nextDouble();
+	    Double b = rand.nextDouble();
+	    Color deliveryColor = Color.color(r, g, b);
+	    SpecialNode start = delivery.getPickupNode();
+	    SpecialNode end = delivery.getDeliveryNode();
+	    Shape startMarker = this.createMarker(start, dimension, deliveryColor);
+	    Shape endMarker = this.createMarker(end, dimension, deliveryColor);
+	    this.mapView.getChildren().addAll(startMarker, endMarker);
+	}
+    }
+
+    private Shape createMarker(SpecialNode node, Double dimension, Paint paint) {
+	Shape marker = null;
+	
+	Double x = this.offsetX + dimension * ((node.getNode().getLongitude() - this.map.getMinLong())
+		/ this.map.getRangeLongitude());
+	Double y = this.offsetY + dimension
+		* ((this.map.getMaxLat() - node.getNode().getLatitude()) / this.map.getRangeLatitude());
+	
+	String textToDisplay = node.getSpecialNodeType() + " : " + node.getDuration() ;
+	
+	if (node.getSpecialNodeType() == SpecialNodeType.PICKUP) {
+	    marker = new Circle(x, y, 5.0, paint);
+	} else if (node.getSpecialNodeType() == SpecialNodeType.DROPOFF) {
+	    marker = new Rectangle(x-5, y-5, 10, 10);
+	    marker.setFill(paint);
+	} else {
+	    marker =  new Circle(x, y, 5.0, paint);
+	}
+	
+	Tooltip.install(marker, new Tooltip(textToDisplay));
+	return marker;
+    }
+
 }
