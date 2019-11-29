@@ -1,5 +1,7 @@
 package view;
 
+import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Border;
@@ -9,7 +11,10 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import model.BestPath;
 import model.Edge;
 import model.FullMap;
 
@@ -76,4 +81,26 @@ public class MapView {
 	
 	return road;
     }
+    
+    private void drawMarkers(List <BestPath> bestPaths, List<Delivery> deliveries){
+	Double dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
+	for(BestPath bestPath : bestPaths) {
+	    this.mapView.getChildren().add(createMarker(bestPath, dimension));
+	}
+	
+	for(Delivery delivery : deliveries ) {
+    }
+    
+    private Circle createMarker(BestPath bestPath, Double dimension, Paint paint) {
+	Double x = this.offsetX + dimension * ((bestPath.getStart().getNode().getLongitude() - this.map.getMinLong()) / 
+		this.map.getRangeLongitude());
+	Double y = this.offsetY + dimension * (( this.map.getMaxLat() - bestPath.getStart().getNode().getLatitude()) / 
+		this.map.getRangeLatitude());
+	Circle marker = new Circle(x, y, 5.0, paint);
+	String textToDisplay = bestPath.getStart().toString() + " - " + bestPath.getEnd().toString() ;
+	Tooltip.install(marker, new Tooltip(textToDisplay));
+	return marker;
+    }
+    
+    
 }
