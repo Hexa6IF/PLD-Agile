@@ -88,7 +88,7 @@ public abstract class TemplateTSP implements TSP {
 	      return null;
 	  else {
 	      List<String> keysNode = new ArrayList<String>(this.graph.keySet());
-	      for (int i=0; i<this.bestSolution.length-1; i+=2) {
+	      for (int i=0; i<this.bestSolution.length-1; i++) {
 		  String nodeOriginID = keysNode.get(bestSolution[i]);
 		  String nodeDestID = keysNode.get(bestSolution[i+1]);
 		  this.bestPathSolution = new ArrayList<BestPath>();
