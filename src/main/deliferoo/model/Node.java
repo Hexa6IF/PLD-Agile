@@ -65,4 +65,10 @@ public class Node {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
+
+    @Override
+    public String toString() {
+	return "Node [nodeId=" + nodeId + ", latitude=" + latitude + ", longitude=" + longitude + "]";
+    }
+    
 }

@@ -1,6 +1,15 @@
 package view;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import controller.Controller;
 import javafx.collections.FXCollections;
@@ -18,8 +27,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Delivery;
 import model.FullMap;
-import view.NodeTextView.NodeType;
 import xml.XMLParser;
 
 public class Window {
@@ -27,10 +36,11 @@ public class Window {
     private Controller controller;
     private Rectangle2D bounds;
     private MapView mapView;
-    private ObservableList<NodeTextView> nodeTextViews;
+    private ObservableList<SpecialNodeView> specialNodeViews;
     private TableBox tableBox;
 
     private FullMap map;
+    private List<Delivery> deliveries;
 
     public Window(Controller controller) {
 	this.controller = controller;
@@ -40,7 +50,7 @@ public class Window {
 	try {
 	    File fXmlFile = new File("src/main/resources/grandPlan.xml");
 	    this.map = parser.parseMap(fXmlFile);
-	} catch(Exception e) {
+	} catch (Exception e) {
 	    System.err.println(e);
 	}
 
@@ -72,7 +82,13 @@ public class Window {
 	BorderPane border = new BorderPane();
 
 	/* Initialise Node text view */
-	this.initialiseTable();
+	try {
+	    this.initialiseTable();
+	} catch (Exception e) {
+	    // TODO Auto-generated catch block
+	    System.err.println("init failed");
+	    e.printStackTrace();
+	}
 
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
@@ -132,14 +148,46 @@ public class Window {
      * Creates the text view of special nodes
      * 
      */
-    private void initialiseTable() {
-	//example data to remove
-	this.nodeTextViews = FXCollections.observableArrayList(
-		new NodeTextView(1,Color.BLACK,NodeType.PICKUP,7f,"14h34"),
-		new NodeTextView(2,Color.BLACK,NodeType.PICKUP,10f,"14h34"),
-		new NodeTextView(1,Color.PURPLE,NodeType.DROPOFF,5f,"14h34"),
-		new NodeTextView(2,Color.PURPLE,NodeType.PICKUP,4f,"14h34")
-		);
-	this.tableBox = new TableBox(this.nodeTextViews);
+    private void initialiseTable() throws Exception {
+	XMLParser parser = XMLParser.getInstance();
+	
+	try {
+	    File deliveryFile = new File("src/main/resources/demandeMoyen5.xml");
+	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
+	} catch (Exception e) {
+	    System.err.println(e);
+	}
+	this.specialNodeViews = FXCollections.observableArrayList(createSpecialNodeViewList());
+	this.tableBox = new TableBox(this.specialNodeViews);
+    }
+    
+    private ArrayList<SpecialNodeView> createSpecialNodeViewList() throws Exception{
+	Random rand = new Random();
+	//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+	LocalTime now = this.deliveries.get(0).getDeliveryNode().getPassageTime();
+	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
+	
+	Double r = rand.nextDouble();
+	Double g = rand.nextDouble();
+	Double b = rand.nextDouble();
+	Color firstDeliveryColor = Color.color(r, g, b);
+	
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getDeliveryNode()));
+	for (int i = 1; i < this.deliveries.size(); i++) {
+	    r = rand.nextDouble();
+	    g = rand.nextDouble();
+	    b = rand.nextDouble();
+	    Color randomColor = Color.color(r, g, b);
+	    
+	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
+	    deliveries.get(i).getDeliveryNode().setPassageTime(now);
+	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getPickupNode().getDuration()));
+	    deliveries.get(i).getPickupNode().setPassageTime(now);
+	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
+	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getPickupNode()));
+	}
+	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getPickupNode()));
+	
+	return specialNodeViewTmpList;
     }
 }
