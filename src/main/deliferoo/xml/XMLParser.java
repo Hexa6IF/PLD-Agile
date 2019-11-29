@@ -21,6 +21,13 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+/**
+ * Class of singleton extracting datas from given 
+ * XML file by parsing them.
+ * 
+ * @authors hakima, marie, sadsitha, louis, teck
+ */
+
 public class XMLParser {
 
     private static XMLParser instance;
@@ -30,7 +37,10 @@ public class XMLParser {
     private XMLParser() {
 	factory = XMLInputFactory.newInstance();
     }
-
+    
+    /**
+     * @return instance
+     */
     public static XMLParser getInstance() {
 	if (instance == null) {
 	    instance = new XMLParser();
@@ -38,6 +48,16 @@ public class XMLParser {
 	return instance;
     }
 
+    /*
+     * parse map - parses the XML map file with a
+     * XMLStreamReader and creates a map of nodes
+     * and a list of edges to build a FullMap object
+     * and the necessary values for the map display
+     * (min and max latitude and longitude)
+     *
+     * @param mapFile
+     * @return mapGraph
+     */
     public FullMap parseMap(File mapFile) {
 	FullMap mapGraph = null;
 
@@ -108,6 +128,15 @@ public class XMLParser {
 	return mapGraph;
     }
 
+    /*
+     * parse deliveries - parses the XML deliveries
+     * requests file with a XMLStreamReader and
+     * creates a list of deliveries (including warehouse)
+     *
+     * @param deliveriesFile
+     * @param map
+     * @return listDeliveries
+     */
     public List<Delivery> parseDeliveries(File deliveriesFile, FullMap map) {
 
 	ArrayList<Delivery> listDeliveries = new ArrayList<Delivery>();
