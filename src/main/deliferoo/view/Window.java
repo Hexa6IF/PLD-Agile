@@ -1,33 +1,27 @@
 package view;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import algorithm.Dijkstra;
 import controller.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.BestPath;
 import model.Delivery;
 import model.FullMap;
 import xml.XMLParser;
@@ -93,7 +87,9 @@ public class Window {
 
 	border.setTop(new TopMenuBar(stage));
 	border.setRight(createSideBar());
-	border.setCenter(this.mapView.getMapView());
+	
+	
+	border.setCenter(this.mapView.getMapView(Dijkstra.calculateShortestPaths(deliveries, map)));
 
 	return new Scene(border);
     }
@@ -131,10 +127,11 @@ public class Window {
 	XMLParser parser = XMLParser.getInstance();
 	
 	try {
-	    File deliveryFile = new File("src/main/resources/demandeMoyen5.xml");
+	    File deliveryFile = new File("src/main/resources/demandeGrand7.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
 	} catch (Exception e) {
 	    System.err.println(e);
+	    e.printStackTrace();
 	}
 	this.specialNodeViews = FXCollections.observableArrayList(createSpecialNodeViewList());
 	this.tableBoxView = new TableBoxView(this.specialNodeViews);
@@ -142,7 +139,6 @@ public class Window {
     
     private ArrayList<SpecialNodeView> createSpecialNodeViewList() throws Exception{
 	Random rand = new Random();
-	//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 	LocalTime now = this.deliveries.get(0).getDeliveryNode().getPassageTime();
 	ArrayList<SpecialNodeView> specialNodeViewTmpList = new ArrayList<SpecialNodeView>();
 	

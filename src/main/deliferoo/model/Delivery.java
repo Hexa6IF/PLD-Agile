@@ -43,9 +43,9 @@ public class Delivery {
      */
     public void setPickupNode(SpecialNode pickupNode) {
         this.pickupNode = pickupNode;
-    }
+    }  
     
     public Integer getDeliveryIndex() {
 	return this.deliveryIndex;
-    }    
+    }
 }

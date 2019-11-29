@@ -139,7 +139,7 @@ public class XMLParser {
 			Delivery wareHouseDel = new Delivery(wareHouseSrt, wareHouseFin, deliveryCount);
 			listDeliveries.add(wareHouseDel);
 			deliveryCount += 1;
-
+			
 		    } else if (streamReader.getLocalName().equalsIgnoreCase("livraison")) {
 			
 			Integer dureeLivr = Integer.parseInt(streamReader.getAttributeValue(null, "dureeLivraison"));
@@ -150,14 +150,13 @@ public class XMLParser {
 			
 			Node delivAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseLivraison"));
 			
-			Node pickAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseEnelvement"));
+			Node pickAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseEnlevement"));
 
 			SpecialNode startNode = new SpecialNode(pickAdr, SpecialNodeType.PICKUP, pickDuration, null);
 			SpecialNode endNode = new SpecialNode(delivAdr, SpecialNodeType.DROPOFF, delivDuration, null);
 			Delivery delivery = new Delivery(endNode, startNode, deliveryCount);
 			listDeliveries.add(delivery);
 			deliveryCount += 1;
-			
 		    }
 		}
 	    }

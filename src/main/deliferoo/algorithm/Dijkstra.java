@@ -17,7 +17,7 @@ import model.FullMap;
 import model.SpecialNode;
 
 public class Dijkstra {    
-    public Map<String, BestPath> calculateShortestPaths(List<Delivery> deliveries, FullMap map) {
+    public static Map<String, BestPath> calculateShortestPaths(List<Delivery> deliveries, FullMap map) {
 	Integer nodeCount = map.getNodeMap().size();
 	
 	Map<String, Double> shortestPaths = new HashMap<String, Double>();
@@ -47,7 +47,7 @@ public class Dijkstra {
 	    shortestPaths.put(nodeId, Double.POSITIVE_INFINITY);
 	}
 	
-	SpecialNode startNode = deliveries.remove(0).getPickupNode();
+	SpecialNode startNode = deliveries.get(0).getPickupNode();
 	String startNodeId = startNode.getNode().getNodeId();
 	
 	undiscoveredNodes.remove(startNodeId);
@@ -58,7 +58,7 @@ public class Dijkstra {
 	    for(String neighborId : neighborGraph.get(currentNode.getKey()).keySet()) {
 		if(!settledNodes.contains(neighborId)) {
 		    Double distance = neighborGraph.get(currentNode.getKey()).get(neighborId).getDistance();
-		    if(shortestPaths.get(neighborId) < currentNode.getValue() + distance) {
+		    if(shortestPaths.get(neighborId) > currentNode.getValue() + distance) {
 			shortestPaths.put(neighborId, currentNode.getValue() + distance);
 			predecessor.put(neighborId, currentNode.getKey());
 		    }
@@ -72,29 +72,31 @@ public class Dijkstra {
 	    settledNodes.add(currentNode.getKey());
 	}
 	
-	return getBestPaths(neighborGraph, predecessor, startNode, deliveries, map);
+	return getBestPaths(map, deliveries, startNode, predecessor, neighborGraph);
     }
     
-    private Map<String, BestPath> getBestPaths(Map<String, Map<String, Edge>> neighborGraph, Map<String, String> predecessor, SpecialNode startNode, List<Delivery> deliveries, FullMap map) {
-	Set<SpecialNode> specialNodes = getSpecialNodes(deliveries);
+    private static Map<String, BestPath> getBestPaths(FullMap map, List<Delivery> deliveries, SpecialNode startNode, Map<String, String> predecessor, Map<String, Map<String, Edge>> neighborGraph){
 	Map<String, BestPath> bestPaths = new HashMap<String, BestPath>();
 	
-	for(SpecialNode endNode : specialNodes) {
-	    String nodeId = endNode.getNode().getNodeId();
+	for(SpecialNode sn : getSpecialNodes(deliveries)) {
+	    String nodeId = sn.getNode().getNodeId();
 	    LinkedList<Edge> edges = new LinkedList<Edge>();
 	    while(!nodeId.equals(startNode.getNode().getNodeId())) {
-		String precedingId = predecessor.get(nodeId);		
+		String precedingId = predecessor.get(nodeId);
+		if(precedingId == null) {
+		    break;
+		}
 		Edge partialPath = neighborGraph.get(precedingId).get(nodeId);
 		edges.addFirst(partialPath);
 		nodeId = precedingId;
 	    }
-	    bestPaths.put(endNode.getNode().getNodeId(), new BestPath(startNode, endNode, edges));
+	    bestPaths.put(sn.getNode().getNodeId(), new BestPath(startNode, sn, edges));
 	}
 	
 	return bestPaths;
     }
     
-    private Set<SpecialNode> getSpecialNodes(List<Delivery> deliveries) {
+    private static Set<SpecialNode> getSpecialNodes(List<Delivery> deliveries) {
 	Set<SpecialNode> specialNodes = new HashSet<SpecialNode>();
 	
 	for(Delivery delivery : deliveries) {
@@ -105,7 +107,7 @@ public class Dijkstra {
 	return specialNodes;
     }
 
-    private Map<String, Map<String, Edge>> getNeighborGraph(FullMap map) {	
+    private static Map<String, Map<String, Edge>> getNeighborGraph(FullMap map) {	
 	Map<String, Map<String, Edge>> neighbors = new HashMap<String, Map<String, Edge>>();
 	
 	for(String nodeId : map.getNodeMap().keySet()) {
