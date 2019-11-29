@@ -135,12 +135,12 @@ public class MapView {
 	String textToDisplay = node.getSpecialNodeType() + " : " + node.getDuration() ;
 	
 	if (node.getSpecialNodeType() == SpecialNodeType.PICKUP) {
-	    marker = new Circle(x, y, 5.0, paint);
+	    marker = new Circle(x, y, 10.0, paint);
 	} else if (node.getSpecialNodeType() == SpecialNodeType.DROPOFF) {
-	    marker = new Rectangle(x-5, y-5, 10, 10);
+	    marker = new Rectangle(x-10, y-10, 20, 20);
 	    marker.setFill(paint);
 	} else {
-	    marker =  new Circle(x, y, 5.0, paint);
+	    marker =  new Circle(x, y, 10, paint);
 	}
 	
 	Tooltip.install(marker, new Tooltip(textToDisplay));
