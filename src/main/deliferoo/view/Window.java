@@ -43,7 +43,7 @@ public class Window {
 
 	XMLParser parser = XMLParser.getInstance();
 	try {
-	    File fXmlFile = new File("src/main/resources/petitPlan.xml");
+	    File fXmlFile = new File("src/main/resources/grandPlan.xml");
 	    this.map = parser.parseMap(fXmlFile);
 	} catch (Exception e) {
 	    System.err.println(e);
@@ -88,8 +88,13 @@ public class Window {
 	border.setTop(new TopMenuBar(stage));
 	border.setRight(createSideBar());
 	
+	Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
 	
-	border.setCenter(this.mapView.getMapView(Dijkstra.calculateShortestPaths(deliveries, map)));
+	for(String s : bestPaths.keySet()) {
+	    System.out.println(s);
+	}
+	
+	border.setCenter(this.mapView.getMapView(bestPaths.get("1362781062")));
 
 	return new Scene(border);
     }
@@ -127,7 +132,7 @@ public class Window {
 	XMLParser parser = XMLParser.getInstance();
 	
 	try {
-	    File deliveryFile = new File("src/main/resources/demandePetit1.xml");
+	    File deliveryFile = new File("src/main/resources/demandeGrand7.xml");
 	    this.deliveries = parser.parseDeliveries(deliveryFile, this.map);
 	} catch (Exception e) {
 	    System.err.println(e);

@@ -67,7 +67,7 @@ public class MapView {
 	Double g = rand.nextDouble();
 	Double b = rand.nextDouble();
 	Color color = Color.color(r, g, b);
-	draw(bestPaths.get("25173820").getPath(), color, 5);
+	draw(bestPaths.get("34401989").getPath(), color, 5);
 
 	this.mapView.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), 
 		BorderWidths.DEFAULT, new Insets(10))));
@@ -82,21 +82,21 @@ public class MapView {
     }
 
     private Line createRoad(Edge edge, Double dimension, Color color, Integer width) {
-	Double x1 = this.offsetY + dimension * ((edge.getStart().getLongitude() - this.map.getMinLong()) / 
-		this.map.getRangeLongitude());
-	Double y1 = this.offsetX + dimension * ((edge.getStart().getLatitude() - this.map.getMinLat()) / 
-		this.map.getRangeLatitude());
+	Double x1 = this.offsetX + dimension * (edge.getStart().getLongitude() - this.map.getMinLong()) / 
+		this.map.getRangeLongitude();
+	Double y1 = this.offsetY + dimension * (this.map.getMaxLat() - edge.getStart().getLatitude()) / 
+		this.map.getRangeLatitude();
 
-	Double x2 = this.offsetY + dimension * ((edge.getEnd().getLongitude() - this.map.getMinLong()) / 
-		this.map.getRangeLongitude());
-	Double y2 = this.offsetX + dimension * ((edge.getEnd().getLatitude() - this.map.getMinLat()) / 
-		this.map.getRangeLatitude());
+	Double x2 = this.offsetX + dimension * (edge.getEnd().getLongitude() - this.map.getMinLong()) / 
+		this.map.getRangeLongitude();
+	Double y2 = this.offsetY + dimension * (this.map.getMaxLat() - edge.getEnd().getLatitude()) / 
+		this.map.getRangeLatitude();
 
 	Line road = new Line(x1, y1, x2, y2);
 	road.setStroke(color);
 	road.setStrokeWidth(width);
 	Tooltip.install(road, new Tooltip(edge.getStreetName() + " " + edge.getStart().getNodeId() + " | " + edge.getEnd().getNodeId() + " | " + edge.getDistance()));
-
+	
 	return road;
     }
 }
