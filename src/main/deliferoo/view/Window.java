@@ -158,8 +158,8 @@ public class Window {
 	    deliveries.get(i).getPickupNode().setPassageTime(now);
 	    now = now.plusMinutes((int) Math.round(deliveries.get(i).getDeliveryNode().getDuration()));
 	    deliveries.get(i).getDeliveryNode().setPassageTime(now);
-	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
 	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getPickupNode()));
+	    specialNodeViewTmpList.add(new SpecialNodeView(i, randomColor, deliveries.get(i).getDeliveryNode()));
 	}
 	deliveries.get(0).getDeliveryNode().setPassageTime(now);
 	specialNodeViewTmpList.add(new SpecialNodeView(0, firstDeliveryColor, deliveries.get(0).getDeliveryNode()));
