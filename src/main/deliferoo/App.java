@@ -23,13 +23,4 @@ public class App extends Application {
     public static void main(String[] args) {
 	launch(args);
     }
-
-    /**
-     * Sums one and one
-     * 
-     * @return sum
-     */
-    public Integer onePlusOne() {
-	return 1 + 1;
-    }
 }

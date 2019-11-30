@@ -12,7 +12,7 @@ import model.SpecialNodeType;
  * @author sadsitha
  *
  */
-public class SpecialNodeView {
+public class SpecialNodeTextView {
 
     private Number deliveryIndex;
     private Color color;
@@ -28,7 +28,7 @@ public class SpecialNodeView {
      * @param duration
      * @param time
      */
-    public SpecialNodeView(Number deliveryIndex, Color color, SpecialNodeType type, Float duration, String time) {
+    public SpecialNodeTextView(Number deliveryIndex, Color color, SpecialNodeType type, Float duration, String time) {
 	this.deliveryIndex = deliveryIndex;
 	this.color = color;
 	this.type = type;
@@ -42,7 +42,7 @@ public class SpecialNodeView {
      * @param node
      * @throws Exception 
      */
-    public SpecialNodeView(Number deliveryIndex, Color color, SpecialNode node) throws Exception {
+    public SpecialNodeTextView(Number deliveryIndex, Color color, SpecialNode node) {
 	this.node = node;
 	this.deliveryIndex = deliveryIndex;
 	this.color = color;
