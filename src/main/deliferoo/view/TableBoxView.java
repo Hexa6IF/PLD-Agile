@@ -1,5 +1,11 @@
 package view;
 
+import java.io.File;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -7,32 +13,28 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import xml.XMLParser;
 
 /**
  * Class for displaying table of special nodes (pickup and delivery nodes)
  *
  * @author sadsitha
  */
-public class TableBoxView {
-
-    private TableView<SpecialNodeView> table;
+public class TableBoxView extends TableView<SpecialNodeTextView>{
 
     /**
      * Constructor
      *
-     * @param specialNodeViews List of Node text views
+     * @param height	preferred height of node
+     * @param width	preferred width of node
      */
-    public TableBoxView(ObservableList<SpecialNodeView> specialNodeViews) {
-	this.table = new TableView<SpecialNodeView>(specialNodeViews);
-	this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    public TableBoxView(Double height, Double width) {
+	super();
+	this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	this.setTableColumns();
-    }
-
-    /**
-     * @return the table
-     */
-    public TableView<SpecialNodeView> getTable() {
-	return this.table;
+	
+	this.setPrefHeight(height);
+	this.setPrefWidth(width);
     }
 
     /*
@@ -40,26 +42,26 @@ public class TableBoxView {
      * 
      */
     private void setTableColumns() {
-	TableColumn<SpecialNodeView, String> indexColumn = new TableColumn<SpecialNodeView, String>("Delivery index");
-	indexColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, String>("deliveryIndex"));
-	indexColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
+	TableColumn<SpecialNodeTextView, String> indexColumn = new TableColumn<SpecialNodeTextView, String>("Delivery index");
+	indexColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("deliveryIndex"));
+	indexColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
 
-	TableColumn<SpecialNodeView, String> typeColumn = new TableColumn<SpecialNodeView, String>("Type");
-	typeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, String>("type"));
-	typeColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
+	TableColumn<SpecialNodeTextView, String> typeColumn = new TableColumn<SpecialNodeTextView, String>("Type");
+	typeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("type"));
+	typeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
 
-	TableColumn<SpecialNodeView, Number> durationColumn = new TableColumn<SpecialNodeView, Number>("Duration (min)");
-	durationColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, Number>("duration"));
-	durationColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
+	TableColumn<SpecialNodeTextView, Number> durationColumn = new TableColumn<SpecialNodeTextView, Number>("Duration (min)");
+	durationColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, Number>("duration"));
+	durationColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
 
-	TableColumn<SpecialNodeView, String> timeColumn = new TableColumn<SpecialNodeView, String>("Time");
-	timeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeView, String>("time"));
-	timeColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
+	TableColumn<SpecialNodeTextView, String> timeColumn = new TableColumn<SpecialNodeTextView, String>("Time");
+	timeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("time"));
+	timeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
 
-	TableColumn<SpecialNodeView, String> colorColumn = this.setColorColumn();
-	colorColumn.prefWidthProperty().bind(this.table.widthProperty().divide(5));
+	TableColumn<SpecialNodeTextView, String> colorColumn = this.setColorColumn();
+	colorColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
 	
-	table.getColumns().setAll(indexColumn, typeColumn, durationColumn, timeColumn, colorColumn);
+	this.getColumns().setAll(indexColumn, typeColumn, durationColumn, timeColumn, colorColumn);
     }
 
     /*
@@ -68,12 +70,12 @@ public class TableBoxView {
      * 
      * @return colorColumn
      */
-    private TableColumn<SpecialNodeView, String> setColorColumn() {
-	TableColumn<SpecialNodeView, String> colorColumn = new TableColumn<SpecialNodeView, String>("Color code");
-	colorColumn.setCellFactory(new Callback<TableColumn<SpecialNodeView, String>, TableCell<SpecialNodeView, String>>() {
+    private TableColumn<SpecialNodeTextView, String> setColorColumn() {
+	TableColumn<SpecialNodeTextView, String> colorColumn = new TableColumn<SpecialNodeTextView, String>("Color code");
+	colorColumn.setCellFactory(new Callback<TableColumn<SpecialNodeTextView, String>, TableCell<SpecialNodeTextView, String>>() {
 	    @Override
-	    public TableCell<SpecialNodeView, String> call(TableColumn<SpecialNodeView, String> param) {
-		return new TableCell<SpecialNodeView, String>() {
+	    public TableCell<SpecialNodeTextView, String> call(TableColumn<SpecialNodeTextView, String> param) {
+		return new TableCell<SpecialNodeTextView, String>() {
 		    @Override
 		    protected void updateItem(String item, boolean empty) {
 			if (!empty) {
@@ -94,5 +96,4 @@ public class TableBoxView {
 	});
 	return colorColumn;
     }
-
 }

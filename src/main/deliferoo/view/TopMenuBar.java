@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 public class TopMenuBar extends VBox {
     
+    File mapFile;
+    File deliveriesFile;
+    
     public TopMenuBar(Stage stage) {
 	super();
 	this.getChildren().add(createMenu(stage));
@@ -25,21 +28,19 @@ public class TopMenuBar extends VBox {
 
 	MenuItem loadMap = new MenuItem("Load Map...");
 	MenuItem loadDeliveries = new MenuItem("Load Deliveries...");
-
 	MenuItem about = new MenuItem("About");
 
 	MenuBar menuBar = new MenuBar();
 
 	menuFile.getItems().add(loadMap);
 	menuFile.getItems().add(loadDeliveries);
-
 	menuHelp.getItems().add(about);
 
 	loadMap.setOnAction(e -> {
-	    File mapFile = fileChooser.showOpenDialog(stage);
+	    this.mapFile = fileChooser.showOpenDialog(stage);
 	});
 	loadDeliveries.setOnAction(e -> {
-	    File deliveriesFile = fileChooser.showOpenDialog(stage);
+	    this.deliveriesFile = fileChooser.showOpenDialog(stage);
 	});
 
 	menuBar.getMenus().addAll(menuFile, menuHelp);
