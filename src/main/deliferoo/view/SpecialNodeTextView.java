@@ -22,6 +22,8 @@ public class SpecialNodeTextView {
     private SpecialNode node; 
 
     /**
+     * Constructor
+     * 
      * @param deliveryIndex
      * @param color
      * @param type
@@ -40,7 +42,6 @@ public class SpecialNodeTextView {
      * @param deliveryIndex
      * @param color
      * @param node
-     * @throws Exception 
      */
     public SpecialNodeTextView(Number deliveryIndex, Color color, SpecialNode node) {
 	this.node = node;

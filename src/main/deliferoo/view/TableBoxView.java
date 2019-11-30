@@ -25,7 +25,8 @@ public class TableBoxView extends TableView<SpecialNodeTextView>{
     /**
      * Constructor
      *
-     * @param specialNodeViews List of Node text views
+     * @param height	preferred height of node
+     * @param width	preferred width of node
      */
     public TableBoxView(Double height, Double width) {
 	super();
