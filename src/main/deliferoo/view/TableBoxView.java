@@ -1,19 +1,11 @@
 package view;
 
-import java.io.File;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
-import xml.XMLParser;
 
 /**
  * Class for displaying table of special nodes (pickup and delivery nodes)

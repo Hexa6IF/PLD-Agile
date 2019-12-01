@@ -5,12 +5,12 @@ package controller;
  * @author sadsitha
  *
  */
-public class AddDeliveryState implements State {
+public class ModifyDeliveryState implements State {
 
     /**
      * State class constructor
      */
-    public AddDeliveryState() {
+    public ModifyDeliveryState() {
 	
     }
 }
