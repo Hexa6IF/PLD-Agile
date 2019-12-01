@@ -52,9 +52,9 @@ public class CommandList {
     }
 
     /**
-     * Definitely deleted the last command added
+     * Definitely delete the last command added
      */
-    public void annule() {
+    public void cancel() {
 	if (this.currentIndex >= 0) {
 	    Command cde = this.commandList.get(this.currentIndex);
 	    this.commandList.remove(this.currentIndex);

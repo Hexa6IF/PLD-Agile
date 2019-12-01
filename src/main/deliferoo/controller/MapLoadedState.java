@@ -36,7 +36,7 @@ public class MapLoadedState implements State {
 	List<Delivery> deliveries = XMLParser.getInstance().parseDeliveries(deliveriesFile, map);
 	controller.setDeliveries(deliveries);
 	window.updateDeliveries(deliveries);
-	controller.deliveriesLoadedState.calculateRound(window, controller, deliveries, map);
-	controller.setCurrentState(controller.deliveriesLoadedState);
+	controller.DELIVERIES_LOADED_STATE.calculateRound(window, controller, deliveries, map);
+	controller.setCurrentState(controller.DELIVERIES_LOADED_STATE);
     }
 }

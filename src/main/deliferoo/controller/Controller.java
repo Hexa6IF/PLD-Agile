@@ -22,12 +22,12 @@ public class Controller {
     private FullMap currentMap;
     private List <BestPath> round;
     private List<Delivery> deliveries;
-    protected final InitState initState = new InitState();
-    protected final AddDeliveryState addDeliveryState = new AddDeliveryState();
-    protected final DeliverySelectedState deliverySelectedState = new DeliverySelectedState();
-    protected final MapLoadedState mapLoadedState = new MapLoadedState();
-    protected final DeliveriesLoadedState deliveriesLoadedState = new DeliveriesLoadedState();
-    protected final ModifyDeliveryState modifyDeliveryState = new ModifyDeliveryState();
+    protected final InitState INIT_STATE = new InitState();
+    protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
+    protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
+    protected final MapLoadedState MAP_LOADED_STATE = new MapLoadedState();
+    protected final DeliveriesLoadedState DELIVERIES_LOADED_STATE = new DeliveriesLoadedState();
+    protected final ModifyDeliveryState MODIFY_DELIVERY_STATE = new ModifyDeliveryState();
 
     /**
      * Creates the controller of the application
@@ -35,7 +35,7 @@ public class Controller {
     public Controller() {
 	this.window = new Window(this);
 	this.window.launchWindow();
-	this.currentState = this.initState;
+	this.currentState = this.INIT_STATE;
     }
 
     /**

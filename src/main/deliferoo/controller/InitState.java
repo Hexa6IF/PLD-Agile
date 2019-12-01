@@ -22,7 +22,7 @@ public class InitState implements State {
 	FullMap map = XMLParser.getInstance().parseMap(mapFile);
 	window.updateMap(map);
 	controller.setCurrentMap(map);
-	controller.setCurrentState(controller.mapLoadedState);
+	controller.setCurrentState(controller.MAP_LOADED_STATE);
     }
     
     @Override

@@ -41,15 +41,13 @@ public class Window {
     private MapView mapView;
     private TableBoxView tableBoxView;
     private MessageView messageView;
-    private ObservableList<SpecialNodeTextView> specialNodeTextViews;
 
     public Window(Controller controller) {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
 	this.mapView = new MapView(this.bounds.getHeight(), 2 * this.bounds.getWidth() / 3);
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, this.bounds.getWidth() / 3);
-	this.specialNodeTextViews = FXCollections.observableList(new ArrayList<SpecialNodeTextView>());
-	this.tableBoxView.setItems(specialNodeTextViews);
+	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.messageView = new MessageView();
     }
 
@@ -134,6 +132,7 @@ public class Window {
      * @param deliveries
      */
     public void updateDeliveries(List<Delivery> deliveries) {
+	ObservableList<SpecialNodeTextView> specialNodeTextViews = tableBoxView.getItems();
 	specialNodeTextViews.clear();
 	for (Delivery delivery : deliveries) {
 	    Color color = generateRandomColor();

@@ -151,13 +151,21 @@ public class MapView {
     }
 
     /**
-     * Draws the paths followed by a round of deliveries, removes old round
+     * Removes old round and draws new round on map
      *
-     * @param bestPaths   a list of best paths to take to optimally complete the
-     *                    round
+     * @param bestPaths a list of best paths to take to optimally complete the round
      */
     public void updateRound(List<BestPath> bestPaths) {
 	this.mapView.getChildren().remove(this.round);
+	this.drawRound(bestPaths);
+    }
+
+    /**
+     * Draws the paths followed by a round of deliveries, removes old round
+     *
+     * @param bestPaths a list of best paths to take to optimally complete the round
+     */
+    public void drawRound(List<BestPath> bestPaths) {
 	this.round = new Polyline();
 	this.round.setStrokeWidth(3);
 	this.round.setStroke(Color.HOTPINK);
