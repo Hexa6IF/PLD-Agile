@@ -23,10 +23,9 @@ public class TableBoxView extends TableView<SpecialNodeTextView>{
     public TableBoxView(Double height, Double width) {
 	super();
 	this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-	this.setTableColumns();
+	this.setPrefSize(width, height);
 	
-	this.setPrefHeight(height);
-	this.setPrefWidth(width);
+	this.setTableColumns();	
     }
 
     /*

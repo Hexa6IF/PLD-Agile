@@ -12,16 +12,17 @@ import javafx.scene.layout.BorderPane;
  * @author sadsitha
  *
  */
-public class MessageView {
+public class MessageView extends BorderPane{
 
     private String currentMessage;
-    private BorderPane messagePane;
 
     /**
      * Constructor
      */
-    public MessageView() {
-	this.messagePane = new BorderPane();
+    public MessageView(Double height, Double width) {
+	super();
+	this.setPrefSize(width, height);
+	
 	this.currentMessage = "Application loaded successfully, please load a map";
 	this.updateMessage();
     }
@@ -40,19 +41,9 @@ public class MessageView {
         this.currentMessage = currentMessage;
         this.updateMessage();
     }
-
-    /**
-     * @return the messagePane
-     */
-    public BorderPane getMessagePanel() {
-        return messagePane;
-    }
     
     private void updateMessage() {
-	this.messagePane.getChildren().clear();
-	this.messagePane.setCenter(new Label(this.currentMessage));
-    }
-    
-    
-    
+	this.getChildren().clear();
+	this.setCenter(new Label(this.currentMessage));
+    }    
 }
