@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import algorithm.Dijkstra;
-import algorithm.TSP1;
+import algorithm.TSPDeliferoo;
 import model.BestPath;
 import model.Delivery;
 import model.FullMap;
@@ -46,7 +46,7 @@ public class DeliveriesLoadedState implements State {
     @Override
     public void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
 	Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	TSP1 tsp = new TSP1();
+	TSPDeliferoo tsp = new TSPDeliferoo();
 	tsp.searchSolution(4000, bestPaths);
 	List<BestPath> round = tsp.getBestPathSolution();
 	controller.setRound(round);
