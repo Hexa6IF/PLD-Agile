@@ -22,6 +22,7 @@ import model.Delivery;
 import model.Edge;
 import model.FullMap;
 import model.Node;
+import model.Round;
 import model.SpecialNode;
 import model.SpecialNodeType;
 
@@ -153,28 +154,28 @@ public class MapView {
     /**
      * Removes old round and draws new round on map
      *
-     * @param bestPaths a list of best paths to take to optimally complete the round
+     * @param round a list of best paths to take to optimally complete the round
      */
-    public void updateRound(List<BestPath> bestPaths) {
+    public void updateRound(Round round) {
 	this.mapView.getChildren().remove(this.round);
-	this.drawRound(bestPaths);
+	this.drawRound(round);
     }
 
     /**
      * Draws the paths followed by a round of deliveries, removes old round
      *
-     * @param bestPaths a list of best paths to take to optimally complete the round
+     * @param round a list of best paths to take to optimally complete the round
      */
-    public void drawRound(List<BestPath> bestPaths) {
+    public void drawRound(Round round) {
 	this.round = new Polyline();
 	this.round.setStrokeWidth(3);
 	this.round.setStroke(Color.HOTPINK);
-	for (BestPath bestPath : bestPaths) {
+	List<BestPath> resultRound = round.getResultPath();
+	for (BestPath bestPath : resultRound) {
 	    List<Edge> path = bestPath.getPath();
 	    for (Edge edge : path) {
 		Pair<Double, Double> p1 = calculateRelativePosition(edge.getStart());
 		Pair<Double, Double> p2 = calculateRelativePosition(edge.getEnd());
-
 		this.round.getPoints().addAll(p1.getKey(), p1.getValue(), p2.getKey(), p2.getValue());
 	    }
 	}
