@@ -69,10 +69,11 @@ public class BestPath {
 
     @Override
     public String toString() {
-	String string = "BestPath :\nDistance : " + this.distance + "\nEdges : ";
+	String string = "BestPath :\nDistance : " + this.distance + "\nStart : " + start.toString() + "\nEdges : ";
 	for (Edge edge : path) {
 	    string += edge.toString() + "\n";
 	}
+	string += "End : " + end.toString();
 	return string;
     }
     

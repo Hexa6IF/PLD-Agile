@@ -3,7 +3,6 @@ package algorithm;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +27,18 @@ public class TSPDeliferooTest {
 	Map<String, Map<String, BestPath>> graph = new HashMap<String, Map<String, BestPath>>();	
 	
 	graph = Dijkstra.calculateAllShortestPaths(deliveries, map);
+	for (String subMapID : graph.keySet()) {
+	    for (String bestPathID : graph.get(subMapID).keySet()) {
+		System.out.println(graph.get(subMapID).get(bestPathID).toString() + "\n") ;
+		
+	    }
+	}
+	
 	tsp.searchSolution(timeLimit, graph);
 	List<BestPath> solution = tsp.getBestPathSolution();
-	for (BestPath bestPath : solution) {
-	    System.out.println(bestPath.toString());
-	}
+//	for (BestPath bestPath : solution) {
+//	    System.out.println(bestPath.toString()+"\n");
+//	}
 
     }
 

@@ -55,6 +55,6 @@ public class SpecialNode {
 
     @Override
     public String toString() {
-	return "SpecialNode [node=" + node.toString() + ", duration=" + duration + ", passageTime=" + passageTime + "]";
+	return "SpecialNode [node=" + node.toString() + ", duration=" + duration + ", passageTime=" + passageTime + "type=" + specialNodeType + "]";
     }
 }
