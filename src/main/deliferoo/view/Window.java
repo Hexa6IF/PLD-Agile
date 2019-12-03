@@ -25,6 +25,7 @@ import model.BestPath;
 import model.Delivery;
 import model.Edge;
 import model.FullMap;
+import model.Round;
 
 /**
  * Main window class
@@ -38,16 +39,18 @@ public class Window {
     private Controller controller;
     private Rectangle2D bounds;
     private MapView mapView;
-    private TableBoxView tableBoxView;
     private MessageView messageView;
+    //private DeliveryDetailView deliveryDetailView;
+    private TableBoxView tableBoxView;
 
     public Window(Controller controller) {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
 	this.mapView = new MapView(this.bounds.getHeight(), 2 * this.bounds.getWidth() / 3);
+	this.messageView = new MessageView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
+	//this.deliveryDetailView = new DeliveryDetailView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, this.bounds.getWidth() / 3);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
-	this.messageView = new MessageView();
     }
 
     public void launchWindow() {
@@ -104,7 +107,7 @@ public class Window {
 	Rectangle rect1 = new Rectangle();
 	rect1.setHeight(bounds.getHeight() / 4);
 	rect1.setWidth(bounds.getWidth() / 3);
-	sideBar.getChildren().addAll(rect1, this.tableBoxView, this.messageView.getMessagePanel());
+	sideBar.getChildren().addAll(this.messageView, rect1, this.tableBoxView);
 	return sideBar;
     }
 
@@ -157,7 +160,7 @@ public class Window {
      * 
      * @param round
      */
-    public void updateRound(List<BestPath> round) {
+    public void updateRound(Round round) {
 	this.mapView.updateRound(round);
     }
 }

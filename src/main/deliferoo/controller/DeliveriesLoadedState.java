@@ -10,6 +10,7 @@ import algorithm.TSPDeliferoo;
 import model.BestPath;
 import model.Delivery;
 import model.FullMap;
+import model.Round;
 import view.Window;
 import xml.XMLParser;
 
@@ -48,7 +49,8 @@ public class DeliveriesLoadedState implements State {
 	Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
 	TSPDeliferoo tsp = new TSPDeliferoo();
 	tsp.searchSolution(4000, bestPaths);
-	List<BestPath> round = tsp.getBestPathSolution();
+	List<BestPath> roundPaths = tsp.getBestPathSolution();
+	Round round = new Round(roundPaths);
 	controller.setRound(round);
 	window.updateRound(round);
 	window.updateMessage("New round calculated");
