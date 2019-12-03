@@ -22,8 +22,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 /**
- * Class of singleton extracting datas from given 
- * XML file by parsing them.
+ * Class for parsing and extracting data from a given XML file
+ * Implements singleton instantialisation
  * 
  * @authors hakima, marie, sadsitha, louis, teck
  */
