@@ -3,9 +3,10 @@ package controller;
 import java.io.File;
 import java.util.List;
 
-import model.BestPath;
+import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
+import model.Round;
 import view.Window;
 
 /**
@@ -20,8 +21,7 @@ public class Controller {
     private State currentState;
     private CommandList commandList;
     private FullMap currentMap;
-    private List <BestPath> round;
-    private List<Delivery> deliveries;
+    private Cyclist cyclist;
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
@@ -35,6 +35,7 @@ public class Controller {
     public Controller() {
 	this.window = new Window(this);
 	this.window.launchWindow();
+	this.cyclist = new Cyclist();
 	this.currentState = this.INIT_STATE;
     }
 
@@ -57,21 +58,21 @@ public class Controller {
     }
     
     /**
-     * Set the controller's current map
+     * Set the current list of deliveries
      * 
-     * @param map the new map
+     * @param deliveries the list of deliveries
      */
     protected void setDeliveries(List<Delivery> deliveries) {
-	this.deliveries = deliveries;
+	this.cyclist.setDeliveries(deliveries);
     }
     
     /**
      * Set the controller's calculated round
      * 
-     * @param round the new round
+     * @param bestPaths the new round
      */
-    protected void setRound(List<BestPath> round) {
-	this.round = round;
+    protected void setRound(Round round) {
+	this.cyclist.setRound(round);
     }
 
     /**
@@ -109,7 +110,7 @@ public class Controller {
      * 
      */
     public void calculateRound() {
-	this.currentState.calculateRound(this.window, this, this.deliveries, this.currentMap);
+	this.currentState.calculateRound(this.window, this, this.cyclist.getDeliveries(), this.currentMap);
     }
 
 }
