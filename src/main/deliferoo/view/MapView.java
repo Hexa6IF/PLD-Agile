@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class MapView {
     private Double offsetX;
     private Double offsetY;
     private Double dimension;
-    private Polyline round;
+    private List<Line> roundLine;
 
     /**
      * Constructor
@@ -57,7 +58,7 @@ public class MapView {
 	this.offsetX = 0.05 * this.width;
 	this.offsetY = 0.05 * this.height;
 	this.dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
-	this.round = new Polyline();
+	this.roundLine =new ArrayList<Line>();
     }
 
     /**
@@ -106,7 +107,7 @@ public class MapView {
      * @param color       the color of the drawn path
      * @param strokeWidth the width of the path drawn
      */
-    public void drawPath(Edge edge, Color color, Integer strokeWidth) {
+    public Line drawPath(Edge edge, Color color, Integer strokeWidth) {
 	Pair<Double, Double> p1 = calculateRelativePosition(edge.getStart());
 	Pair<Double, Double> p2 = calculateRelativePosition(edge.getEnd());
 
@@ -116,6 +117,7 @@ public class MapView {
 	path.setStrokeWidth(strokeWidth);
 
 	this.mapView.getChildren().add(path);
+	return path;
     }
 
     /**
@@ -157,7 +159,9 @@ public class MapView {
      * @param round a list of best paths to take to optimally complete the round
      */
     public void updateRound(Round round) {
-	this.mapView.getChildren().remove(this.round);
+	for (Line path : this.roundLine) {
+	    this.mapView.getChildren().remove(path);
+	}
 	this.drawRound(round);
     }
 
@@ -167,19 +171,16 @@ public class MapView {
      * @param round a list of best paths to take to optimally complete the round
      */
     public void drawRound(Round round) {
-	this.round = new Polyline();
-	this.round.setStrokeWidth(3);
-	this.round.setStroke(Color.HOTPINK);
+	this.roundLine = new ArrayList<Line>();
 	List<BestPath> resultRound = round.getResultPath();
+	
 	for (BestPath bestPath : resultRound) {
 	    List<Edge> path = bestPath.getPath();
 	    for (Edge edge : path) {
-		Pair<Double, Double> p1 = calculateRelativePosition(edge.getStart());
-		Pair<Double, Double> p2 = calculateRelativePosition(edge.getEnd());
-		this.round.getPoints().addAll(p1.getKey(), p1.getValue(), p2.getKey(), p2.getValue());
+		this.roundLine.add(drawPath(edge, Color.HOTPINK, 3));
 	    }
 	}
-	this.mapView.getChildren().add(this.round);
+	
     }
 
     /**
