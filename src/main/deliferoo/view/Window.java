@@ -20,7 +20,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import algorithm.Dijkstra;
-import algorithm.TSP1;
 import controller.Controller;
 import model.BestPath;
 import model.Delivery;

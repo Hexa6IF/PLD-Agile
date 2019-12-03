@@ -42,6 +42,7 @@ public abstract class TemplateTSP implements TSP {
 	    for (int i=1; i<nbNodes; i++) undiscovered.add(i);
 	    ArrayList<Integer> discovered = new ArrayList<Integer>(nbNodes);
 	    discovered.add(0); // le premier sommet visite est 0
+	    System.out.println(graph.size());
 	    branchAndBound(0, undiscovered, discovered, 0, cost, duration, System.currentTimeMillis(), timeLimit);
 	}
 	
