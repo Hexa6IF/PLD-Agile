@@ -2,7 +2,9 @@ package view;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,12 +21,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import algorithm.Dijkstra;
-import algorithm.TSP1;
 import controller.Controller;
-import model.BestPath;
 import model.Delivery;
-import model.Edge;
 import model.FullMap;
 import model.Round;
 
@@ -42,6 +40,7 @@ public class Window {
     private MapView mapView;
     private TableBoxView tableBoxView;
     private MessageView messageView;
+    private Map<Delivery, Color> deliveryColourMap;
 
     public Window(Controller controller) {
 	this.controller = controller;
@@ -50,6 +49,7 @@ public class Window {
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, this.bounds.getWidth() / 3);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.messageView = new MessageView();
+	this.deliveryColourMap = new HashMap<>();
     }
 
     public void launchWindow() {
@@ -137,10 +137,9 @@ public class Window {
 	specialNodeTextViews.clear();
 	for (Delivery delivery : deliveries) {
 	    Color color = generateRandomColor();
-	    specialNodeTextViews
-		    .add(new SpecialNodeTextView(delivery.getDeliveryIndex(), color, delivery.getPickupNode()));
-	    specialNodeTextViews
-		    .add(new SpecialNodeTextView(delivery.getDeliveryIndex(), color, delivery.getDeliveryNode()));
+	    this.deliveryColourMap.put(delivery, color);
+	    this.tableBoxView.addSpecialNode(delivery.getPickupNode(), color);
+	    this.tableBoxView.addSpecialNode(delivery.getDeliveryNode(), color);
 	    this.mapView.drawMarker(delivery, color, 20);
 	}
     }
@@ -155,11 +154,13 @@ public class Window {
     }
 
     /**
-     * Updates the round
+     * Updates the round displayed
      * 
      * @param round
      */
     public void updateRound(Round round) {
 	this.mapView.updateRound(round);
+	this.tableBoxView.updateSpecialNodes(round, this.deliveryColourMap);
+
     }
 }
