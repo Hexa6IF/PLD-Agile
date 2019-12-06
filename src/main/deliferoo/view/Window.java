@@ -14,17 +14,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import algorithm.Dijkstra;
-import algorithm.TSP1;
 import controller.Controller;
 import model.BestPath;
 import model.Delivery;
-import model.Edge;
 import model.FullMap;
 
 /**
@@ -40,7 +36,7 @@ public class Window {
     private Rectangle2D bounds;
     private MapView mapView;
     private MessageView messageView;
-    //private DeliveryDetailView deliveryDetailView;
+    private DeliveryDetailView deliveryDetailView;
     private TableBoxView tableBoxView;
 
     public Window(Controller controller) {
@@ -48,7 +44,7 @@ public class Window {
 	this.bounds = Screen.getPrimary().getVisualBounds();
 	this.mapView = new MapView(this.bounds.getHeight(), 2 * this.bounds.getWidth() / 3);
 	this.messageView = new MessageView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
-	//this.deliveryDetailView = new DeliveryDetailView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
+	this.deliveryDetailView = new DeliveryDetailView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, this.bounds.getWidth() / 3);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
     }
@@ -104,10 +100,7 @@ public class Window {
 
     private VBox createSideBar() {
 	VBox sideBar = new VBox();
-	Rectangle rect1 = new Rectangle();
-	rect1.setHeight(bounds.getHeight() / 4);
-	rect1.setWidth(bounds.getWidth() / 3);
-	sideBar.getChildren().addAll(this.messageView, rect1, this.tableBoxView);
+	sideBar.getChildren().addAll(this.messageView, this.deliveryDetailView, this.tableBoxView);
 	return sideBar;
     }
 
@@ -119,7 +112,7 @@ public class Window {
 	return Color.color(r, g, b);
     }
 
-    /**
+    /**rect1
      * Update the map graphical view
      * 
      * @param map

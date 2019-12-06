@@ -1,5 +1,6 @@
 package view;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,6 +25,7 @@ public class TableBoxView extends TableView<SpecialNodeTextView>{
 	super();
 	this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	this.setPrefSize(width, height);
+	this.setPlaceholder(new Label("No deliveries loaded"));
 	
 	this.setTableColumns();	
     }
@@ -34,29 +36,34 @@ public class TableBoxView extends TableView<SpecialNodeTextView>{
      */
     private void setTableColumns() {
 	TableColumn<SpecialNodeTextView, String> indexColumn = new TableColumn<SpecialNodeTextView, String>("Delivery index");
-	indexColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("deliveryIndex"));
-	indexColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	indexColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryIndex"));
 
 	TableColumn<SpecialNodeTextView, String> typeColumn = new TableColumn<SpecialNodeTextView, String>("Type");
-	typeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("type"));
-	typeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
-
+	typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+	
 	TableColumn<SpecialNodeTextView, Number> durationColumn = new TableColumn<SpecialNodeTextView, Number>("Duration (min)");
-	durationColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, Number>("duration"));
-	durationColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
 	TableColumn<SpecialNodeTextView, String> timeColumn = new TableColumn<SpecialNodeTextView, String>("Time");
-	timeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("time"));
-	timeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
-
+	timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+	
 	TableColumn<SpecialNodeTextView, String> colorColumn = this.setColorColumn();
+	
+	indexColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	typeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	durationColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	timeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
 	colorColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
 	
-	this.getColumns().setAll(indexColumn, typeColumn, durationColumn, timeColumn, colorColumn);
+	this.getColumns().add(indexColumn);
+	this.getColumns().add(typeColumn);
+	this.getColumns().add(durationColumn);
+	this.getColumns().add(timeColumn);
+	this.getColumns().add(colorColumn);
     }
 
     /*
-     * Set color column - use color of NodeTextView to create custom css to set
+     * Set color column - use color of SpecialNodeTextView to create custom css to set
      * background color of cells
      * 
      * @return colorColumn
