@@ -31,7 +31,6 @@ import javax.xml.stream.XMLStreamReader;
 public class XMLParser {
 
     private static XMLParser instance;
-
     private XMLInputFactory factory;
 
     private XMLParser() {
@@ -147,7 +146,7 @@ public class XMLParser {
 	
 	try {
 	    XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(deliveriesFile));
-	    Integer deliveryCount = 0;
+	    Integer deliveryIndex = 0;
 	    
 	    while (streamReader.hasNext()) {
 		streamReader.next();
@@ -155,20 +154,17 @@ public class XMLParser {
 		if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
 		    
 		    if (streamReader.getLocalName().equalsIgnoreCase("entrepot")) {
-			
-			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");
-			
+			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");	
 			startTime = LocalTime.parse(heureDepart, startTimeFormatter);
-
 			warehouseAddress = (Node) nodeMap.get(streamReader.getAttributeValue(null, "adresse"));
-			
 			SpecialNode wareHouseSrt = new SpecialNode(warehouseAddress, SpecialNodeType.START, 0.0,
-				startTime);
-			SpecialNode wareHouseFin = new SpecialNode(warehouseAddress, SpecialNodeType.FINISH, 0.0, null);
-			Delivery wareHouseDel = new Delivery(wareHouseFin, wareHouseSrt, deliveryCount);
+				startTime, null);
+			SpecialNode wareHouseFin = new SpecialNode(warehouseAddress, SpecialNodeType.FINISH, 0.0, null, null);
+			Delivery wareHouseDel = new Delivery(wareHouseFin, wareHouseSrt, deliveryIndex);
+			wareHouseSrt.setDelivery(wareHouseDel);
+			wareHouseFin.setDelivery(wareHouseDel);
 			listDeliveries.add(wareHouseDel);
-			deliveryCount += 1;
-			
+			deliveryIndex += 1;	
 		    } else if (streamReader.getLocalName().equalsIgnoreCase("livraison")) {
 			
 			Integer dureeLivr = Integer.parseInt(streamReader.getAttributeValue(null, "dureeLivraison"));
@@ -178,14 +174,17 @@ public class XMLParser {
 			Double pickDuration = dureeEnlev / 60.0;
 			
 			Node delivAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseLivraison"));
-			
 			Node pickAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseEnlevement"));
 
-			SpecialNode startNode = new SpecialNode(pickAdr, SpecialNodeType.PICKUP, pickDuration, null);
-			SpecialNode endNode = new SpecialNode(delivAdr, SpecialNodeType.DROPOFF, delivDuration, null);
-			Delivery delivery = new Delivery(endNode, startNode, deliveryCount);
+			SpecialNode startNode = new SpecialNode(pickAdr, SpecialNodeType.PICKUP, pickDuration, null, null);
+			SpecialNode endNode = new SpecialNode(delivAdr, SpecialNodeType.DROPOFF, delivDuration, null, null);
+			Delivery delivery = new Delivery(endNode, startNode, deliveryIndex);
+			
+			startNode.setDelivery(delivery);
+			endNode.setDelivery(delivery);
+			
 			listDeliveries.add(delivery);
-			deliveryCount += 1;
+			deliveryIndex += 1;
 		    }
 		}
 	    }
