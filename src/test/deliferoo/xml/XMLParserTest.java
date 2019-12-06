@@ -75,14 +75,7 @@ public class XMLParserTest {
 		assertEquals(dureePickup[i],delivery.getPickupNode().getDuration());
 		i = i+1;
 	    }
-	    
-//	    assertEquals("2129259176", nodes[3].getIdNode());
-//	    assertEquals((float)45.75171, nodes[3].getLatitude());
-//	    assertEquals((float)4.8718166, nodes[3].getLongitude());
-//	    assertEquals((long)2129259180, edges[2].getNodeDest().getIdNode());
-//	    assertEquals((long)2129259178, edges[2].getNodeOrigin().getIdNode());
-//	    assertEquals((float)25.26484, edges[2].getDistance());
-//	    assertEquals("Avenue Lacassagne", edges[3].getStreetName());
+
 	    
 	} catch (Exception e) {
 	    fail(e);
