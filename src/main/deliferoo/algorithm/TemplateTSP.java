@@ -2,9 +2,11 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import model.BestPath;
 import model.Delivery;
@@ -83,8 +85,8 @@ public abstract class TemplateTSP implements TSP {
 	    return cost;
 	}
 	
-	private Map<String, Map<SpecialNodeType, Integer>> createDurationFromGraph(){
-	    HashMap<String, Map<SpecialNodeType, Integer>> duration = new HashMap<String, Map<SpecialNodeType, Integer>>();
+	private Set<SpecialNode> createDurationFromGraph(){
+	    /*HashMap<String, Map<SpecialNodeType, Integer>> duration = new HashMap<String, Map<SpecialNodeType, Integer>>();
 	    for (Delivery delivery : this.deliveries) {
 		HashMap<SpecialNodeType, Integer> subMapPickUp = new HashMap<SpecialNodeType, Integer>();
 		HashMap<SpecialNodeType, Integer> subMapDelivery = new HashMap<SpecialNodeType, Integer>();
@@ -98,6 +100,10 @@ public abstract class TemplateTSP implements TSP {
 		subMapPickUp.put(pickupNode.getSpecialNodeType(), pickupNode.getDuration().intValue());
 		Map<SpecialNodeType, Integer> subMapDelivery = duration.get(deliveryNode.getNode().getNodeId());
 		subMapDelivery.put(deliveryNode.getSpecialNodeType(), deliveryNode.getDuration().intValue());
+	    }*/
+	    HashSet<SpecialNode> duration = new HashSet<SpecialNode>();
+	    for(Delivery delivery : this.deliveries) {
+		
 	    }
 	    return duration;
 	}
@@ -205,13 +211,15 @@ public abstract class TemplateTSP implements TSP {
 	    	}
 	    //} else if (discoveredCost + bound(currentNode, undiscovered, cost, duration) < bestSolutionCost){
 	    } else if (discoveredCost < bestSolutionCost){
-		Iterator<Integer> it = iterator(currentNode, undiscovered, cost, duration);
+		Iterator<String> it = iterator(currentNode, undiscovered);
 	        while (it.hasNext()){
-	        	Integer nextNode = it.next();
+	        	String nextNode = it.next();
 	        	discovered.add(nextNode);
 	        	undiscovered.remove(nextNode);
 	        	//si nextNode est un pickup, ajouter dans undiscovered son dropoff associé
-	        	branchAndBound(nextNode, undiscovered, discovered, discoveredCost + cost[currentNode][nextNode] + duration[nextNode], cost, duration, startTime, timeLimit);
+	        	//branchAndBound(nextNode, undiscovered, discovered, discoveredCost + cost[currentNode][nextNode] + duration[nextNode], cost, duration, startTime, timeLimit);
+	        	branchAndBound(nextNode, undiscovered, discovered, discoveredCost + cost.get(currentNode).get(nextNode)
+	        		+ duration[nextNode], cost, duration, startTime, timeLimit);
 	        	//undo
 	        	discovered.remove(nextNode); //dernier de la liste a remove
 	        	undiscovered.add(nextNode);

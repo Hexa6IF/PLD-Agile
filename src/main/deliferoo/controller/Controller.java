@@ -3,7 +3,6 @@ package controller;
 import java.io.File;
 import java.util.List;
 
-import model.BestPath;
 import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
@@ -59,9 +58,9 @@ public class Controller {
     }
     
     /**
-     * Set the controller's current map
+     * Set the current list of deliveries
      * 
-     * @param map the new map
+     * @param deliveries the list of deliveries
      */
     protected void setDeliveries(List<Delivery> deliveries) {
 	this.cyclist.setDeliveries(deliveries);

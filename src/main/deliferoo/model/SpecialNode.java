@@ -13,12 +13,14 @@ public class SpecialNode {
     private SpecialNodeType specialNodeType;
     private Double duration;
     private LocalTime passageTime;
+    private Delivery delivery;
 
-    public SpecialNode(Node node, SpecialNodeType specialNodeType, Double duration, LocalTime passageTime) {
+    public SpecialNode(Node node, SpecialNodeType specialNodeType, Double duration, LocalTime passageTime, Delivery delivery) {
 	this.node = node;
 	this.specialNodeType = specialNodeType;
 	this.duration = duration;
 	this.passageTime = passageTime;
+	this.delivery = delivery;
     }
 
     public Node getNode() {
@@ -56,5 +58,19 @@ public class SpecialNode {
     @Override
     public String toString() {
 	return "SpecialNode [node=" + node.toString() + ", duration=" + duration + ", passageTime=" + passageTime + "type=" + specialNodeType + "]";
+    }
+
+    /**
+     * @return the delivery
+     */
+    public Delivery getDelivery() {
+        return delivery;
+    }
+
+    /**
+     * @param delivery the delivery to set
+     */
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
     }
 }
