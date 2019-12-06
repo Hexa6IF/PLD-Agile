@@ -21,16 +21,25 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+/**
+ * Class for parsing and extracting data from a given XML file
+ * Implements singleton instantialisation
+ * 
+ * @authors hakima, marie, sadsitha, louis, teck
+ */
+
 public class XMLParser {
 
     private static XMLParser instance;
-
     private XMLInputFactory factory;
 
     private XMLParser() {
 	factory = XMLInputFactory.newInstance();
     }
-
+    
+    /**
+     * @return instance
+     */
     public static XMLParser getInstance() {
 	if (instance == null) {
 	    instance = new XMLParser();
@@ -38,6 +47,16 @@ public class XMLParser {
 	return instance;
     }
 
+    /*
+     * parse map - parses the XML map file with a
+     * XMLStreamReader and creates a map of nodes
+     * and a list of edges to build a FullMap object
+     * and the necessary values for the map display
+     * (min and max latitude and longitude)
+     *
+     * @param mapFile
+     * @return mapGraph
+     */
     public FullMap parseMap(File mapFile) {
 	FullMap mapGraph = null;
 
@@ -108,6 +127,15 @@ public class XMLParser {
 	return mapGraph;
     }
 
+    /*
+     * parse deliveries - parses the XML deliveries
+     * requests file with a XMLStreamReader and
+     * creates a list of deliveries (including warehouse)
+     *
+     * @param deliveriesFile
+     * @param map
+     * @return listDeliveries
+     */
     public List<Delivery> parseDeliveries(File deliveriesFile, FullMap map) {
 
 	ArrayList<Delivery> listDeliveries = new ArrayList<Delivery>();
@@ -118,7 +146,7 @@ public class XMLParser {
 	
 	try {
 	    XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(deliveriesFile));
-	    Integer deliveryCount = 0;
+	    Integer deliveryIndex = 0;
 	    
 	    while (streamReader.hasNext()) {
 		streamReader.next();
@@ -126,20 +154,17 @@ public class XMLParser {
 		if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
 		    
 		    if (streamReader.getLocalName().equalsIgnoreCase("entrepot")) {
-			
-			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");
-			
+			String heureDepart = streamReader.getAttributeValue(null, "heureDepart");	
 			startTime = LocalTime.parse(heureDepart, startTimeFormatter);
-
 			warehouseAddress = (Node) nodeMap.get(streamReader.getAttributeValue(null, "adresse"));
-			
 			SpecialNode wareHouseSrt = new SpecialNode(warehouseAddress, SpecialNodeType.START, 0.0,
-				startTime);
-			SpecialNode wareHouseFin = new SpecialNode(warehouseAddress, SpecialNodeType.FINISH, 0.0, null);
-			Delivery wareHouseDel = new Delivery(wareHouseFin, wareHouseSrt, deliveryCount);
+				startTime, null);
+			SpecialNode wareHouseFin = new SpecialNode(warehouseAddress, SpecialNodeType.FINISH, 0.0, null, null);
+			Delivery wareHouseDel = new Delivery(wareHouseFin, wareHouseSrt, deliveryIndex);
+			wareHouseSrt.setDelivery(wareHouseDel);
+			wareHouseFin.setDelivery(wareHouseDel);
 			listDeliveries.add(wareHouseDel);
-			deliveryCount += 1;
-			
+			deliveryIndex += 1;	
 		    } else if (streamReader.getLocalName().equalsIgnoreCase("livraison")) {
 			
 			Integer dureeLivr = Integer.parseInt(streamReader.getAttributeValue(null, "dureeLivraison"));
@@ -149,14 +174,17 @@ public class XMLParser {
 			Double pickDuration = dureeEnlev / 60.0;
 			
 			Node delivAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseLivraison"));
-			
 			Node pickAdr = nodeMap.get(streamReader.getAttributeValue(null, "adresseEnlevement"));
 
-			SpecialNode startNode = new SpecialNode(pickAdr, SpecialNodeType.PICKUP, pickDuration, null);
-			SpecialNode endNode = new SpecialNode(delivAdr, SpecialNodeType.DROPOFF, delivDuration, null);
-			Delivery delivery = new Delivery(endNode, startNode, deliveryCount);
+			SpecialNode startNode = new SpecialNode(pickAdr, SpecialNodeType.PICKUP, pickDuration, null, null);
+			SpecialNode endNode = new SpecialNode(delivAdr, SpecialNodeType.DROPOFF, delivDuration, null, null);
+			Delivery delivery = new Delivery(endNode, startNode, deliveryIndex);
+			
+			startNode.setDelivery(delivery);
+			endNode.setDelivery(delivery);
+			
 			listDeliveries.add(delivery);
-			deliveryCount += 1;
+			deliveryIndex += 1;
 		    }
 		}
 	    }
