@@ -22,6 +22,7 @@ import controller.Controller;
 import model.BestPath;
 import model.Delivery;
 import model.FullMap;
+import model.Round;
 
 /**
  * Main window class
@@ -153,7 +154,7 @@ public class Window {
      * 
      * @param round
      */
-    public void updateRound(List<BestPath> round) {
+    public void updateRound(Round round) {
 	this.mapView.updateRound(round);
     }
 }
