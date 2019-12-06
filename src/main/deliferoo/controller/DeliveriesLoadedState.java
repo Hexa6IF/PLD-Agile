@@ -34,14 +34,14 @@ public class DeliveriesLoadedState implements State {
 	FullMap map = XMLParser.getInstance().parseMap(mapFile);
 	controller.setCurrentMap(map);
 	window.updateMap(map);
-	window.updateDeliveries(new ArrayList<Delivery>());
+	window.updateTableBox(new ArrayList<Delivery>());
     }
 
     @Override
     public void loadDeliveries(Window window, Controller controller, File deliveriesFile, FullMap map) {
 	List<Delivery> deliveries = XMLParser.getInstance().parseDeliveries(deliveriesFile, map);
 	controller.setDeliveries(deliveries);
-	window.updateDeliveries(deliveries);
+	window.updateTableBox(deliveries);
     }
 
     @Override
@@ -54,5 +54,10 @@ public class DeliveriesLoadedState implements State {
 	controller.setRound(round);
 	window.updateRound(round);
 	window.updateMessage("New round calculated");
+    }
+    
+    @Override
+    public void selectDeliveryClick(Window window, Controller controller) {
+	
     }
 }

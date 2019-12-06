@@ -42,6 +42,7 @@ public class MapView {
     private Double offsetY;
     private Double dimension;
     private List<Line> roundLine;
+    private List<Shape> markers;
 
     /**
      * Constructor
@@ -58,7 +59,8 @@ public class MapView {
 	this.offsetX = 0.05 * this.width;
 	this.offsetY = 0.05 * this.height;
 	this.dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
-	this.roundLine =new ArrayList<Line>();
+	this.roundLine = new ArrayList<Line>();
+	this.markers = new ArrayList<Shape>();
     }
 
     /**
@@ -150,13 +152,16 @@ public class MapView {
 	    }
 	    marker.setFill(color);
 	    this.mapView.getChildren().add(marker);
+	    
+	    markers.add(marker);
 	}
     }
 
     /**
      * Removes old round and draws new round on map
      *
-     * @param round a list of best paths to take to optimally complete the round
+     * @param round a list of best p
+    public default void selectDeliveryClick(Window window, Controller controller) {aths to take to optimally complete the round
      */
     public void updateRound(Round round) {
 	for (Line path : this.roundLine) {
@@ -180,7 +185,6 @@ public class MapView {
 		this.roundLine.add(drawPath(edge, Color.HOTPINK, 3));
 	    }
 	}
-	
     }
 
     /**

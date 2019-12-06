@@ -98,7 +98,7 @@ public class Window {
 	menuBar.getMenus().addAll(menuFile, menuHelp);
 	return new VBox(menuBar);
     }
-
+    
     private VBox createSideBar() {
 	VBox sideBar = new VBox();
 	sideBar.getChildren().addAll(this.messageView, this.deliveryDetailView, this.tableBoxView);
@@ -127,7 +127,7 @@ public class Window {
      * 
      * @param deliveries
      */
-    public void updateDeliveries(List<Delivery> deliveries) {
+    public void updateTableBox(List<Delivery> deliveries) {
 	ObservableList<SpecialNodeTextView> specialNodeTextViews = tableBoxView.getItems();
 	specialNodeTextViews.clear();
 	for (Delivery delivery : deliveries) {
@@ -157,4 +157,6 @@ public class Window {
     public void updateRound(Round round) {
 	this.mapView.updateRound(round);
     }
+    
+    
 }

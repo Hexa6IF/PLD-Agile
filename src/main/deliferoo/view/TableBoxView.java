@@ -1,12 +1,16 @@
 package view;
 
+import java.util.List;
+
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import javafx.util.Pair;
 
 /**
  * Class for displaying table of special nodes (pickup and delivery nodes)
@@ -14,7 +18,7 @@ import javafx.util.Callback;
  * @author sadsitha
  */
 public class TableBoxView extends TableView<SpecialNodeTextView>{
-
+    
     /**
      * Constructor
      *
@@ -27,10 +31,11 @@ public class TableBoxView extends TableView<SpecialNodeTextView>{
 	this.setPrefSize(width, height);
 	this.setPlaceholder(new Label("No deliveries loaded"));
 	
-	this.setTableColumns();	
+	this.setTableColumns();
+	this.addRowListeners();	
     }
 
-    /*
+    /**
      * Sets the table columns
      * 
      */
@@ -61,8 +66,38 @@ public class TableBoxView extends TableView<SpecialNodeTextView>{
 	this.getColumns().add(timeColumn);
 	this.getColumns().add(colorColumn);
     }
+    
+    private void addRowListeners() {
+	this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+	
+	this.getSelectionModel().selectedItemProperty().addListener((observer, oldSelection, newSelection) -> {
+	    if (newSelection != null) {
+	        this.getSelectionModel().clearSelection();
+	    }
+	    
+	    Pair<Integer, Integer> indices = getPairSpecialNodes(newSelection.getDeliveryIndex());
+	    
+	    this.getSelectionModel().selectIndices(indices.getKey(), indices.getValue());
+	});
+    }
+    
+    private Pair<Integer, Integer> getPairSpecialNodes(Number deliveryIndex) {
+	Integer index = null;
+	List<SpecialNodeTextView> sn = this.getItems();
+	
+	for(int i = 0; i< sn.size(); i++) {
+	    if(sn.get(i).getDeliveryIndex() == deliveryIndex) {
+		if(index == null) {
+		    index = i;
+		} else {
+		    return new Pair<Integer, Integer>(index, i);
+		}
+	    }
+	}
+	return null;
+    }
 
-    /*
+    /**
      * Set color column - use color of SpecialNodeTextView to create custom css to set
      * background color of cells
      * 
