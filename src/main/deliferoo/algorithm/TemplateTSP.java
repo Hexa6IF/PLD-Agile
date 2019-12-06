@@ -173,7 +173,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param duration : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 * @return un iterateur permettant d'iterer sur tous les sommets de nonVus
 	 */
-	protected abstract Iterator<Integer> iterator(Integer currentNode, ArrayList<Integer> undiscovered, int[][] cost, int[] duration);
+	protected abstract Iterator<String> iterator(String currentNode, ArrayList<String> undiscovered);
 	
 	/**
 	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP
@@ -203,8 +203,9 @@ public abstract class TemplateTSP implements TSP {
 	    	    	this.bestSolution.addAll(discovered);
 	    		bestSolutionCost = discoveredCost;
 	    	}
-	    } else if (discoveredCost + bound(currentNode, undiscovered, cost, duration) < bestSolutionCost){
-	        Iterator<Integer> it = iterator(currentNode, undiscovered, cost, duration);
+	    //} else if (discoveredCost + bound(currentNode, undiscovered, cost, duration) < bestSolutionCost){
+	    } else if (discoveredCost < bestSolutionCost){
+		Iterator<Integer> it = iterator(currentNode, undiscovered, cost, duration);
 	        while (it.hasNext()){
 	        	Integer nextNode = it.next();
 	        	discovered.add(nextNode);

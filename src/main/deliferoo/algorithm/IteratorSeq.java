@@ -3,9 +3,9 @@ package algorithm;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class IteratorSeq implements Iterator<Integer> {
+public class IteratorSeq implements Iterator<String> {
 
-	private Integer[] candidates;
+	private String[] candidates;
 	private int nbCandidates;
 
 	/**
@@ -13,10 +13,10 @@ public class IteratorSeq implements Iterator<Integer> {
 	 * @param undiscovered
 	 * @param currentNode
 	 */
-	public IteratorSeq(Collection<Integer> undiscovered, int currentNode){
-		this.candidates = new Integer[undiscovered.size()];
+	public IteratorSeq(Collection<String> undiscovered, int currentNode){
+		this.candidates = new String[undiscovered.size()];
 		nbCandidates = 0;
-		for (Integer s : undiscovered){
+		for (String s : undiscovered){
 			candidates[nbCandidates++] = s;
 		}
 	}
@@ -27,7 +27,7 @@ public class IteratorSeq implements Iterator<Integer> {
 	}
 
 	@Override
-	public Integer next() {
+	public String next() {
 		return candidates[--nbCandidates];
 	}
 
