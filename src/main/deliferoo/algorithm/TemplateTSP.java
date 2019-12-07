@@ -2,12 +2,9 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import model.BestPath;
 import model.Delivery;
 import model.SpecialNode;
@@ -16,7 +13,7 @@ import model.SpecialNodeType;
 public abstract class TemplateTSP implements TSP {
 	
     	private ArrayList<BestPath> bestPathSolution;
-	private ArrayList<String> bestSolution;
+	private ArrayList<SpecialNode> bestSolution;
 	private int bestSolutionCost = 0;
 	private Boolean timeLimitReached;
 	private Map<String, Map<String, BestPath>> graph;
@@ -38,36 +35,26 @@ public abstract class TemplateTSP implements TSP {
 	}*/
 	
 	public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
-	    //pour pouvoir ajouter dans undiscovered
-	    //un dropoff associé à un pickup qui vient d'être ajouté dans discovered
-	    //OU map<PickupInt, DropoffInt> ? créé ici on stocke que les pickup, mais trouver DropoffInt
-	    //va couter plus cher au debut. PB : node pickup et dropoff a la fois(sauf si duplicat de ce genre de noeud),
-	    //si on pickup d'abord
-	    //il faut revenir plus tard pour dropoff donc detour(?) pas genant je pense
-	    //pb 2 : trouver dropoffint car map pas de notion d'index
-	    //OU map<PickupID, DropoffID> puis parcourir graph avec + map<Int, <NodeID, Nodetype> 
-	    //pb 2 : trouver dropoffint car map pas de notion d'index
-	    //OU faire passer tous les int[] en set<string> + map<strPickup, strDropoff> a partir de deliveries, résout pb d'index OK
 	    this.graph = graph;
 	    this.deliveries = deliveries;
 	    timeLimitReached = false;
 	    bestSolutionCost = Integer.MAX_VALUE;
 	    int nbNodes = this.deliveries.size()*2;
-	    Map<String, Map<String, Integer>> cost = this.createCostFromGraph(); //map<nodeid,map<nodeid,cost>>
-	    Map<String, Map<SpecialNodeType, Integer>> duration = this.createDurationFromGraph(); //map<nodeid,map<SpecialNodeType, int>
-	    bestSolution = new ArrayList<String>(nbNodes);
-	    ArrayList<String> undiscovered = this.initUndiscovered(); //list<nodeid>	    
-	    ArrayList<String> discovered = new ArrayList<String>(nbNodes); //list nodeid and remove last one each time
-	    discovered.add(this.deliveries.get(0).getPickupNode().getNode().getNodeId()); // le premier sommet visite est 0
-	    branchAndBound(0, undiscovered, discovered, 0, cost, duration, System.currentTimeMillis(), timeLimit);
+	    Map<String, Map<String, Integer>> cost = this.createCostFromGraph();
+	    //Set<SpecialNode> duration = this.createDurationFromGraph(); //map<nodeid,map<SpecialNodeType, int>
+	    bestSolution = new ArrayList<SpecialNode>(nbNodes);
+	    ArrayList<SpecialNode> undiscovered = this.initUndiscovered();	    
+	    ArrayList<SpecialNode> discovered = new ArrayList<SpecialNode>();
+	    SpecialNode startNode = this.deliveries.get(0).getPickupNode();
+	    discovered.add(startNode); // le premier sommet visite est 0
+	    branchAndBound(startNode, undiscovered, discovered, 0, cost, System.currentTimeMillis(), timeLimit);
 	}
 	
-	private ArrayList<String> initUndiscovered(){
-	    ArrayList<String> undiscovered = new ArrayList<String>();
+	private ArrayList<SpecialNode> initUndiscovered(){
+	    ArrayList<SpecialNode> undiscovered = new ArrayList<SpecialNode>();
 	    for (Delivery delivery : this.deliveries) {
-		SpecialNode pickupNode = delivery.getPickupNode();
-		if (pickupNode.getSpecialNodeType() != SpecialNodeType.START) {
-		    undiscovered.add(pickupNode.getNode().getNodeId());
+		if (delivery.getPickupNode().getSpecialNodeType() != SpecialNodeType.START) {
+		    undiscovered.add(delivery.getPickupNode());
 		}
 	    }
 	    return undiscovered;
@@ -85,8 +72,8 @@ public abstract class TemplateTSP implements TSP {
 	    return cost;
 	}
 	
-	private Set<SpecialNode> createDurationFromGraph(){
-	    /*HashMap<String, Map<SpecialNodeType, Integer>> duration = new HashMap<String, Map<SpecialNodeType, Integer>>();
+	/*private HashMap<String, Map<SpecialNodeType, Integer>> createDurationFromGraph(){ //delivery index
+	    HashMap<String, Map<SpecialNodeType, Integer>> duration = new HashMap<String, Map<SpecialNodeType, Integer>>();
 	    for (Delivery delivery : this.deliveries) {
 		HashMap<SpecialNodeType, Integer> subMapPickUp = new HashMap<SpecialNodeType, Integer>();
 		HashMap<SpecialNodeType, Integer> subMapDelivery = new HashMap<SpecialNodeType, Integer>();
@@ -100,13 +87,9 @@ public abstract class TemplateTSP implements TSP {
 		subMapPickUp.put(pickupNode.getSpecialNodeType(), pickupNode.getDuration().intValue());
 		Map<SpecialNodeType, Integer> subMapDelivery = duration.get(deliveryNode.getNode().getNodeId());
 		subMapDelivery.put(deliveryNode.getSpecialNodeType(), deliveryNode.getDuration().intValue());
-	    }*/
-	    HashSet<SpecialNode> duration = new HashSet<SpecialNode>();
-	    for(Delivery delivery : this.deliveries) {
-		
 	    }
 	    return duration;
-	}
+	}*/
 	
 	/*private int[][] createCostFromGraph(){
 	    int nbNodes = this.graph.size();
@@ -153,7 +136,9 @@ public abstract class TemplateTSP implements TSP {
 	  else {
 	      this.bestPathSolution = new ArrayList<BestPath>();
 	      for (int i=0; i<this.bestSolution.size()-1; i++) {
-		  this.bestPathSolution.add(this.graph.get(this.bestSolution.get(i)).get(this.bestSolution.get(i+1)));
+		  this.bestPathSolution.add(
+			  this.graph.get(this.bestSolution.get(i).getNode().getNodeId()).get(this.bestSolution.get(i+1).getNode().getNodeId())
+			  );
 	      }
 	  } 
 	  return this.bestPathSolution; 
@@ -179,7 +164,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param duration : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 * @return un iterateur permettant d'iterer sur tous les sommets de nonVus
 	 */
-	protected abstract Iterator<String> iterator(String currentNode, ArrayList<String> undiscovered);
+	protected abstract Iterator<SpecialNode> iterator(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered);
 	
 	/**
 	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP
@@ -192,9 +177,8 @@ public abstract class TemplateTSP implements TSP {
 	 * @param startTime : moment ou la resolution a commence
 	 * @param timeLimit : limite de temps pour la resolution
 	 */	
-	 void branchAndBound(String currentNode, ArrayList<String> undiscovered, ArrayList<String> discovered, int discoveredCost,
-		 Map<String, Map<String, Integer>> cost, Map<String, Map<SpecialNodeType, Integer>> duration, long startTime,
-		 int timeLimit){
+	 void branchAndBound(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered, ArrayList<SpecialNode> discovered,
+		 int discoveredCost, Map<String, Map<String, Integer>> cost, long startTime, int timeLimit){
 	     if (System.currentTimeMillis() - startTime > timeLimit){
 			 timeLimitReached = true;
 			 return;
@@ -202,26 +186,25 @@ public abstract class TemplateTSP implements TSP {
 	    if (undiscovered.size() == 0){ // tous les sommets ont ete visites
 	    	//discoveredCost += cost[currentNode][0];
 		SpecialNode startNode = this.deliveries.get(0).getPickupNode();
-		discoveredCost += cost.get(currentNode).get(startNode.getNode().getNodeId());
+		discoveredCost += cost.get(currentNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
 	    	if (discoveredCost < bestSolutionCost){ // on a trouve une solution meilleure que bestSolution
-	    	    //bestsolution = discovered
 	    	    	this.bestSolution.clear();
 	    	    	this.bestSolution.addAll(discovered);
 	    		bestSolutionCost = discoveredCost;
 	    	}
 	    //} else if (discoveredCost + bound(currentNode, undiscovered, cost, duration) < bestSolutionCost){
 	    } else if (discoveredCost < bestSolutionCost){
-		Iterator<String> it = iterator(currentNode, undiscovered);
+		Iterator<SpecialNode> it = iterator(currentNode, undiscovered);
 	        while (it.hasNext()){
-	        	String nextNode = it.next();
+	            	SpecialNode nextNode = it.next();
 	        	discovered.add(nextNode);
 	        	undiscovered.remove(nextNode);
 	        	//si nextNode est un pickup, ajouter dans undiscovered son dropoff associé
 	        	//branchAndBound(nextNode, undiscovered, discovered, discoveredCost + cost[currentNode][nextNode] + duration[nextNode], cost, duration, startTime, timeLimit);
-	        	branchAndBound(nextNode, undiscovered, discovered, discoveredCost + cost.get(currentNode).get(nextNode)
-	        		+ duration[nextNode], cost, duration, startTime, timeLimit);
-	        	//undo
-	        	discovered.remove(nextNode); //dernier de la liste a remove
+	        	branchAndBound(nextNode, undiscovered, discovered, discoveredCost 
+	        		+ cost.get(currentNode.getNode().getNodeId()).get(nextNode.getNode().getNodeId())
+	        		+ nextNode.getDuration().intValue(), cost, startTime, timeLimit);
+	        	discovered.remove(nextNode);
 	        	undiscovered.add(nextNode);
 	        }	    
 	    }

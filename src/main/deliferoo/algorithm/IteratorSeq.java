@@ -3,9 +3,11 @@ package algorithm;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class IteratorSeq implements Iterator<String> {
+import model.SpecialNode;
 
-	private String[] candidates;
+public class IteratorSeq implements Iterator<SpecialNode> {
+
+	private SpecialNode[] candidates;
 	private int nbCandidates;
 
 	/**
@@ -13,10 +15,10 @@ public class IteratorSeq implements Iterator<String> {
 	 * @param undiscovered
 	 * @param currentNode
 	 */
-	public IteratorSeq(Collection<String> undiscovered, int currentNode){
-		this.candidates = new String[undiscovered.size()];
+	public IteratorSeq(Collection<SpecialNode> undiscovered, int currentNode){
+		this.candidates = new SpecialNode[undiscovered.size()];
 		nbCandidates = 0;
-		for (String s : undiscovered){
+		for (SpecialNode s : undiscovered){
 			candidates[nbCandidates++] = s;
 		}
 	}
@@ -27,7 +29,7 @@ public class IteratorSeq implements Iterator<String> {
 	}
 
 	@Override
-	public String next() {
+	public SpecialNode next() {
 		return candidates[--nbCandidates];
 	}
 
