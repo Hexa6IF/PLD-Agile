@@ -20,10 +20,17 @@ public class TSPDeliferoo {
     private Map<String, Map<String, BestPath>> graph;
     private List<Delivery> deliveries;
 
+    /**
+     * @return true if the algorithm's computing time is greater than the time limit
+     * set by the user
+     */
     public Boolean getTimeLimitReached() {
 	return timeLimitReached;
     }
 
+    /**
+     * @return 
+     */
     public int getBestSolutionCost() {
 	return bestSolutionCost;
     }
@@ -76,7 +83,8 @@ public class TSPDeliferoo {
 	for (String nodeIDKeyOne : this.graph.keySet()) {
 	    HashMap<String, Integer> subMap = new HashMap<String, Integer>();
 	    for (String nodeIDKeyTwo : this.graph.get(nodeIDKeyOne).keySet()) {
-		subMap.put(nodeIDKeyTwo, this.graph.get(nodeIDKeyOne).get(nodeIDKeyTwo).getDistance().intValue());
+		Integer duration = this.graph.get(nodeIDKeyOne).get(nodeIDKeyTwo).getDistance().intValue()*60/15000;
+		subMap.put(nodeIDKeyTwo, duration);
 	    }
 	    cost.put(nodeIDKeyOne, subMap);
 	}

@@ -39,6 +39,9 @@ public class SpecialNode {
 	this.specialNodeType = specialNodeType;
     }
 
+    /**
+     * @return duration in min
+     */
     public Double getDuration() {
 	return this.duration;
     }
