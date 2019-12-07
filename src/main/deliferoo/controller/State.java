@@ -79,7 +79,7 @@ public interface State {
     }
 
     /**
-     * Method called when the "Cencel" button is clicked
+     * Method called when the "Cancel" button is clicked
      * 
      * @param the window
      * @param the controller
@@ -103,7 +103,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void selectDeliveryClick(Window window, Controller controller) {
+    public default void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
     }
 
     /**

@@ -31,7 +31,6 @@ import javax.xml.stream.XMLStreamReader;
 public class XMLParser {
 
     private static XMLParser instance;
-
     private XMLInputFactory factory;
 
     private XMLParser() {

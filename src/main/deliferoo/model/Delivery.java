@@ -14,6 +14,7 @@ public class Delivery {
     /**
      * @param deliveryNode
      * @param pickupNode
+     * @param deliveryIndex
      */
     public Delivery(SpecialNode deliveryNode, SpecialNode pickupNode, Integer deliveryIndex) {
 	this.deliveryNode = deliveryNode;

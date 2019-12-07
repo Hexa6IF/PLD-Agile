@@ -19,9 +19,9 @@ public class Controller {
 
     private Window window;
     private State currentState;
-    private CommandList commandList;
-    private FullMap currentMap;
-    private Cyclist cyclist;
+    protected CommandList commandList;
+    protected FullMap currentMap;
+    protected Cyclist cyclist;
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
@@ -113,4 +113,12 @@ public class Controller {
 	this.currentState.calculateRound(this.window, this, this.cyclist.getDeliveries(), this.currentMap);
     }
 
+    /**
+     *  Method called when a delivery is selected
+     *  
+     * @param deliveryIndex
+     */
+    public void selectDeliveryClick(Integer deliveryIndex) {
+	this.currentState.selectDeliveryClick(this.window, this, deliveryIndex);
+    }
 }
