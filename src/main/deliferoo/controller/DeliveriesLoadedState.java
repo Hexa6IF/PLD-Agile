@@ -48,7 +48,7 @@ public class DeliveriesLoadedState implements State {
     public void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
 	Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
 	TSPDeliferoo tsp = new TSPDeliferoo();
-	tsp.searchSolution(4000, bestPaths);
+	tsp.searchSolution(4000, bestPaths, deliveries);
 	List<BestPath> roundPaths = tsp.getBestPathSolution();
 	Round round = new Round(roundPaths);
 	controller.setRound(round);
