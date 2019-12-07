@@ -27,11 +27,6 @@ public class TSPDeliferooTest {
 	Map<String, Map<String, BestPath>> graph = new HashMap<String, Map<String, BestPath>>();	
 	
 	graph = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	/*for (String subMapID : graph.keySet()) {
-	    for (String bestPathID : graph.get(subMapID).keySet()) {
-		System.out.println(graph.get(subMapID).get(bestPathID).toString() + "\n") ;
-	    }
-	}*/
 	
 	tsp.searchSolution(timeLimit, graph, deliveries);
 	List<BestPath> solution = tsp.getBestPathSolution();

@@ -71,9 +71,14 @@ public abstract class TemplateTSP implements TSP {
 	  else {
 	      this.bestPathSolution = new ArrayList<BestPath>();
 	      for (int i=0; i<this.bestSolution.size()-1; i++) {
-		  this.bestPathSolution.add(
+		  /*this.bestPathSolution.add(
 			  this.graph.get(this.bestSolution.get(i).getNode().getNodeId()).get(this.bestSolution.get(i+1).getNode().getNodeId())
-			  );
+			  );*/
+		  BestPath path = this.graph.get(
+			  this.bestSolution.get(i).getNode().getNodeId())
+			  .get(this.bestSolution.get(i+1).getNode().getNodeId());
+		  this.bestPathSolution.add(path);
+
 	      }
 	  } 
 	  return this.bestPathSolution; 
@@ -118,13 +123,18 @@ public abstract class TemplateTSP implements TSP {
 			 timeLimitReached = true;
 			 return;
 		 }
-	    if (undiscovered.size() == 0){ // tous les sommets ont ete visites
+	     if (undiscovered.size() == 0 && !discovered.contains(this.deliveries.get(0).getDeliveryNode())) {
+		 undiscovered.add(this.deliveries.get(0).getDeliveryNode());
+		 branchAndBound(currentNode, undiscovered, discovered, discoveredCost, cost, startTime, timeLimit);
+	     }
+	     else if (undiscovered.size() == 0){ // tous les sommets ont ete visites
 	    	//discoveredCost += cost[currentNode][0];
 		SpecialNode startNode = this.deliveries.get(0).getPickupNode();
-		SpecialNode endNode = this.deliveries.get(0).getPickupNode();
+		//SpecialNode endNode = this.deliveries.get(0).getDeliveryNode();
 		discoveredCost += cost.get(currentNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
 		//ajouter node finish
-		discovered.add(endNode);
+		//discovered.add(endNode);
+		//discoveredCost += cost.get(endNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
 	    	if (discoveredCost < bestSolutionCost){ // on a trouve une solution meilleure que bestSolution
 	    	    	this.bestSolution.clear();
 	    	    	this.bestSolution.addAll(discovered);
