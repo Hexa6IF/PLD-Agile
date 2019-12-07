@@ -17,11 +17,16 @@ import model.FullMap;
 import model.SpecialNode;
 
 public class Dijkstra {
+    private static SpecialNode startNode;
+    private static SpecialNode finishNode;
     public static Map<String, Map<String, BestPath>> calculateAllShortestPaths(List<Delivery> deliveries, FullMap map) {
 	Set<SpecialNode> specialNodes = getSpecialNodes(deliveries);
 	Map<String, Map<String, BestPath>> totalShortPaths = new HashMap<String, Map<String, BestPath>>(); 
 	
 	for(SpecialNode startNode : specialNodes) {
+	    if (startNode == Dijkstra.finishNode) {
+		continue;
+	    }
 	    totalShortPaths.put(startNode.getNode().getNodeId(), calculateShortestPaths(startNode, specialNodes, map));
 	}
 	return totalShortPaths;
@@ -89,6 +94,9 @@ public class Dijkstra {
 	Map<String, BestPath> bestPaths = new HashMap<String, BestPath>();
 	
 	for(SpecialNode sn : specialNodes) {
+	    if (sn == Dijkstra.startNode) {
+		continue;
+	    }
 	    String nodeId = sn.getNode().getNodeId();
 	    LinkedList<Edge> edges = new LinkedList<Edge>();
 	    while(!nodeId.equals(startNode.getNode().getNodeId())) {
@@ -108,6 +116,8 @@ public class Dijkstra {
     
     private static Set<SpecialNode> getSpecialNodes(List<Delivery> deliveries) {
 	Set<SpecialNode> specialNodes = new HashSet<SpecialNode>();
+	Dijkstra.startNode = deliveries.get(0).getPickupNode();
+	Dijkstra.finishNode = deliveries.get(0).getDeliveryNode();
 	
 	for(Delivery delivery : deliveries) {
 	    specialNodes.add(delivery.getDeliveryNode());

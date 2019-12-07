@@ -57,6 +57,12 @@ public class Delivery {
 	return this.deliveryIndex;
     }
 
+    @Override
+    public String toString() {
+	return "Delivery [deliveryNode=" + deliveryNode.toString() + ", pickupNode=" + pickupNode.toString()
+		+ ", deliveryIndex=" + deliveryIndex + "]";
+    }
+
     /**
      * @param deliveryIndex the deliveryIndex to set
      */
