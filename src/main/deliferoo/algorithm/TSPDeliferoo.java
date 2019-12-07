@@ -29,12 +29,19 @@ public class TSPDeliferoo {
     }
 
     /**
-     * @return 
+     * @return the cost in minutes for the best solution
      */
     public int getBestSolutionCost() {
 	return bestSolutionCost;
     }
 
+    /**
+     * Create a list of BestPath from a list of SpecialNodes
+     * The order of the special nodes is computed by branchAndBound
+     * whereas the list of BestPath the graph computed by Dijkstra
+     * 
+     * @return
+     */
     public List<BestPath> getBestPathSolution() {
 	if (this.bestSolution == null)
 	    return null;
@@ -49,6 +56,13 @@ public class TSPDeliferoo {
 	return this.bestPathSolution;
     }
 
+    /**
+     * This is the method to execute if we want to compute the best solution
+     * 
+     * @param timeLimit the algorithm stops if the time limit in ms is reached
+     * @param graph computed by Dijkstra
+     * @param deliveries 
+     */
     public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
 	this.initClassVar(timeLimit, graph, deliveries);
 	Map<String, Map<String, Integer>> cost = this.createCostFromGraph();
@@ -59,6 +73,11 @@ public class TSPDeliferoo {
 	branchAndBound(startNode, undiscovered, discovered, 0, cost, System.currentTimeMillis(), timeLimit);
     }
 
+    /**
+     * @param timeLimit
+     * @param graph
+     * @param deliveries
+     */
     private void initClassVar(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
 	this.graph = graph;
 	this.deliveries = deliveries;
@@ -68,6 +87,12 @@ public class TSPDeliferoo {
 	this.bestSolution = new ArrayList<SpecialNode>(nbNodes);
     }
 
+    /**
+     * Insert all pickup nodes in an ArrayList
+     * At the beginning, delivery nodes are not discoverable 
+     * because we have to pick up before delivering
+     * @return
+     */
     private ArrayList<SpecialNode> initUndiscovered() {
 	ArrayList<SpecialNode> undiscovered = new ArrayList<SpecialNode>();
 	for (Delivery delivery : this.deliveries) {
@@ -78,6 +103,11 @@ public class TSPDeliferoo {
 	return undiscovered;
     }
 
+    /**
+     * Stores in a data structure the time in minutes 
+     * needed to go from special node X to special node Y
+     * @return
+     */
     private Map<String, Map<String, Integer>> createCostFromGraph() {
 	HashMap<String, Map<String, Integer>> cost = new HashMap<String, Map<String, Integer>>();
 	for (String nodeIDKeyOne : this.graph.keySet()) {
@@ -92,7 +122,7 @@ public class TSPDeliferoo {
     }
 
     /**
-     * Methode devant etre redefinie par les sous-classes de TemplateTSP
+     * The algorithm's heuristic.
      * 
      * @param currentNode
      * @param undiscovered : tableau des sommets restant a visiter
@@ -110,7 +140,6 @@ public class TSPDeliferoo {
     }
 
     /**
-     * Methode devant etre redefinie par les sous-classes de TemplateTSP
      * 
      * @param currentNode
      * @param undiscovered : tableau des sommets restant a visiter
@@ -146,9 +175,8 @@ public class TSPDeliferoo {
 	    long startTime, int timeLimit) {
 	if (System.currentTimeMillis() - startTime > timeLimit) {
 	    timeLimitReached = true;
-	    return;
 	}
-	if (undiscovered.size() == 0 && !discovered.contains(this.deliveries.get(0).getDeliveryNode())) {
+	else if (undiscovered.size() == 0 && !discovered.contains(this.deliveries.get(0).getDeliveryNode())) {
 	    undiscovered.add(this.deliveries.get(0).getDeliveryNode());
 	    branchAndBound(currentNode, undiscovered, discovered, discoveredCost, cost, startTime, timeLimit);
 	} else if (undiscovered.size() == 0) { // tous les sommets ont ete visites
