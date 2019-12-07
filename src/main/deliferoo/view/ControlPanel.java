@@ -53,6 +53,8 @@ public class ControlPanel extends GridPane{
 	this.messageBox.setText(msg);
     }
 
+    
+    
     private void initializeComponent(Double width, Double height) {
 	this.messageBox = new TextArea();
 	

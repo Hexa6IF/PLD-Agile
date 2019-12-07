@@ -52,11 +52,11 @@ public class Window {
     public Window(Controller controller) {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
-	this.mapView = new MapView(this.bounds.getHeight(), 2 * this.bounds.getWidth() / 3);
-	this.overviewPanel = new OverviewPanel(this.bounds.getHeight() / 6, this.bounds.getWidth() / 3);
-	this.deliveryDetailView = new DeliveryDetailView(this.bounds.getHeight() / 6, this.bounds.getWidth() / 3);
-	this.controlPanel = new ControlPanel(this.bounds.getHeight() / 6, this.bounds.getWidth() / 3);
-	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, this.bounds.getWidth() / 3);
+	this.mapView = new MapView(this.bounds.getHeight(), 5 * this.bounds.getWidth() / 9);
+	this.overviewPanel = new OverviewPanel(this.bounds.getHeight() / 6, 4 * this.bounds.getWidth() / 9);
+	this.deliveryDetailView = new DeliveryDetailView(this.bounds.getHeight() / 6, 4 * this.bounds.getWidth() / 9);
+	this.controlPanel = new ControlPanel(this.bounds.getHeight() / 6, 4 * this.bounds.getWidth() / 9);
+	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, 4 * this.bounds.getWidth() / 9);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.deliveryColorMap = new HashMap<>();
 	
