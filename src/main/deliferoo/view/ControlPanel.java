@@ -1,5 +1,8 @@
 package view;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,7 +17,7 @@ import javafx.scene.text.FontWeight;
  * @author teckwan
  */
 public class ControlPanel extends GridPane{
-    
+
     private TextArea messageBox;
 
     private Button modifyButton;
@@ -32,17 +35,17 @@ public class ControlPanel extends GridPane{
      */
     public ControlPanel(Double height, Double width) {
 	super();
-	
+
 	this.setAlignment(Pos.CENTER);
 	this.setHgap(20);
 	this.setVgap(20);
 	this.setPadding(new Insets(20));
 	this.setPrefSize(width, height);
-	
+
 	initializeComponent(width, height);
 	placeGridComponents();
     }
-    
+
     /**
      * Method to change currently shown message
      * 
@@ -53,22 +56,24 @@ public class ControlPanel extends GridPane{
 	this.messageBox.setText(msg);
     }
 
-    
-    
+    public void toggleButton(String button, boolean enabled) {
+	
+    }
+
     private void initializeComponent(Double width, Double height) {
 	this.messageBox = new TextArea();
-	
+
 	this.modifyButton = new Button("Modify");	
 	this.addButton = new Button("Add");
 	this.removeButton = new Button("Remove");
 	this.undoButton = new Button("Undo");
 	this.redoButton = new Button("Redo");
 	this.cancelButton = new Button("Cancel");
-	
+
 	this.messageBox.setEditable(false);
 	this.messageBox.setPrefSize(width, height / 2);
 	this.messageBox.setFont(Font.font("Tahoma", FontWeight.SEMI_BOLD, 15));
-	
+
 	this.modifyButton.setPrefSize(width / 6, height / 4);
 	this.addButton.setPrefSize(width / 6, height / 4);
 	this.removeButton.setPrefSize(width / 6, height / 4);
@@ -79,7 +84,7 @@ public class ControlPanel extends GridPane{
 
     private void placeGridComponents() {
 	this.add(this.messageBox, 0, 0, 6, 1);
-	
+
 	this.add(this.modifyButton, 0, 1);
 	this.add(this.addButton, 1, 1);
 	this.add(this.removeButton, 2, 1);
