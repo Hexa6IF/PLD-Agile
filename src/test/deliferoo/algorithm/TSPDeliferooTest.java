@@ -33,7 +33,7 @@ public class TSPDeliferooTest {
 	    }
 	}*/
 	
-	tsp.searchSolution(timeLimit, graph);
+	tsp.searchSolution(timeLimit, graph, deliveries);
 	List<BestPath> solution = tsp.getBestPathSolution();
 	
 	System.out.println("a");

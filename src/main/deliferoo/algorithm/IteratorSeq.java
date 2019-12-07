@@ -15,7 +15,7 @@ public class IteratorSeq implements Iterator<SpecialNode> {
 	 * @param undiscovered
 	 * @param currentNode
 	 */
-	public IteratorSeq(Collection<SpecialNode> undiscovered, int currentNode){
+	public IteratorSeq(Collection<SpecialNode> undiscovered, SpecialNode currentNode){
 		this.candidates = new SpecialNode[undiscovered.size()];
 		nbCandidates = 0;
 		for (SpecialNode s : undiscovered){

@@ -14,16 +14,16 @@ public interface TSP {
 	 * @param cost : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
 	 * @param duration : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 */
-	public void searchSolution(int timeLimit, int nbNodes, int[][] cost, int[] duration);
+	//public void searchSolution(int timeLimit, int nbNodes, int[][] cost, int[] duration);
 	
 	/**
 	 * @param i
 	 * @return le sommet visite en i-eme position dans la solution calculee par chercheSolution
 	 */
-	public Integer getBestSolution(int i);
+	//public Integer getBestSolution(int i);
 	
 	/** 
 	 * @return la duree de la solution calculee par chercheSolution
 	 */
-	public int getBestSolutionCost();
+	//public int getBestSolutionCost();
 }

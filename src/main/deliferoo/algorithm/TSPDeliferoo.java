@@ -2,11 +2,14 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+
+import model.SpecialNode;
 
 public class TSPDeliferoo extends TemplateTSP {
 
 	@Override
-	protected Iterator<Integer> iterator(Integer currentNode, ArrayList<Integer> undiscovered, int[][] cost, int[] duration) {
+	protected Iterator<SpecialNode> iterator(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered) {
 		return new IteratorSeq(undiscovered, currentNode);
 	}
 
