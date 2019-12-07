@@ -23,17 +23,6 @@ public abstract class TemplateTSP implements TSP {
 		return timeLimitReached;
 	}
 	
-	/*public void searchSolution(int timeLimit, int nbNodes, int[][] cost, int[] duration){
-		timeLimitReached = false;
-		bestSolutionCost = Integer.MAX_VALUE;
-		bestSolution = new Integer[nbNodes];
-		ArrayList<Integer> undiscovered = new ArrayList<Integer>();
-		for (int i=1; i<nbNodes; i++) undiscovered.add(i);
-		ArrayList<Integer> discovered = new ArrayList<Integer>(nbNodes);
-		discovered.add(0); // le premier sommet visite est 0
-		branchAndBound(0, undiscovered, discovered, 0, cost, duration, System.currentTimeMillis(), timeLimit);
-	}*/
-	
 	public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
 	    this.graph = graph;
 	    this.deliveries = deliveries;
@@ -41,12 +30,11 @@ public abstract class TemplateTSP implements TSP {
 	    bestSolutionCost = Integer.MAX_VALUE;
 	    int nbNodes = this.deliveries.size()*2;
 	    Map<String, Map<String, Integer>> cost = this.createCostFromGraph();
-	    //Set<SpecialNode> duration = this.createDurationFromGraph(); //map<nodeid,map<SpecialNodeType, int>
 	    bestSolution = new ArrayList<SpecialNode>(nbNodes);
 	    ArrayList<SpecialNode> undiscovered = this.initUndiscovered();	    
 	    ArrayList<SpecialNode> discovered = new ArrayList<SpecialNode>();
 	    SpecialNode startNode = this.deliveries.get(0).getPickupNode();
-	    discovered.add(startNode); // le premier sommet visite est 0
+	    discovered.add(startNode);
 	    branchAndBound(startNode, undiscovered, discovered, 0, cost, System.currentTimeMillis(), timeLimit);
 	}
 	
@@ -71,59 +59,6 @@ public abstract class TemplateTSP implements TSP {
 	    }
 	    return cost;
 	}
-	
-	/*private HashMap<String, Map<SpecialNodeType, Integer>> createDurationFromGraph(){ //delivery index
-	    HashMap<String, Map<SpecialNodeType, Integer>> duration = new HashMap<String, Map<SpecialNodeType, Integer>>();
-	    for (Delivery delivery : this.deliveries) {
-		HashMap<SpecialNodeType, Integer> subMapPickUp = new HashMap<SpecialNodeType, Integer>();
-		HashMap<SpecialNodeType, Integer> subMapDelivery = new HashMap<SpecialNodeType, Integer>();
-		duration.put(delivery.getPickupNode().getNode().getNodeId(), subMapPickUp);
-		duration.put(delivery.getDeliveryNode().getNode().getNodeId(), subMapDelivery);
-	    }
-	    for (Delivery delivery : this.deliveries) {
-		SpecialNode pickupNode = delivery.getPickupNode();
-		SpecialNode deliveryNode = delivery.getDeliveryNode();
-		Map<SpecialNodeType, Integer> subMapPickUp = duration.get(pickupNode.getNode().getNodeId());
-		subMapPickUp.put(pickupNode.getSpecialNodeType(), pickupNode.getDuration().intValue());
-		Map<SpecialNodeType, Integer> subMapDelivery = duration.get(deliveryNode.getNode().getNodeId());
-		subMapDelivery.put(deliveryNode.getSpecialNodeType(), deliveryNode.getDuration().intValue());
-	    }
-	    return duration;
-	}*/
-	
-	/*private int[][] createCostFromGraph(){
-	    int nbNodes = this.graph.size();
-	    int[][] cost = new int[nbNodes][nbNodes];//to do : convert to double
-	    List<String> keysNodeOrigin = new ArrayList<String>(this.graph.keySet());
-	    for (int i=0; i<nbNodes; i++) {
-		String nodeOrigin = keysNodeOrigin.get(i);
-		List<String> keysNodeDest = new ArrayList<String>(this.graph.get(nodeOrigin).keySet());
-		for (int j=0; j<nbNodes; j++) {
-		    String nodeDest = keysNodeDest.get(j);
-		    int distanceFromOrigintoDest = this.graph.get(nodeOrigin).get(nodeDest).getDistance().intValue();
-		    cost[i][j]= distanceFromOrigintoDest;
-		}
-	    }
-	    return cost;
-	}*/
-	
-	/*private int[] createDurationFromGraph() {
-	    int nbNodes = this.deliveries.size()*2;
-	    int [] duration = new int[nbNodes];
-	    //fill array from deliveries
-	    String[] nodeList = this.graph.keySet().toArray(new String[1]);
-	    Map<String, BestPath> firstEntry = this.graph.get(nodeList[0]);
-	    for (int i=0; i<nbNodes; i++) {
-		duration[i]= firstEntry.get(nodeList[i]).getStart().getDuration().intValue();
-	    }
-	    return duration;
-	}*/
-	
-	/*public Integer getBestSolution(int i){
-		if ((bestSolution == null) || (i<0) || (i>=bestSolution.length))
-			return null;
-		return bestSolution[i];
-	}*/
 	
 	public int getBestSolutionCost(){
 	    	return bestSolutionCost;
