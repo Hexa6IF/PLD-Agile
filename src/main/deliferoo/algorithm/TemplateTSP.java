@@ -121,7 +121,10 @@ public abstract class TemplateTSP implements TSP {
 	    if (undiscovered.size() == 0){ // tous les sommets ont ete visites
 	    	//discoveredCost += cost[currentNode][0];
 		SpecialNode startNode = this.deliveries.get(0).getPickupNode();
+		SpecialNode endNode = this.deliveries.get(0).getPickupNode();
 		discoveredCost += cost.get(currentNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
+		//ajouter node finish
+		discovered.add(endNode);
 	    	if (discoveredCost < bestSolutionCost){ // on a trouve une solution meilleure que bestSolution
 	    	    	this.bestSolution.clear();
 	    	    	this.bestSolution.addAll(discovered);
@@ -135,14 +138,21 @@ public abstract class TemplateTSP implements TSP {
 	        	discovered.add(nextNode);
 	        	undiscovered.remove(nextNode);
 	        	//si nextNode est un pickup, ajouter dans undiscovered son dropoff associé
+	        	if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
+	        	    undiscovered.add(nextNode.getDelivery().getDeliveryNode());
+	        	}
 	        	//branchAndBound(nextNode, undiscovered, discovered, discoveredCost + cost[currentNode][nextNode] + duration[nextNode], cost, duration, startTime, timeLimit);
 	        	branchAndBound(nextNode, undiscovered, discovered, discoveredCost 
 	        		+ cost.get(currentNode.getNode().getNodeId()).get(nextNode.getNode().getNodeId())
 	        		+ nextNode.getDuration().intValue(), cost, startTime, timeLimit);
 	        	discovered.remove(nextNode);
 	        	undiscovered.add(nextNode);
+	        	if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
+	        	    undiscovered.remove(nextNode.getDelivery().getDeliveryNode());
+	        	}
 	        }	    
 	    }
+	    
 	}
 }
 
