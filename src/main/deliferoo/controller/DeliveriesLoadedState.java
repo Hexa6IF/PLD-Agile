@@ -35,6 +35,7 @@ public class DeliveriesLoadedState implements State {
 	controller.setCurrentMap(map);
 	window.updateMap(map);
 	window.updateDeliveries(new ArrayList<Delivery>());
+	controller.setCurrentState(controller.MAP_LOADED_STATE);
     }
 
     @Override
@@ -54,5 +55,16 @@ public class DeliveriesLoadedState implements State {
 	controller.setRound(round);
 	window.updateRound(round);
 	window.updateMessage("New round calculated");
+    }
+    
+    @Override
+    public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
+	for(Delivery delivery : controller.cyclist.getDeliveries()) {
+	    if(delivery.getDeliveryIndex() == deliveryIndex) {
+		window.updateSelectedDelivery(delivery);
+		break;
+	    }
+	}
+	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
 }

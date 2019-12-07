@@ -14,13 +14,12 @@ import model.SpecialNodeType;
  */
 public class SpecialNodeTextView {
 
-    private Number deliveryIndex;
+    private Integer deliveryIndex;
     private Color color;
     private SpecialNodeType type;
     private Double duration;
     private LocalTime time;
-    private SpecialNode node;
-
+    
 /**
  * Constructor
  * 
@@ -33,7 +32,6 @@ public class SpecialNodeTextView {
 	this.type = specialNode.getSpecialNodeType();
 	this.duration = specialNode.getDuration();
 	this.time = specialNode.getPassageTime();
-	this.node = specialNode;
     }
 
     /**
@@ -95,28 +93,14 @@ public class SpecialNodeTextView {
     /**
      * @return the deliveryIndex
      */
-    public Number getDeliveryIndex() {
+    public Integer getDeliveryIndex() {
 	return deliveryIndex;
     }
 
     /**
      * @param deliveryIndex the deliveryIndex to set
      */
-    public void setDeliveryIndex(Number deliveryIndex) {
+    public void setDeliveryIndex(Integer deliveryIndex) {
 	this.deliveryIndex = deliveryIndex;
-    }
-
-    /**
-     * @return the node
-     */
-    public SpecialNode getNode() {
-	return node;
-    }
-
-    /**
-     * @param node the node to set
-     */
-    public void setNode(SpecialNode node) {
-	this.node = node;
     }
 }
