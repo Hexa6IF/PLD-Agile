@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -19,11 +19,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import controller.Controller;
+import model.BestPath;
 import model.Delivery;
 import model.FullMap;
 import model.Round;
+import model.SpecialNode;
 
 /**
  * Main window class
@@ -40,8 +41,13 @@ public class Window {
     private MessageView messageView;
     private DeliveryDetailView deliveryDetailView;
     private TableBoxView tableBoxView;
-    private Map<Delivery, Color> deliveryColourMap;
+    private Map<Integer, Color> deliveryColorMap;
 
+    /**
+     * Constructor
+     * 
+     * @param controller
+     */
     public Window(Controller controller) {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
@@ -51,14 +57,110 @@ public class Window {
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, this.bounds.getWidth() / 3);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.messageView = new MessageView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
-	this.deliveryColourMap = new HashMap<>();
+	this.deliveryColorMap = new HashMap<>();
+	
+	this.addSelectionListeners();
     }
 
+    /**
+     * Build window content and show
+     */
     public void launchWindow() {
 	Stage stage = new Stage();
 	buildAndShowStage(stage);
     }
 
+    /**
+     * Update the map graphical view
+     * 
+     * @param map
+     */
+    public void updateMap(FullMap map) {
+	this.mapView.setMap(map);
+	this.mapView.drawMap(Color.BLACK, 2);
+    }
+
+    /**
+     * Update the list of deliveries to display
+     * 
+     * @param deliveries
+     */
+    public void updateDeliveries(List<Delivery> deliveries) {
+	List<SpecialNode> nodesToInsert = new ArrayList<>();
+	
+	for(Delivery delivery : deliveries) {
+	    Color color;	    
+	    if(deliveryColorMap.containsKey(delivery.getDeliveryIndex())) {
+		color = this.deliveryColorMap.get(delivery.getDeliveryIndex());
+	    } else {
+		color = generateRandomColor();
+		deliveryColorMap.put(delivery.getDeliveryIndex(), color);
+	    }
+	    nodesToInsert.add(delivery.getPickupNode());
+	    nodesToInsert.add(delivery.getDeliveryNode());
+	    this.mapView.drawMarker(delivery, color, 20);
+	}
+	this.tableBoxView.updateTableBox(nodesToInsert, this.deliveryColorMap);
+    }
+    
+    /**
+     * Update the view for selected delivery
+     * 
+     * @param delivery
+     */
+    public void updateSelectedDelivery(Delivery delivery) {
+	this.mapView.highlightSelectedMarkers(delivery.getDeliveryIndex());
+	this.deliveryDetailView.updateDeliveryDetail(delivery, this.deliveryColorMap);
+    }
+    
+    /**
+     * Update the view for the calculated round and orders the nodes in the table
+     * 
+     * @param round
+     */
+    public void updateRound(Round round) {
+	List<SpecialNode> nodesToInsert = new ArrayList<>();
+	List<BestPath> resultPath = round.getResultPath();
+	
+	for(int i = 0; i < resultPath.size(); i++) {
+	    SpecialNode start = resultPath.get(i).getStart();
+	    SpecialNode end = resultPath.get(i).getEnd();
+	    
+	    if(i == 0) {
+		nodesToInsert.add(start);
+	    }
+	    nodesToInsert.add(end);
+	    
+	    if(!this.deliveryColorMap.containsKey(end.getDelivery().getDeliveryIndex())) {
+		this.deliveryColorMap.put(end.getDelivery().getDeliveryIndex(), generateRandomColor());
+	    }
+	}
+	this.tableBoxView.updateTableBox(nodesToInsert, this.deliveryColorMap);
+	this.mapView.drawRound(round);
+    }
+
+    /**
+     * Update the displayed message
+     * 
+     * @param message
+     */
+    public void updateMessage(String message) {
+	this.messageView.setCurrentMessage(message);
+    }
+    
+    /**
+     * Generates a random color
+     * 
+     * @return	a random color
+     */
+    public Color generateRandomColor() {
+	Random rand = new Random();
+	Double r = rand.nextDouble();
+	Double g = rand.nextDouble();
+	Double b = rand.nextDouble();
+	return Color.color(r, g, b);
+    }
+    
     private void buildAndShowStage(Stage stage) {
 	stage.setTitle("Del'IFeroo");
 	stage.setX(this.bounds.getMinX());
@@ -74,7 +176,7 @@ public class Window {
 	BorderPane border = new BorderPane();
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
-	border.setCenter(this.mapView.getMapView());
+	border.setCenter(this.mapView);
 	return new Scene(border);
     }
 
@@ -108,59 +210,10 @@ public class Window {
 	sideBar.getChildren().addAll(this.messageView, this.deliveryDetailView, this.tableBoxView);
 	return sideBar;
     }
-
-    public Color generateRandomColor() {
-	Random rand = new Random();
-	Double r = rand.nextDouble();
-	Double g = rand.nextDouble();
-	Double b = rand.nextDouble();
-	return Color.color(r, g, b);
-    }
-
-    /**rect1
-     * Update the map graphical view
-     * 
-     * @param map
-     */
-    public void updateMap(FullMap map) {
-	this.mapView.updateMap(map);
-    }
-
-    /**
-     * Update the list of deliveries to display
-     * 
-     * @param deliveries
-     */
-    public void updateTableBox(List<Delivery> deliveries) {
-	ObservableList<SpecialNodeTextView> specialNodeTextViews = tableBoxView.getItems();
-	specialNodeTextViews.clear();
-	for (Delivery delivery : deliveries) {
-	    Color color = generateRandomColor();
-	    this.deliveryColourMap.put(delivery, color);
-	    this.tableBoxView.addSpecialNode(delivery.getPickupNode(), color);
-	    this.tableBoxView.addSpecialNode(delivery.getDeliveryNode(), color);
-	    this.mapView.drawMarker(delivery, color, 20);
-	}
-    }
-
-    /**
-     * Update the displayed message
-     * 
-     * @param message
-     */
-    public void updateMessage(String message) {
-	this.messageView.setCurrentMessage(message);
-    }
-
-    /**
-     * Updates the round displayed
-     * 
-     * @param round
-     */
-    public void updateRound(Round round) {
-	this.mapView.updateRound(round);
-	this.tableBoxView.updateSpecialNodes(round, this.deliveryColourMap);
-    }
     
-    
+    private void addSelectionListeners() {
+	this.tableBoxView.getSelectionModel().selectedItemProperty().addListener((observer, oldSelection, newSelection) -> {
+	    this.controller.selectDeliveryClick(newSelection.getDeliveryIndex());
+	});
+    }
 }

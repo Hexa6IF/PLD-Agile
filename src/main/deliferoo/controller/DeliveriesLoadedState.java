@@ -34,14 +34,15 @@ public class DeliveriesLoadedState implements State {
 	FullMap map = XMLParser.getInstance().parseMap(mapFile);
 	controller.setCurrentMap(map);
 	window.updateMap(map);
-	window.updateTableBox(new ArrayList<Delivery>());
+	window.updateDeliveries(new ArrayList<Delivery>());
+	controller.setCurrentState(controller.MAP_LOADED_STATE);
     }
 
     @Override
     public void loadDeliveries(Window window, Controller controller, File deliveriesFile, FullMap map) {
 	List<Delivery> deliveries = XMLParser.getInstance().parseDeliveries(deliveriesFile, map);
 	controller.setDeliveries(deliveries);
-	window.updateTableBox(deliveries);
+	window.updateDeliveries(deliveries);
     }
 
     @Override
@@ -57,7 +58,13 @@ public class DeliveriesLoadedState implements State {
     }
     
     @Override
-    public void selectDeliveryClick(Window window, Controller controller) {
-	
+    public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
+	for(Delivery delivery : controller.cyclist.getDeliveries()) {
+	    if(delivery.getDeliveryIndex() == deliveryIndex) {
+		window.updateSelectedDelivery(delivery);
+		break;
+	    }
+	}
+	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
 }

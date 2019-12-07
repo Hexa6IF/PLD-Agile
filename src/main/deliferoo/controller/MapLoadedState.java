@@ -1,10 +1,12 @@
 package controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Delivery;
 import model.FullMap;
+import model.SpecialNode;
 import view.Window;
 import xml.XMLParser;
 
@@ -35,7 +37,7 @@ public class MapLoadedState implements State {
     public void loadDeliveries(Window window, Controller controller, File deliveriesFile, FullMap map) {
 	List<Delivery> deliveries = XMLParser.getInstance().parseDeliveries(deliveriesFile, map);
 	controller.setDeliveries(deliveries);
-	window.updateTableBox(deliveries);
+	window.updateDeliveries(deliveries);
 	controller.DELIVERIES_LOADED_STATE.calculateRound(window, controller, deliveries, map);
 	controller.setCurrentState(controller.DELIVERIES_LOADED_STATE);
     }
