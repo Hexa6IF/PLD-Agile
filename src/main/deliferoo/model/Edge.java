@@ -60,4 +60,11 @@ public class Edge {
     public void setDistance(Double distance) {
 	this.distance = distance;
     }
+
+    @Override
+    public String toString() {
+	return "Edge [streetName=" + streetName + ", start=" + start.toString() + ", end=" + end.toString() + ", distance=" + distance + "]";
+    }
+    
+    
 }
