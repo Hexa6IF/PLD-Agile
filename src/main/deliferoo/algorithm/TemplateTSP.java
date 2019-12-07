@@ -71,9 +71,6 @@ public abstract class TemplateTSP implements TSP {
 	  else {
 	      this.bestPathSolution = new ArrayList<BestPath>();
 	      for (int i=0; i<this.bestSolution.size()-1; i++) {
-		  /*this.bestPathSolution.add(
-			  this.graph.get(this.bestSolution.get(i).getNode().getNodeId()).get(this.bestSolution.get(i+1).getNode().getNodeId())
-			  );*/
 		  BestPath path = this.graph.get(
 			  this.bestSolution.get(i).getNode().getNodeId())
 			  .get(this.bestSolution.get(i+1).getNode().getNodeId());
@@ -128,30 +125,22 @@ public abstract class TemplateTSP implements TSP {
 		 branchAndBound(currentNode, undiscovered, discovered, discoveredCost, cost, startTime, timeLimit);
 	     }
 	     else if (undiscovered.size() == 0){ // tous les sommets ont ete visites
-	    	//discoveredCost += cost[currentNode][0];
 		SpecialNode startNode = this.deliveries.get(0).getPickupNode();
-		//SpecialNode endNode = this.deliveries.get(0).getDeliveryNode();
 		discoveredCost += cost.get(currentNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
-		//ajouter node finish
-		//discovered.add(endNode);
-		//discoveredCost += cost.get(endNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
 	    	if (discoveredCost < bestSolutionCost){ // on a trouve une solution meilleure que bestSolution
 	    	    	this.bestSolution.clear();
 	    	    	this.bestSolution.addAll(discovered);
 	    		bestSolutionCost = discoveredCost;
 	    	}
-	    //} else if (discoveredCost + bound(currentNode, undiscovered, cost, duration) < bestSolutionCost){
 	    } else if (discoveredCost < bestSolutionCost){
 		Iterator<SpecialNode> it = iterator(currentNode, undiscovered);
 	        while (it.hasNext()){
 	            	SpecialNode nextNode = it.next();
 	        	discovered.add(nextNode);
 	        	undiscovered.remove(nextNode);
-	        	//si nextNode est un pickup, ajouter dans undiscovered son dropoff associé
 	        	if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 	        	    undiscovered.add(nextNode.getDelivery().getDeliveryNode());
 	        	}
-	        	//branchAndBound(nextNode, undiscovered, discovered, discoveredCost + cost[currentNode][nextNode] + duration[nextNode], cost, duration, startTime, timeLimit);
 	        	branchAndBound(nextNode, undiscovered, discovered, discoveredCost 
 	        		+ cost.get(currentNode.getNode().getNodeId()).get(nextNode.getNode().getNodeId())
 	        		+ nextNode.getDuration().intValue(), cost, startTime, timeLimit);
