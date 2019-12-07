@@ -39,7 +39,11 @@ import model.SpecialNodeType;
  */
 public class MapView extends Pane{
 
-    private FullMap map;
+    private Double minLong;
+    private Double maxLong;
+    private Double minLat;
+    private Double maxLat;    
+    
     private Double height;
     private Double width;
     private Double offsetX;
@@ -68,22 +72,19 @@ public class MapView extends Pane{
     }
 
     /**
-     *
-     * @param map FullMap associated to this MapView
-     */
-    public void setMap(FullMap map) {
-	this.map = map;
-    }
-
-    /**
      * Draws the map 
      *
      * @param color       Color of the paths of this MapView
      * @param strokeWidth Width of the paths
      */
-    public void drawMap(Color color, Integer strokeWidth) {
+    public void drawMap(FullMap map, Color color, Integer strokeWidth) {
+	this.minLong = map.getMinLong();
+	this.maxLong = map.getMaxLong();
+	this.minLat = map.getMinLat();
+	this.maxLat = map.getMaxLat();
+	
 	this.getChildren().clear();
-	for (Edge edge : this.map.getEdgeList()) {
+	for (Edge edge : map.getEdgeList()) {
 	    drawPath(edge, color, strokeWidth);
 	}
     }
@@ -196,10 +197,10 @@ public class MapView extends Pane{
      * @return the coordinates as a pair with X as key and Y as value
      */
     private Pair<Double, Double> calculateRelativePosition(Node point) {
-	Double x = this.offsetX
-		+ dimension * (point.getLongitude() - this.map.getMinLong()) / this.map.getRangeLongitude();
-	Double y = this.offsetY
-		+ dimension * (this.map.getMaxLat() - point.getLatitude()) / this.map.getRangeLatitude();
+	Double x = this.offsetX + dimension 
+		* (point.getLongitude() - this.minLong) / (this.maxLong - this.minLong);
+	Double y = this.offsetY + dimension 
+		* (this.maxLat - point.getLatitude()) / (this.maxLat - this.minLat);
 
 	return new Pair<Double, Double>(x, y);
     }

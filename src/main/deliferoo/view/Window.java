@@ -38,8 +38,9 @@ public class Window {
     private Controller controller;
     private Rectangle2D bounds;
     private MapView mapView;
-    private MessageView messageView;
+    private OverviewPanel overviewPanel;
     private DeliveryDetailView deliveryDetailView;
+    private ControlPanel controlPanel;
     private TableBoxView tableBoxView;
     private Map<Integer, Color> deliveryColorMap;
 
@@ -52,11 +53,11 @@ public class Window {
 	this.controller = controller;
 	this.bounds = Screen.getPrimary().getVisualBounds();
 	this.mapView = new MapView(this.bounds.getHeight(), 2 * this.bounds.getWidth() / 3);
-	this.messageView = new MessageView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
-	this.deliveryDetailView = new DeliveryDetailView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
+	this.overviewPanel = new OverviewPanel(this.bounds.getHeight() / 6, this.bounds.getWidth() / 3);
+	this.deliveryDetailView = new DeliveryDetailView(this.bounds.getHeight() / 6, this.bounds.getWidth() / 3);
+	this.controlPanel = new ControlPanel(this.bounds.getHeight() / 6, this.bounds.getWidth() / 3);
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, this.bounds.getWidth() / 3);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
-	this.messageView = new MessageView(this.bounds.getHeight() / 4, this.bounds.getWidth() / 3);
 	this.deliveryColorMap = new HashMap<>();
 	
 	this.addSelectionListeners();
@@ -76,8 +77,7 @@ public class Window {
      * @param map
      */
     public void updateMap(FullMap map) {
-	this.mapView.setMap(map);
-	this.mapView.drawMap(Color.BLACK, 2);
+	this.mapView.drawMap(map, Color.BLACK, 2);
     }
 
     /**
@@ -145,7 +145,7 @@ public class Window {
      * @param message
      */
     public void updateMessage(String message) {
-	this.messageView.setCurrentMessage(message);
+	this.controlPanel.setCurrentMessage(message);
     }
     
     /**
@@ -207,7 +207,7 @@ public class Window {
     
     private VBox createSideBar() {
 	VBox sideBar = new VBox();
-	sideBar.getChildren().addAll(this.messageView, this.deliveryDetailView, this.tableBoxView);
+	sideBar.getChildren().addAll(this.overviewPanel, this.deliveryDetailView, this.controlPanel, this.tableBoxView);
 	return sideBar;
     }
     

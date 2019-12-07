@@ -19,7 +19,6 @@ public class SpecialNodeTextView {
     private SpecialNodeType type;
     private Double duration;
     private LocalTime time;
-    private SpecialNode node;
     
 /**
  * Constructor
@@ -33,7 +32,6 @@ public class SpecialNodeTextView {
 	this.type = specialNode.getSpecialNodeType();
 	this.duration = specialNode.getDuration();
 	this.time = specialNode.getPassageTime();
-	this.node = specialNode;
     }
 
     /**
@@ -104,19 +102,5 @@ public class SpecialNodeTextView {
      */
     public void setDeliveryIndex(Integer deliveryIndex) {
 	this.deliveryIndex = deliveryIndex;
-    }
-
-    /**
-     * @return the node
-     */
-    public SpecialNode getNode() {
-	return node;
-    }
-
-    /**
-     * @param node the node to set
-     */
-    public void setNode(SpecialNode node) {
-	this.node = node;
     }
 }

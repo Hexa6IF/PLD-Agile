@@ -4,7 +4,6 @@ import java.util.Map;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -44,10 +43,7 @@ public class DeliveryDetailView extends GridPane{
     TextField dropoffPointField;
     TextField pickupDurationField;
     TextField dropoffDurationField;
-
-    Button modifyButton;
-
-    HBox buttonContainer;
+    
     HBox headerContainer;
 
     /**
@@ -133,12 +129,6 @@ public class DeliveryDetailView extends GridPane{
 	this.dropoffPointField.setEditable(false);
 	this.pickupDurationField.setEditable(false);
 	this.dropoffDurationField.setEditable(false);
-
-	this.modifyButton = new Button("Modify");
-	this.modifyButton.setDisable(true);
-	this.buttonContainer = new HBox(10);
-	this.buttonContainer.setAlignment(Pos.BOTTOM_RIGHT);
-	this.buttonContainer.getChildren().add(this.modifyButton);
     }
 
     private void placeGridComponents() {
@@ -159,7 +149,5 @@ public class DeliveryDetailView extends GridPane{
 	this.add(this.dropoffPointField, 5, 2);
 	this.add(this.dropoffDurationLabel, 4, 3);
 	this.add(this.dropoffDurationField, 5, 3);
-
-	this.add(this.buttonContainer, 5, 0);
     }
 }
