@@ -155,7 +155,7 @@ public abstract class TSP {
      *         sommetCourant, contenant chaque sommet de nonVus exactement une fois
      *         et terminant par le sommet 0
      */
-    abstract int bound(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered,
+    abstract int bound(SpecialNode currentNode, String startNodeID, ArrayList<SpecialNode> undiscovered,
 	    Map<String, Map<String, Integer>> cost);
 
     /**
@@ -218,9 +218,10 @@ public abstract class TSP {
 		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 		    undiscovered.add(nextNode.getDelivery().getDeliveryNode());
 		}
+		String startNodeID = this.deliveries.get(0).getPickupNode().getNode().getNodeId();
 		branchAndBound(
 			nextNode, undiscovered, discovered, discoveredCost + costCurrentToNext.intValue()
-				+ nextNode.getDuration().intValue() + this.bound(currentNode, undiscovered, cost),
+				+ nextNode.getDuration().intValue() + this.bound(currentNode, startNodeID, undiscovered, cost),
 			cost, startTime, timeLimit);
 		discovered.remove(nextNode);
 		undiscovered.add(nextNode);

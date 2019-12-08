@@ -12,7 +12,7 @@ import model.SpecialNode;
  */
 public class TSPSimple extends TSP {
 
-    protected int bound(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered,
+    protected int bound(SpecialNode currentNode, String startNodeID, ArrayList<SpecialNode> undiscovered,
 	    Map<String, Map<String, Integer>> cost) {
 	return 0;
     }
