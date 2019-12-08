@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Delivery;
@@ -9,35 +10,43 @@ import view.Window;
 import xml.XMLParser;
 
 /**
- * State where map has been loaded
- * Waiting to load deliveries
+ * State where deliveries have been loaded and round has been calculated
  * 
  * @author sadsitha
  */
-public class MapLoadedState implements State {
+public class RoundCalculatedState implements State {
     /**
      * State class constructor
      */
-    public MapLoadedState() {}
+    public RoundCalculatedState() {}
 
     @Override
     public void init(Window window, Controller controller) {
 	window.disableButtons(true, false, true, true, true, true);
-	window.updateMessage("Map succesfully loaded.");
+	window.updateMessage("Round succesfully calculated");
     }
     
     @Override
-    public void addDeliveryClick(Window window, Controller controller) {
-	controller.setCurrentState(controller.ADD_DELIVERY_STATE);
+    public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
+	for(Delivery delivery : controller.cyclist.getDeliveries()) {
+	    if(delivery.getDeliveryIndex() == deliveryIndex) {
+		window.updateSelectedDelivery(delivery);
+		controller.currentSelectedDelivery = delivery;
+		break;
+	    }
+	}
+	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
     
     @Override
     public void loadMap(Window window, Controller controller, File mapFile) {
 	FullMap map = XMLParser.getInstance().parseMap(mapFile);
 	window.updateMap(map);
+	window.updateDeliveries(new ArrayList<Delivery>());
 	controller.setCurrentMap(map);
+	controller.setCurrentState(controller.MAP_LOADED_STATE);
     }
-    
+
     @Override
     public void loadDeliveries(Window window, Controller controller, File deliveriesFile, FullMap map) {
 	List<Delivery> deliveries = XMLParser.getInstance().parseDeliveries(deliveriesFile, map);

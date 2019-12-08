@@ -22,12 +22,14 @@ public class Controller {
     protected CommandList commandList;
     protected FullMap currentMap;
     protected Cyclist cyclist;
+    protected Delivery currentSelectedDelivery;
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
     protected final MapLoadedState MAP_LOADED_STATE = new MapLoadedState();
-    protected final DeliveriesLoadedState DELIVERIES_LOADED_STATE = new DeliveriesLoadedState();
+    protected final RoundCalculatedState ROUND_CALCULATED_STATE = new RoundCalculatedState();
     protected final ModifyDeliveryState MODIFY_DELIVERY_STATE = new ModifyDeliveryState();
+    protected final CalculatingRoundState CALCULATING_ROUND_STATE = new CalculatingRoundState();
 
     /**
      * Creates the controller of the application
@@ -36,7 +38,7 @@ public class Controller {
 	this.window = new Window(this);
 	this.window.launchWindow();
 	this.cyclist = new Cyclist();
-	this.currentState = this.INIT_STATE;
+	this.setCurrentState(this.INIT_STATE);
     }
 
     /**
@@ -46,6 +48,7 @@ public class Controller {
      */
     protected void setCurrentState(State state) {
 	this.currentState = state;
+	this.currentState.init(this.window, this);
     }
     
     /**
@@ -103,14 +106,6 @@ public class Controller {
      */
     public void loadMap(File mapFile) {
 	this.currentState.loadMap(this.window, this, mapFile);
-    }
-    
-    /**
-     * Method called to calculate the round
-     * 
-     */
-    public void calculateRound() {
-	this.currentState.calculateRound(this.window, this, this.cyclist.getDeliveries(), this.currentMap);
     }
 
     /**
