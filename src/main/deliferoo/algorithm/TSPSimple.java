@@ -5,6 +5,11 @@ import java.util.Map;
 
 import model.SpecialNode;
 
+/**
+ * 
+ * @author sadsitha
+ *
+ */
 public class TSPSimple extends TSP {
 
     protected int bound(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered,

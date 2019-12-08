@@ -13,7 +13,12 @@ import model.Delivery;
 import model.SpecialNode;
 import model.SpecialNodeType;
 
-public abstract class TSP implements ControlledTSP {
+/**
+ * 
+ * @author Louis
+ *
+ */
+public abstract class TSP {
 
     private ArrayList<BestPath> bestPathSolution;
     private ArrayList<SpecialNode> bestSolution;
@@ -84,6 +89,8 @@ public abstract class TSP implements ControlledTSP {
 	SpecialNode startNode = this.deliveries.get(0).getPickupNode();
 	discovered.add(startNode);
 	branchAndBound(startNode, undiscovered, discovered, 0, this.cost, System.currentTimeMillis(), timeLimit);
+	if (this.tspCallback != null)
+	    this.tspCallback.calculationsCompleted(); //indicate that calculation is complete
     }
 
     /**
