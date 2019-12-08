@@ -3,6 +3,7 @@ package algorithm;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class TSPDeliferooTest {
 	Map<String, Map<String, BestPath>> graph = new HashMap<String, Map<String, BestPath>>();	
 	
 	graph = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	
+	LocalTime a = LocalTime.of(8, 59);
+	LocalTime b = a.plusMinutes(5);
 	tsp.searchSolution(timeLimit, graph, deliveries);
 	List<BestPath> solution = tsp.getBestPathSolution();
 	Integer totalCost = tsp.getBestSolutionCost();

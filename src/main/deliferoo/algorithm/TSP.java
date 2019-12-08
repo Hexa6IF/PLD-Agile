@@ -1,6 +1,5 @@
 package algorithm;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +11,7 @@ import model.Delivery;
 import model.SpecialNode;
 import model.SpecialNodeType;
 
-public class TSPDeliferoo {
+public abstract class TSP {
 
     private ArrayList<BestPath> bestPathSolution;
     private ArrayList<SpecialNode> bestSolution;
@@ -20,7 +19,6 @@ public class TSPDeliferoo {
     private Boolean timeLimitReached;
     private Map<String, Map<String, BestPath>> graph;
     private List<Delivery> deliveries;
-    private Map<String, Map<String, Integer>> cost;
 
     /**
      * @return true if the algorithm's computing time is greater than the time limit
@@ -48,7 +46,6 @@ public class TSPDeliferoo {
 	if (this.bestSolution == null)
 	    return null;
 	else {
-	    this.setPassageTimeForBestSolution(this.cost);
 	    this.bestPathSolution = new ArrayList<BestPath>();
 	    for (int i = 0; i < this.bestSolution.size() - 1; i++) {
 		BestPath path = this.graph.get(this.bestSolution.get(i).getNode().getNodeId())
@@ -68,12 +65,12 @@ public class TSPDeliferoo {
      */
     public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
 	this.initClassVar(timeLimit, graph, deliveries);
-	this.cost = this.createCostFromGraph();
+	Map<String, Map<String, Integer>> cost = this.createCostFromGraph();
 	ArrayList<SpecialNode> undiscovered = this.initUndiscovered();
 	ArrayList<SpecialNode> discovered = new ArrayList<SpecialNode>();
 	SpecialNode startNode = this.deliveries.get(0).getPickupNode();
 	discovered.add(startNode);
-	branchAndBound(startNode, undiscovered, discovered, 0, this.cost, System.currentTimeMillis(), timeLimit);
+	branchAndBound(startNode, undiscovered, discovered, 0, cost, System.currentTimeMillis(), timeLimit);
     }
 
     /**
@@ -195,13 +192,12 @@ public class TSPDeliferoo {
 	    while (it.hasNext()) {
 		SpecialNode nextNode = it.next();
 		discovered.add(nextNode);
-		Long costCurrentToNext = cost.get(currentNode.getNode().getNodeId()).get(nextNode.getNode().getNodeId()).longValue();
 		undiscovered.remove(nextNode);
 		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 		    undiscovered.add(nextNode.getDelivery().getDeliveryNode());
 		}
 		branchAndBound(nextNode, undiscovered, discovered,
-			discoveredCost + costCurrentToNext.intValue()
+			discoveredCost + cost.get(currentNode.getNode().getNodeId()).get(nextNode.getNode().getNodeId())
 				+ nextNode.getDuration().intValue() + this.bound(currentNode, undiscovered, cost),
 			cost, startTime, timeLimit);
 		discovered.remove(nextNode);
@@ -210,17 +206,6 @@ public class TSPDeliferoo {
 		    undiscovered.remove(nextNode.getDelivery().getDeliveryNode());
 		}
 	    }
-	}
-    }
-    
-    private void setPassageTimeForBestSolution(Map<String, Map<String, Integer>> cost) {
-	for (int i = 1; i<this.bestSolution.size(); i++) {
-	    SpecialNode node = this.bestSolution.get(i);
-	    SpecialNode previousNode = this.bestSolution.get(i-1);
-	    LocalTime previousPassageTime = previousNode.getPassageTime();
-	    Long costToAdd = cost.get(previousNode.getNode().getNodeId()).get(node.getNode().getNodeId()).longValue();
-	    Long minutesToAdd = previousNode.getDuration().longValue() + costToAdd;
-	    node.setPassageTime(previousPassageTime.plusMinutes(minutesToAdd));
 	}
     }
 }
