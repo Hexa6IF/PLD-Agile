@@ -220,13 +220,16 @@ public abstract class TSP {
 		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 		    undiscovered.add(nextNode.getDelivery().getDeliveryNode());
 		}
-		String finishNodeID = this.deliveries.get(0).getDeliveryNode().getNode().getNodeId();
+		SpecialNode finishNode = this.deliveries.get(0).getDeliveryNode();
+		String finishNodeID = finishNode.getNode().getNodeId();
 		branchAndBound(
 			nextNode, undiscovered, discovered, discoveredCost + costCurrentToNext.intValue()
 				+ nextNode.getDuration().intValue(), this.bound(currentNode, finishNodeID, undiscovered, cost),
 			cost, startTime, timeLimit);
 		discovered.remove(nextNode);
-		undiscovered.add(nextNode);
+		if (nextNode != finishNode) {
+		    undiscovered.add(nextNode); 
+		}
 		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 		    undiscovered.remove(nextNode.getDelivery().getDeliveryNode());
 		}
