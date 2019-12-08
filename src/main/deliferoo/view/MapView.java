@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,13 +38,13 @@ import model.SpecialNodeType;
  *
  * @author sadsitha
  */
-public class MapView extends Pane{
+public class MapView extends Pane {
 
     private Double minLong;
     private Double maxLong;
     private Double minLat;
-    private Double maxLat;    
-    
+    private Double maxLat;
+
     private Double height;
     private Double width;
     private Double offsetX;
@@ -51,6 +52,7 @@ public class MapView extends Pane{
     private Double dimension;
     private List<Line> roundLine;
     private Map<Integer, Set<Shape>> markers;
+    private List<Rectangle> intersections;
 
     /**
      * Constructor
@@ -69,14 +71,28 @@ public class MapView extends Pane{
 	this.dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
 	this.roundLine = new ArrayList<Line>();
 	this.markers = new HashMap<Integer, Set<Shape>>();
+	this.intersections = new ArrayList<Rectangle>();
+
     }
 
+    /**
+     *
+     * @return the Intersections
+     */
+    public List<Rectangle> getIntersections() {
+	return intersections;
+    }
+
+    /**
+     *
+     * @return the Markers
+     */
     public Map<Integer, Set<Shape>> getMarkers() {
 	return this.markers;
     }
-    
+
     /**
-     * Draws the map 
+     * Draws the map
      *
      * @param color       Color of the paths of this MapView
      * @param strokeWidth Width of the paths
@@ -86,17 +102,40 @@ public class MapView extends Pane{
 	this.maxLong = map.getMaxLong();
 	this.minLat = map.getMinLat();
 	this.maxLat = map.getMaxLat();
-	
+	Set<Node> nodes = new HashSet<Node>();
+
 	this.getChildren().clear();
 	for (Edge edge : map.getEdgeList()) {
 	    drawPath(edge, color, strokeWidth);
+	    nodes.add(edge.getStart());
+	    nodes.add(edge.getEnd());
+
+	}
+	drawNodes(nodes, 4);
+    }
+
+    /**
+     * Draws all nodes
+     *
+     * @param nodes       the set of all the nodes in
+     *                    MapView
+     * @param Width       the width of the node drawn
+     */
+    public void drawNodes(Collection<Node> nodes, Integer width) {
+	for(Node node : nodes) {
+	    Pair<Double, Double> p = calculateRelativePosition(node);
+	    Rectangle nodeRect = new Rectangle(p.getKey(), p.getValue(), width, width);
+	    nodeRect.setFill(Color.TRANSPARENT);
+	    intersections.add(nodeRect);
+	    this.getChildren().add(nodeRect);
 	}
     }
 
     /**
      * Draws a path
      *
-     * @param edge        the corresponding edge to be drawn on the corresponding MapView
+     * @param edge        the corresponding edge to be drawn on the corresponding
+     *                    MapView
      * @param color       the color of the drawn path
      * @param strokeWidth the width of the path drawn
      */
@@ -126,7 +165,7 @@ public class MapView extends Pane{
 	SpecialNode start = delivery.getPickupNode();
 	SpecialNode end = delivery.getDeliveryNode();
 
-	for(SpecialNode sn : Arrays.asList(start, end)) {
+	for (SpecialNode sn : Arrays.asList(start, end)) {
 	    Shape marker = null;
 
 	    Pair<Double, Double> p = calculateRelativePosition(sn.getNode());
@@ -149,7 +188,7 @@ public class MapView extends Pane{
 
 	    this.getChildren().add(marker);
 
-	    if(markers.get(index) == null) {
+	    if (markers.get(index) == null) {
 		markers.put(index, new HashSet<Shape>());
 	    }
 	    markers.get(index).add(marker);
@@ -180,13 +219,13 @@ public class MapView extends Pane{
      * @param deliveryIndex
      */
     public void highlightSelectedMarkers(Integer deliveryIndex) {
-	for(Integer id : markers.keySet()) {
-	    for(Shape s : markers.get(id)) {
-		if(id == deliveryIndex) {
+	for (Integer id : markers.keySet()) {
+	    for (Shape s : markers.get(id)) {
+		if (id == deliveryIndex) {
 		    s.setStroke(Color.DODGERBLUE);
 		    s.setStrokeType(StrokeType.OUTSIDE);
 		    s.setStrokeWidth(5);
-		}else {
+		} else {
 		    s.setStroke(Color.BLACK);
 		    s.setStrokeWidth(1);
 		}
@@ -198,12 +237,12 @@ public class MapView extends Pane{
      * Clears all markers on map
      */
     public void clearMarkers() {
-	for(Integer id : this.markers.keySet()) {
+	for (Integer id : this.markers.keySet()) {
 	    this.getChildren().removeAll(this.markers.get(id));
 	}
 	this.markers = new HashMap<>();
     }
-    
+
     /**
      * Calculates the relative position of a point from the MapView pane
      *
@@ -211,10 +250,8 @@ public class MapView extends Pane{
      * @return the coordinates as a pair with X as key and Y as value
      */
     private Pair<Double, Double> calculateRelativePosition(Node point) {
-	Double x = this.offsetX + dimension 
-		* (point.getLongitude() - this.minLong) / (this.maxLong - this.minLong);
-	Double y = this.offsetY + dimension 
-		* (this.maxLat - point.getLatitude()) / (this.maxLat - this.minLat);
+	Double x = this.offsetX + dimension * (point.getLongitude() - this.minLong) / (this.maxLong - this.minLong);
+	Double y = this.offsetY + dimension * (this.maxLat - point.getLatitude()) / (this.maxLat - this.minLat);
 
 	return new Pair<Double, Double>(x, y);
     }
