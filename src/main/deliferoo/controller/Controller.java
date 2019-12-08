@@ -3,6 +3,7 @@ package controller;
 import java.io.File;
 import java.util.List;
 
+import algorithm.TSP;
 import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
@@ -23,6 +24,7 @@ public class Controller {
     protected FullMap currentMap;
     protected Cyclist cyclist;
     protected Delivery currentSelectedDelivery;
+    protected TSP tspSolver;
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
