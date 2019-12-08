@@ -19,7 +19,8 @@ public class TSPDeliferooTest {
 
     @Test
     public void testSearchSolution() {
-	TSPDeliferoo tsp = new TSPDeliferoo();
+	TSP tsp = new TSPHeuristic();
+	//TSP tsp = new TSPSimple();
 	final Integer timeLimit = 100000;
 	
 	XMLParser parser = XMLParser.getInstance();
