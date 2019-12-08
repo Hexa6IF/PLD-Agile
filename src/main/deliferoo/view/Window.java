@@ -237,6 +237,7 @@ public class Window {
 	    for(Shape marker : this.mapView.getMarkers().get(deliveryIndex)) {
 		marker.setOnMouseClicked(e -> {
 		    this.controller.selectDeliveryClick(deliveryIndex);
+		    
 		});
 	    }
 	}

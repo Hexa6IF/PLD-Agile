@@ -27,7 +27,7 @@ public class MapLoadedState implements State {
     }
     
     @Override
-    public void addDeliveryClick(Window window, Controller controller) {
+    public void addButtonClick(Window window, Controller controller) {
 	controller.setCurrentState(controller.ADD_DELIVERY_STATE);
     }
     

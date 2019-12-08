@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -43,7 +44,7 @@ public class MapView extends Pane{
     private Double maxLong;
     private Double minLat;
     private Double maxLat;    
-    
+
     private Double height;
     private Double width;
     private Double offsetX;
@@ -74,7 +75,7 @@ public class MapView extends Pane{
     public Map<Integer, Set<Shape>> getMarkers() {
 	return this.markers;
     }
-    
+
     /**
      * Draws the map 
      *
@@ -86,10 +87,21 @@ public class MapView extends Pane{
 	this.maxLong = map.getMaxLong();
 	this.minLat = map.getMinLat();
 	this.maxLat = map.getMaxLat();
-	
+
 	this.getChildren().clear();
 	for (Edge edge : map.getEdgeList()) {
 	    drawPath(edge, color, strokeWidth);
+	}
+
+	for (String id : map.getNodeMap().keySet()) {
+	    Pair<Double, Double> p = calculateRelativePosition(map.getNodeMap().get(id));
+	    Double x = p.getKey();
+	    Double y = p.getValue();
+	    Rectangle rect = new Rectangle(x - 2, y - 2, 4, 4);
+	    Tooltip tip = new Tooltip(id);
+	    Tooltip.install(rect, tip);
+	    rect.toFront();
+	    this.getChildren().add(rect);
 	}
     }
 
@@ -203,7 +215,14 @@ public class MapView extends Pane{
 	}
 	this.markers = new HashMap<>();
     }
-    
+
+    public Pair<Double, Double> calculateNearestNode(Double x, Double y) {
+	Double nX = 0d;
+	Double nY = 0d;
+
+	return new Pair<Double, Double>(nX, nY);
+    }
+
     /**
      * Calculates the relative position of a point from the MapView pane
      *

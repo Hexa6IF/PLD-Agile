@@ -65,7 +65,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void addDeliveryClick(Window window, Controller controller) {
+    public default void addButtonClick(Window window, Controller controller) {
     }
 
     /**
@@ -83,7 +83,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void removeDeliveryClick(Window window, Controller controller) {
+    public default void removeButtonClick(Window window, Controller controller) {
     }
 
     /**
@@ -92,7 +92,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void cancelModificationClick(Window window, Controller controller) {
+    public default void cancelButtonClick(Window window, Controller controller) {
     }
 
     /**
@@ -101,7 +101,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void modifyDeliveryClick(Window window, Controller controller) {
+    public default void modifyButtonClick(Window window, Controller controller) {
     }
 
     /**
