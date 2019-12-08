@@ -8,7 +8,7 @@ import model.SpecialNode;
 public class TSPHeuristic extends TSP {
 
     @Override
-    int bound(SpecialNode currentNode, String startNodeID, ArrayList<SpecialNode> undiscovered, Map<String, Map<String, Integer>> cost) {
+    int bound(SpecialNode currentNode, String finishNodeID, ArrayList<SpecialNode> undiscovered, Map<String, Map<String, Integer>> cost) {
 	Integer bound = 0;
 	if (undiscovered.size() == 0) {
 	    return bound;
@@ -29,8 +29,8 @@ public class TSPHeuristic extends TSP {
 		    undiscToUndiscLength = cost.get(undiscoveredNodeID).get(anotherUndiscoveredNodeID);
 		}
 	    }
-	    if (cost.get(undiscoveredNodeID).get(startNodeID) < undiscToUndiscLength) {
-		undiscToUndiscLength = cost.get(undiscoveredNodeID).get(startNodeID);
+	    if (cost.get(undiscoveredNodeID).get(finishNodeID) < undiscToUndiscLength) {
+		undiscToUndiscLength = cost.get(undiscoveredNodeID).get(finishNodeID);
 	    }
 	    bound += undiscToUndiscLength;
 	}

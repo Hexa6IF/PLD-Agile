@@ -87,8 +87,10 @@ public abstract class TSP {
 	ArrayList<SpecialNode> undiscovered = this.initUndiscovered();
 	ArrayList<SpecialNode> discovered = new ArrayList<SpecialNode>();
 	SpecialNode startNode = this.deliveries.get(0).getPickupNode();
+	String finishNodeID = this.deliveries.get(0).getDeliveryNode().getNode().getNodeId();
 	discovered.add(startNode);
-	branchAndBound(startNode, undiscovered, discovered, 0, this.cost, System.currentTimeMillis(), timeLimit);
+	branchAndBound(startNode, undiscovered, discovered, 0, this.bound(startNode, finishNodeID, undiscovered, cost),
+		this.cost, System.currentTimeMillis(), timeLimit);
 	if (this.tspCallback != null)
 	    this.tspCallback.calculationsCompleted(); //indicate that calculation is complete
     }
@@ -190,13 +192,13 @@ public abstract class TSP {
      * @param timeLimit      : limite de temps pour la resolution
      */
     private void branchAndBound(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered,
-	    ArrayList<SpecialNode> discovered, int discoveredCost, Map<String, Map<String, Integer>> cost,
+	    ArrayList<SpecialNode> discovered, int discoveredCost, int bound, Map<String, Map<String, Integer>> cost,
 	    long startTime, int timeLimit) {
 	if (!this.calculationShouldContinue && (System.currentTimeMillis() - startTime > timeLimit)) {
 	    timeLimitReached = true;
 	} else if (undiscovered.size() == 0 && !discovered.contains(this.deliveries.get(0).getDeliveryNode())) {
 	    undiscovered.add(this.deliveries.get(0).getDeliveryNode());
-	    branchAndBound(currentNode, undiscovered, discovered, discoveredCost, cost, startTime, timeLimit);
+	    branchAndBound(currentNode, undiscovered, discovered, discoveredCost, bound, cost, startTime, timeLimit);
 	} else if (undiscovered.size() == 0) { // tous les sommets ont ete visites
 	    SpecialNode startNode = this.deliveries.get(0).getPickupNode();
 	    discoveredCost += cost.get(currentNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
@@ -207,7 +209,7 @@ public abstract class TSP {
 		if (this.tspCallback != null)
 		    this.tspCallback.bestSolutionUpdated(); // indicate that a new best solution has been found
 	    }
-	} else if (discoveredCost < bestSolutionCost) {
+	} else if (discoveredCost + bound < bestSolutionCost) {
 	    Iterator<SpecialNode> it = iterator(currentNode, undiscovered);
 	    while (it.hasNext()) {
 		SpecialNode nextNode = it.next();
@@ -218,10 +220,10 @@ public abstract class TSP {
 		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 		    undiscovered.add(nextNode.getDelivery().getDeliveryNode());
 		}
-		String startNodeID = this.deliveries.get(0).getPickupNode().getNode().getNodeId();
+		String finishNodeID = this.deliveries.get(0).getDeliveryNode().getNode().getNodeId();
 		branchAndBound(
 			nextNode, undiscovered, discovered, discoveredCost + costCurrentToNext.intValue()
-				+ nextNode.getDuration().intValue() + this.bound(currentNode, startNodeID, undiscovered, cost),
+				+ nextNode.getDuration().intValue(), this.bound(currentNode, finishNodeID, undiscovered, cost),
 			cost, startTime, timeLimit);
 		discovered.remove(nextNode);
 		undiscovered.add(nextNode);
