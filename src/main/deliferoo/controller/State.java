@@ -17,6 +17,14 @@ import view.Window;
 public interface State {
 
     /**
+     * Method systematically called when current state changes to this state
+     * 
+     */
+    public default void init(Window window, Controller controller) {
+	
+    }
+    
+    /**
      * Method called when the "Undo" button is clicked
      * 
      * @param l the current command list

@@ -16,6 +16,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -59,8 +60,8 @@ public class Window {
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, 4 * this.bounds.getWidth() / 9);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.deliveryColorMap = new HashMap<>();
-	
-	this.addSelectionListeners();
+
+	this.addRowListeners();
     }
 
     /**
@@ -87,7 +88,8 @@ public class Window {
      */
     public void updateDeliveries(List<Delivery> deliveries) {
 	List<SpecialNode> nodesToInsert = new ArrayList<>();
-	
+	this.mapView.clearMarkers();
+
 	for(Delivery delivery : deliveries) {
 	    Color color;	    
 	    if(deliveryColorMap.containsKey(delivery.getDeliveryIndex())) {
@@ -101,8 +103,9 @@ public class Window {
 	    this.mapView.drawMarker(delivery, color, 20);
 	}
 	this.tableBoxView.updateTableBox(nodesToInsert, this.deliveryColorMap);
+	this.addMarkerListeners();
     }
-    
+
     /**
      * Update the view for selected delivery
      * 
@@ -112,7 +115,7 @@ public class Window {
 	this.mapView.highlightSelectedMarkers(delivery.getDeliveryIndex());
 	this.deliveryDetailView.updateDeliveryDetail(delivery, this.deliveryColorMap);
     }
-    
+
     /**
      * Update the view for the calculated round and orders the nodes in the table
      * 
@@ -121,16 +124,16 @@ public class Window {
     public void updateRound(Round round) {
 	List<SpecialNode> nodesToInsert = new ArrayList<>();
 	List<BestPath> resultPath = round.getResultPath();
-	
+
 	for(int i = 0; i < resultPath.size(); i++) {
 	    SpecialNode start = resultPath.get(i).getStart();
 	    SpecialNode end = resultPath.get(i).getEnd();
-	    
+
 	    if(i == 0) {
 		nodesToInsert.add(start);
 	    }
 	    nodesToInsert.add(end);
-	    
+
 	    if(!this.deliveryColorMap.containsKey(end.getDelivery().getDeliveryIndex())) {
 		this.deliveryColorMap.put(end.getDelivery().getDeliveryIndex(), generateRandomColor());
 	    }
@@ -147,7 +150,11 @@ public class Window {
     public void updateMessage(String message) {
 	this.controlPanel.setCurrentMessage(message);
     }
-    
+
+    public void disableButtons(boolean modify, boolean add, boolean remove, boolean undo, boolean redo, boolean cancel) {
+	this.controlPanel.disableButtons(modify, add, remove, undo, redo, cancel);
+    }
+
     /**
      * Generates a random color
      * 
@@ -160,7 +167,7 @@ public class Window {
 	Double b = rand.nextDouble();
 	return Color.color(r, g, b);
     }
-    
+
     private void buildAndShowStage(Stage stage) {
 	stage.setTitle("Del'IFeroo");
 	stage.setX(this.bounds.getMinX());
@@ -194,26 +201,44 @@ public class Window {
 	menuHelp.getItems().add(about);
 	loadMap.setOnAction(e -> {
 	    File mapFile = fileChooser.showOpenDialog(stage);
-	    this.controller.loadMap(mapFile);
+	    if(mapFile != null) {
+		this.controller.loadMap(mapFile);
+	    }
 	});
 	loadDeliveries.setOnAction(e -> {
 	    File deliveriesFile = fileChooser.showOpenDialog(stage);
-	    this.controller.loadDeliveries(deliveriesFile);
+	    if(deliveriesFile != null) {
+		this.controller.loadDeliveries(deliveriesFile);
+	    }
 	});
 
 	menuBar.getMenus().addAll(menuFile, menuHelp);
 	return new VBox(menuBar);
     }
-    
+
     private VBox createSideBar() {
 	VBox sideBar = new VBox();
 	sideBar.getChildren().addAll(this.overviewPanel, this.deliveryDetailView, this.controlPanel, this.tableBoxView);
 	return sideBar;
     }
-    
-    private void addSelectionListeners() {
+
+    private void addRowListeners() {
 	this.tableBoxView.getSelectionModel().selectedItemProperty().addListener((observer, oldSelection, newSelection) -> {
-	    this.controller.selectDeliveryClick(newSelection.getDeliveryIndex());
+	    if(newSelection == null) {
+		this.tableBoxView.getSelectionModel().clearSelection();
+	    } else {
+		this.controller.selectDeliveryClick(newSelection.getDeliveryIndex());
+	    }
 	});
+    }
+
+    private void addMarkerListeners() {
+	for(Integer deliveryIndex : this.mapView.getMarkers().keySet()) {
+	    for(Shape marker : this.mapView.getMarkers().get(deliveryIndex)) {
+		marker.setOnMouseClicked(e -> {
+		    this.controller.selectDeliveryClick(deliveryIndex);
+		});
+	    }
+	}
     }
 }

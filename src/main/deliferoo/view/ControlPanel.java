@@ -1,8 +1,5 @@
 package view;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -52,12 +49,16 @@ public class ControlPanel extends GridPane{
      * @param msg message to show
      */
     public void setCurrentMessage(String msg) {
-	System.out.println(msg);
 	this.messageBox.setText(msg);
     }
 
-    public void toggleButton(String button, boolean enabled) {
-	
+    public void disableButtons(boolean modify, boolean add, boolean remove, boolean undo, boolean redo, boolean cancel) {
+	this.modifyButton.setDisable(modify);
+	this.addButton.setDisable(add);
+	this.removeButton.setDisable(remove);
+	this.undoButton.setDisable(undo);
+	this.redoButton.setDisable(redo);
+	this.cancelButton.setDisable(cancel);
     }
 
     private void initializeComponent(Double width, Double height) {

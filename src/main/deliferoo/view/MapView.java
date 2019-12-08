@@ -71,6 +71,10 @@ public class MapView extends Pane{
 	this.markers = new HashMap<Integer, Set<Shape>>();
     }
 
+    public Map<Integer, Set<Shape>> getMarkers() {
+	return this.markers;
+    }
+    
     /**
      * Draws the map 
      *
@@ -190,6 +194,16 @@ public class MapView extends Pane{
 	}
     }
 
+    /**
+     * Clears all markers on map
+     */
+    public void clearMarkers() {
+	for(Integer id : this.markers.keySet()) {
+	    this.getChildren().removeAll(this.markers.get(id));
+	}
+	this.markers = new HashMap<>();
+    }
+    
     /**
      * Calculates the relative position of a point from the MapView pane
      *
