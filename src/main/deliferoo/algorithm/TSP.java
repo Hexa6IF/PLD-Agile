@@ -2,6 +2,8 @@ package algorithm;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -83,6 +85,7 @@ public abstract class TSP {
      */
     public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
 	this.initClassVar(timeLimit, graph, deliveries);
+	Long startTime = System.currentTimeMillis();
 	this.cost = this.createCostFromGraph();
 	ArrayList<SpecialNode> undiscovered = this.initUndiscovered();
 	ArrayList<SpecialNode> discovered = new ArrayList<SpecialNode>();
@@ -91,8 +94,10 @@ public abstract class TSP {
 	discovered.add(startNode);
 	branchAndBound(startNode, undiscovered, discovered, 0, this.bound(startNode, finishNodeID, undiscovered, cost),
 		this.cost, System.currentTimeMillis(), timeLimit);
+	Long endTime = System.currentTimeMillis();
+	System.out.println((endTime - startTime));
 	if (this.tspCallback != null)
-	    this.tspCallback.calculationsCompleted(); //indicate that calculation is complete
+	    this.tspCallback.calculationsCompleted(); // indicate that calculation is complete
     }
 
     /**
@@ -210,6 +215,7 @@ public abstract class TSP {
 		    this.tspCallback.bestSolutionUpdated(); // indicate that a new best solution has been found
 	    }
 	} else if (discoveredCost + bound < bestSolutionCost) {
+	    sortUndiscovered(currentNode, undiscovered);
 	    Iterator<SpecialNode> it = iterator(currentNode, undiscovered);
 	    while (it.hasNext()) {
 		SpecialNode nextNode = it.next();
@@ -222,13 +228,12 @@ public abstract class TSP {
 		}
 		SpecialNode finishNode = this.deliveries.get(0).getDeliveryNode();
 		String finishNodeID = finishNode.getNode().getNodeId();
-		branchAndBound(
-			nextNode, undiscovered, discovered, discoveredCost + costCurrentToNext.intValue()
-				+ nextNode.getDuration().intValue(), this.bound(currentNode, finishNodeID, undiscovered, cost),
-			cost, startTime, timeLimit);
+		branchAndBound(nextNode, undiscovered, discovered,
+			discoveredCost + costCurrentToNext.intValue() + nextNode.getDuration().intValue(),
+			this.bound(currentNode, finishNodeID, undiscovered, cost), cost, startTime, timeLimit);
 		discovered.remove(nextNode);
 		if (nextNode != finishNode) {
-		    undiscovered.add(nextNode); 
+		    undiscovered.add(nextNode);
 		}
 		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 		    undiscovered.remove(nextNode.getDelivery().getDeliveryNode());
@@ -251,6 +256,24 @@ public abstract class TSP {
 	    Long minutesToAdd = previousNode.getDuration().longValue() + costToAdd;
 	    node.setPassageTime(previousPassageTime.plusMinutes(minutesToAdd));
 	}
+    }
+
+    /**
+     * Sort undiscovered special node list in ascending order of distance from last seen special node
+     * 
+     * @param lastDiscovered
+     * @param undiscovered
+     */
+    private void sortUndiscovered(SpecialNode lastDiscovered, ArrayList<SpecialNode> undiscovered) {
+	Comparator<SpecialNode> comparator = new Comparator<SpecialNode>() {
+	    public int compare(SpecialNode n1, SpecialNode n2) {
+		Map<String,Integer> costsFromLast= cost.get(lastDiscovered.getNode().getNodeId());
+		Integer costFromLastToN1 = costsFromLast.get(n1.getNode().getNodeId());
+		Integer costFromLastToN2 = costsFromLast.get(n2.getNode().getNodeId());
+		return costFromLastToN2 - costFromLastToN1;
+
+	    }};
+	Collections.sort(undiscovered, comparator);
     }
 
     /**
