@@ -22,13 +22,13 @@ public class TSPHeuristic extends TSP {
 		lengthToCurrent = cost.get(currentNodeID).get(undiscoveredNodeID);
 	    }
 	    Integer undiscToUndiscLength = Integer.MAX_VALUE;
-	    for (int j=0; j<undiscovered.size(); j++) {
+	    /*for (int j=0; j<undiscovered.size(); j++) {
 		SpecialNode anotherUndiscoveredNode = undiscovered.get(j);
 		String anotherUndiscoveredNodeID = anotherUndiscoveredNode.getNode().getNodeId();
 		if (i != j && cost.get(undiscoveredNodeID).get(anotherUndiscoveredNodeID) < undiscToUndiscLength) {
 		    undiscToUndiscLength = cost.get(undiscoveredNodeID).get(anotherUndiscoveredNodeID);
 		}
-	    }
+	    }*/
 	    if (cost.get(undiscoveredNodeID).get(finishNodeID) < undiscToUndiscLength) {
 		undiscToUndiscLength = cost.get(undiscoveredNodeID).get(finishNodeID);
 	    }

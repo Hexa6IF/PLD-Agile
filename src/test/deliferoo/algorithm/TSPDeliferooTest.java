@@ -27,11 +27,13 @@ public class TSPDeliferooTest {
 	//FullMap map = parser.parseMap(new File("src/main/resources/petitPlan.xml"));
 	FullMap map = parser.parseMap(new File("src/main/resources/grandPlan.xml"));
 	//List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandePetit2.xml"), map);
-	List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandeGrand7.xml"), map);
+	List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandeGrand9.xml"), map);
 	Map<String, Map<String, BestPath>> graph = new HashMap<String, Map<String, BestPath>>();	
 	
 	graph = Dijkstra.calculateAllShortestPaths(deliveries, map);
+	long startTime = System.currentTimeMillis();
 	tsp.searchSolution(timeLimit, graph, deliveries);
+	long finishTime = System.currentTimeMillis() - startTime;
 	List<BestPath> solution = tsp.getBestPathSolution();
 	Integer totalCost = tsp.getBestSolutionCost();
 	System.out.println("a");
