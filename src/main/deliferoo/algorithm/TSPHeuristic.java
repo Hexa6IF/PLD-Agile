@@ -26,6 +26,9 @@ public class TSPHeuristic extends TSP {
 		    undiscToUndiscLength = cost.get(undiscoveredNodeID).get(anotherUndiscoveredNodeID);
 		}
 	    }*/
+	    //piste d'amélioration
+	    //acces O(1) arraylist OK mais map O(log n)
+	    //trier undiscovered dans iterator par les plus proches d'abord
 	    if (cost.get(undiscoveredNodeID).get(finishNodeID) < undiscToUndiscLength) {
 		undiscToUndiscLength = cost.get(undiscoveredNodeID).get(finishNodeID);
 	    }
