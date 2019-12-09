@@ -22,16 +22,16 @@ public class RoundCalculatedState implements State {
 
     @Override
     public void init(Window window, Controller controller) {
-	window.disableButtons(true, false, true, true, true, true);
+	window.disableButtons(true, false, true, true, true, true, true, true);
 	window.updateMessage("Round succesfully calculated");
     }
     
     @Override
     public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
-	for(Delivery delivery : controller.cyclist.getDeliveries()) {
+	for(Delivery delivery : controller.getCyclist().getDeliveries()) {
 	    if(delivery.getDeliveryIndex() == deliveryIndex) {
 		window.updateSelectedDelivery(delivery);
-		controller.currentSelectedDelivery = delivery;
+		controller.setSelectedDelivery(delivery);
 		break;
 	    }
 	}
@@ -51,7 +51,7 @@ public class RoundCalculatedState implements State {
     public void loadDeliveries(Window window, Controller controller, File deliveriesFile, FullMap map) {
 	List<Delivery> deliveries = XMLParser.getInstance().parseDeliveries(deliveriesFile, map);
 	window.updateDeliveries(deliveries);
-	controller.setDeliveries(deliveries);
+	controller.getCyclist().setDeliveries(deliveries);
 	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
     }
 }

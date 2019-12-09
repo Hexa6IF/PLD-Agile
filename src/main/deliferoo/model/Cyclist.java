@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Model class representing the cyclist containing its to-do deliveries and the
@@ -10,11 +11,11 @@ import java.util.List;
  */
 public class Cyclist {
     private Integer startTime;
+    private Map<String, Map<String, BestPath>> shortestPaths;
     private List<Delivery> deliveries;
-    private Round round;
+    private List<SpecialNode> round;
 
-    public Cyclist() {
-    }
+    public Cyclist() {}
 
     public Integer getStartTime() {
 	return this.startTime;
@@ -23,7 +24,15 @@ public class Cyclist {
     public void setStartTime(Integer startTime) {
 	this.startTime = startTime;
     }
-
+    
+    public Map<String, Map<String, BestPath>> getShortestPaths() {
+	return this.shortestPaths;
+    }
+    
+    public void setShortestPaths(Map<String, Map<String, BestPath>> shortestPaths) {
+	this.shortestPaths = shortestPaths;
+    }
+    
     public List<Delivery> getDeliveries() {
 	return this.deliveries;
     }
@@ -32,11 +41,11 @@ public class Cyclist {
 	this.deliveries = deliveries;
     }
 
-    public Round getRound() {
+    public List<SpecialNode> getRound() {
 	return round;
     }
 
-    public void setRound(Round round) {
+    public void setRound(List<SpecialNode> round) {
 	this.round = round;
     }
 }

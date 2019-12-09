@@ -21,6 +21,12 @@ public class Delivery {
 	this.pickupNode = pickupNode;
 	this.deliveryIndex = deliveryIndex;
     }
+    
+    public Delivery(Delivery delivery) {
+	this.deliveryNode = new SpecialNode(delivery.getDeliveryNode());
+	this.pickupNode = new SpecialNode(delivery.getPickupNode());
+	this.deliveryIndex = delivery.getDeliveryIndex();
+    }
 
     /**
      * @return the deliveryNode

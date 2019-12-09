@@ -30,6 +30,14 @@ public class SpecialNode {
 	this.passageTime = passageTime;
 	this.delivery = delivery;
     }
+    
+    public SpecialNode(SpecialNode nodeToCopy) {
+	this.node = nodeToCopy.getNode();
+	this.specialNodeType = nodeToCopy.getSpecialNodeType();
+	this.duration = nodeToCopy.getDuration();
+	this.passageTime = nodeToCopy.getPassageTime();
+	this.delivery = nodeToCopy.getDelivery();
+    }
 
     /**
      * 

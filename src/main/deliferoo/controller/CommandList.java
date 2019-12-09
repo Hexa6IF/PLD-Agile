@@ -37,7 +37,7 @@ public class CommandList {
 	}
 	this.currentIndex++;
 	this.commandList.add(this.currentIndex, c);
-	c.doCde();
+	c.doCmd();
     }
 
     /**
@@ -47,7 +47,7 @@ public class CommandList {
 	if (this.currentIndex >= 0) {
 	    Command cde = this.commandList.get(this.currentIndex);
 	    this.currentIndex--;
-	    cde.undoCde();
+	    cde.undoCmd();
 	}
     }
 
@@ -59,7 +59,7 @@ public class CommandList {
 	    Command cde = this.commandList.get(this.currentIndex);
 	    this.commandList.remove(this.currentIndex);
 	    this.currentIndex--;
-	    cde.undoCde();
+	    cde.undoCmd();
 	}
     }
 
@@ -70,7 +70,7 @@ public class CommandList {
 	if (this.currentIndex < this.commandList.size() - 1) {
 	    this.currentIndex++;
 	    Command cde = this.commandList.get(this.currentIndex);
-	    cde.doCde();
+	    cde.doCmd();
 	}
     }
 

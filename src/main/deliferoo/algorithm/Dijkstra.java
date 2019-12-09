@@ -17,8 +17,10 @@ import model.FullMap;
 import model.SpecialNode;
 
 public class Dijkstra {
+    
     private static SpecialNode startNode;
     private static SpecialNode finishNode;
+    
     public static Map<String, Map<String, BestPath>> calculateAllShortestPaths(List<Delivery> deliveries, FullMap map) {
 	Set<SpecialNode> specialNodes = getSpecialNodes(deliveries);
 	Map<String, Map<String, BestPath>> totalShortPaths = new HashMap<String, Map<String, BestPath>>(); 

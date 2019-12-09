@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.Delivery;
 import model.FullMap;
+import model.SpecialNode;
 import view.Window;
 
 /**
@@ -22,22 +23,6 @@ public interface State {
      */
     public default void init(Window window, Controller controller) {
 	
-    }
-    
-    /**
-     * Method called when the "Undo" button is clicked
-     * 
-     * @param l the current command list
-     */
-    public default void undo(CommandList l) {
-    }
-
-    /**
-     * Method called when the "Redo" button is clicked
-     * 
-     * @param l the current command list
-     */
-    public default void redo(CommandList l) {
     }
 
     /**
@@ -58,6 +43,18 @@ public interface State {
      */
     public default void leftClick(Window window, Controller controller) {
     }
+    
+    public default void moveSpecialNode(Window window, Controller controller, SpecialNode node, String newNodeId) {
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public default void modifyButtonClick(Window window, Controller controller) {
+    }
 
     /**
      * Method called when the "Add Delivery" button is clicked
@@ -67,23 +64,50 @@ public interface State {
      */
     public default void addButtonClick(Window window, Controller controller) {
     }
-
+    
     /**
-     * Method called when the "Save Delivery" button is clicked
-     * 
-     * @param the window
-     * @param the controller
-     */
-    public default void saveDeliveryClick(Window window, Controller controller) {
-    }
-
-    /**
-     * Method called when the "Remove Delivery" button is clicked
+     * Method called when the "Modify Delivery" button is clicked
      * 
      * @param the window
      * @param the controller
      */
     public default void removeButtonClick(Window window, Controller controller) {
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public default void confirmButtonClick(Window window, Controller controller) {
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public default void calculateButtonClick(Window window, Controller controller) {
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public default void undoButtonClick(Window window, Controller controller) {
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public default void redoButtonClick(Window window, Controller controller) {
     }
 
     /**
@@ -95,14 +119,7 @@ public interface State {
     public default void cancelButtonClick(Window window, Controller controller) {
     }
 
-    /**
-     * Method called when the "Modify Delivery" button is clicked
-     * 
-     * @param the window
-     * @param the controller
-     */
-    public default void modifyButtonClick(Window window, Controller controller) {
-    }
+    
 
     /**
      * Method called when a Delivery is clicked on (either on the map or on the text

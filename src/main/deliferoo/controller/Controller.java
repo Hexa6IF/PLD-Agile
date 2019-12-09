@@ -1,12 +1,11 @@
 package controller;
 
 import java.io.File;
-import java.util.List;
 
 import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
-import model.Round;
+import model.SpecialNode;
 import view.Window;
 
 /**
@@ -19,10 +18,11 @@ public class Controller {
 
     private Window window;
     private State currentState;
-    protected CommandList commandList;
-    protected FullMap currentMap;
-    protected Cyclist cyclist;
-    protected Delivery currentSelectedDelivery;
+    private CommandList commandList;
+    private FullMap currentMap;
+    private Cyclist cyclist;
+    private Delivery selectedDelivery;
+    private Delivery tmpDelivery;
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
@@ -37,6 +37,7 @@ public class Controller {
     public Controller() {
 	this.window = new Window(this);
 	this.window.launchWindow();
+	this.commandList = new CommandList();
 	this.cyclist = new Cyclist();
 	this.setCurrentState(this.INIT_STATE);
     }
@@ -51,6 +52,10 @@ public class Controller {
 	this.currentState.init(this.window, this);
     }
     
+    protected FullMap getCurrentMap() {
+	return this.currentMap;
+    }
+    
     /**
      * Set the controller's current map
      * 
@@ -60,35 +65,39 @@ public class Controller {
 	this.currentMap = map;
     }
     
-    /**
-     * Set the current list of deliveries
-     * 
-     * @param deliveries the list of deliveries
-     */
-    protected void setDeliveries(List<Delivery> deliveries) {
-	this.cyclist.setDeliveries(deliveries);
+    protected Cyclist getCyclist() { 
+	return this.cyclist;
     }
     
-    /**
-     * Set the controller's calculated round
-     * 
-     * @param bestPaths the new round
-     */
-    protected void setRound(Round round) {
-	this.cyclist.setRound(round);
+    protected Delivery getSelectedDelivery() {
+	return this.selectedDelivery;
+    }
+    
+    protected void setSelectedDelivery(Delivery selectedDelivery) {
+	this.selectedDelivery = selectedDelivery;
+    }
+    
+    protected Delivery getTmpDelivery() {
+	return this.tmpDelivery;
+    }
+    
+    protected void setTmpDelivery(Delivery tmpDelivery) {
+	this.tmpDelivery = tmpDelivery;
+    }
+    
+    protected void doCommand(Command cmd) {
+	this.commandList.addCmd(cmd);
     }
 
     /**
      * Method called when the "Undo" button is clicked
      */
-    public void undo() {
-    }
+    public void undo() {}
 
     /**
      * Method called when the "Redo" button is clicked
      */
-    public void redo() {
-    }
+    public void redo() {}
 
     /**
      * Method called when a new deliveries file is loaded
@@ -106,6 +115,70 @@ public class Controller {
      */
     public void loadMap(File mapFile) {
 	this.currentState.loadMap(this.window, this, mapFile);
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public void modifyButtonClick() {
+	this.currentState.modifyButtonClick(this.window, this);
+    }
+
+    /**
+     * Method called when the "Add Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public void addButtonClick() {
+	this.currentState.addButtonClick(this.window, this);
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public void removeButtonClick() {
+	this.currentState.removeButtonClick(this.window, this);
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public void confirmButtonClick() {
+	this.currentState.confirmButtonClick(this.window, this);
+    }
+    
+    /**
+     * Method called when the "Modify Delivery" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public void calculateButtonClick() {
+	this.currentState.calculateButtonClick(this.window, this);
+    }
+
+    /**
+     * Method called when the "Cancel" button is clicked
+     * 
+     * @param the window
+     * @param the controller
+     */
+    public void cancelButtonClick() {
+	this.currentState.cancelButtonClick(this.window, this);
+    }
+    
+    public void moveSpecialNode(SpecialNode node, String newNodeId) {
+	this.currentState.moveSpecialNode(this.window, this, node, newNodeId);
     }
 
     /**

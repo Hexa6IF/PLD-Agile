@@ -20,7 +20,7 @@ public class InitState implements State {
 
     @Override
     public void init(Window window, Controller controller) {
-	window.disableButtons(true, true, true, true, true, true);
+	window.disableButtons(true, true, true, true, true, true, true, true);
 	window.updateMessage("Welcome. Please load a map file to continue.");
     }
     
