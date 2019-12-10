@@ -32,7 +32,8 @@ public class TSPHeuristicTest {
 		
 	}
 
-	
+	/* Test Louis
+	 * 
     @Test
     public void testSearchSolution() {
 	TSP tsp = new TSPHeuristic();
@@ -50,7 +51,7 @@ public class TSPHeuristicTest {
 	List<BestPath> solution = tsp.getBestPathSolution();
 	Integer totalCost = tsp.getBestSolutionCost();
     }
-    
+    */
     @Test
     public void testTimerGetBestPath() {
 
@@ -66,7 +67,9 @@ public class TSPHeuristicTest {
     
     @Test
     public void testGetBestPath() {
-    	fail("not yet");
+
+		TSP tsp = new TSPHeuristic();
+		tsp.searchSolution(Integer.MAX_VALUE, bestPaths, deliveries);
     }
 }
 
