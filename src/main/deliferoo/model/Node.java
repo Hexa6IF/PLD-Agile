@@ -23,6 +23,12 @@ public class Node {
 	this.latitude = latitude;
 	this.longitude = longitude;
     }
+    
+    public Node(Node node) {
+	this.nodeId = node.getNodeId();
+	this.latitude = node.getLatitude();
+	this.longitude = node.getLongitude();
+    }
 
     /**
      * @return the idNode

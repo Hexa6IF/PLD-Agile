@@ -24,6 +24,14 @@ public class CommandList {
 	currentIndex = -1;
 	commandList = new LinkedList<Command>();
     }
+    
+    public Integer getCurrentIndex() { 
+	return this.currentIndex;
+    }
+    
+    public Integer getLength() {
+	return this.commandList.size();
+    }
 
     /**
      * Adding command c to the commandList
@@ -37,7 +45,7 @@ public class CommandList {
 	}
 	this.currentIndex++;
 	this.commandList.add(this.currentIndex, c);
-	c.doCde();
+	c.doCmd();
     }
 
     /**
@@ -47,7 +55,7 @@ public class CommandList {
 	if (this.currentIndex >= 0) {
 	    Command cde = this.commandList.get(this.currentIndex);
 	    this.currentIndex--;
-	    cde.undoCde();
+	    cde.undoCmd();
 	}
     }
 
@@ -59,18 +67,18 @@ public class CommandList {
 	    Command cde = this.commandList.get(this.currentIndex);
 	    this.commandList.remove(this.currentIndex);
 	    this.currentIndex--;
-	    cde.undoCde();
+	    cde.undoCmd();
 	}
     }
 
     /**
-     * Reinsert the last cancelled commande with undo
+     * Reinsert the last cancelled command with undo
      */
     public void redo() {
 	if (this.currentIndex < this.commandList.size() - 1) {
 	    this.currentIndex++;
 	    Command cde = this.commandList.get(this.currentIndex);
-	    cde.doCde();
+	    cde.doCmd();
 	}
     }
 

@@ -11,10 +11,10 @@ public interface Command {
     /**
      * Execute the current command
      */
-    void doCde();
+    void doCmd();
 
     /**
      * Execute the inverse of the current command
      */
-    void undoCde();
+    void undoCmd();
 }

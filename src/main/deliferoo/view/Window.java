@@ -8,11 +8,18 @@ import java.util.Map;
 import java.util.Random;
 
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableRow;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -24,7 +31,6 @@ import controller.Controller;
 import model.BestPath;
 import model.Delivery;
 import model.FullMap;
-import model.Round;
 import model.SpecialNode;
 
 /**
@@ -61,7 +67,8 @@ public class Window {
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.deliveryColorMap = new HashMap<>();
 
-	this.addRowListeners();
+	this.addTableRowListeners();
+	this.addButtonListeners();
     }
 
     /**
@@ -87,9 +94,9 @@ public class Window {
      * @param deliveries
      */
     public void updateDeliveries(List<Delivery> deliveries) {
-	List<SpecialNode> nodesToInsert = new ArrayList<>();
 	this.mapView.clearMarkers();
 
+	List<SpecialNode> nodesToInsert = new ArrayList<>();
 	for(Delivery delivery : deliveries) {
 	    Color color;	    
 	    if(deliveryColorMap.containsKey(delivery.getDeliveryIndex())) {
@@ -100,10 +107,33 @@ public class Window {
 	    }
 	    nodesToInsert.add(delivery.getPickupNode());
 	    nodesToInsert.add(delivery.getDeliveryNode());
-	    this.mapView.drawMarker(delivery, color, 20);
 	}
 	this.tableBoxView.updateTableBox(nodesToInsert, this.deliveryColorMap);
-	this.addMarkerListeners();
+	this.drawMarkers(deliveries, 20);
+    }
+
+    /**
+     * Update the view for the calculated round and orders the nodes in the table
+     * 
+     * @param round
+     */
+    public void updateRound(List<SpecialNode> round, Map<String, Map<String, BestPath>> bestPaths) {
+	this.mapView.clearRound();
+	for(int i = 0; i < round.size() - 1; i++) {
+	    String startId = round.get(i).getNode().getNodeId();
+	    String endId = round.get(i + 1).getNode().getNodeId();
+	    BestPath bestPath = bestPaths.get(startId).get(endId);
+	    this.mapView.drawBestPath(bestPath, Color.HOTPINK, 8);
+	}
+	this.tableBoxView.updateTableBox(round, this.deliveryColorMap);
+    }
+
+    public void drawMarkers(List<Delivery> deliveries, Integer markerSize) {
+	this.mapView.clearMarkers();
+	for(Delivery delivery : deliveries) {
+	    this.mapView.drawMarker(delivery, this.deliveryColorMap.get(delivery.getDeliveryIndex()), markerSize);
+	}
+	this.addMarkerSelectListeners();
     }
 
     /**
@@ -112,35 +142,14 @@ public class Window {
      * @param delivery
      */
     public void updateSelectedDelivery(Delivery delivery) {
-	this.mapView.highlightSelectedMarkers(delivery.getDeliveryIndex());
+	this.mapView.highlightMarkers(delivery, Color.DODGERBLUE);
+	this.updateDeliveryDetail(delivery);
+    }
+
+    public void updateDeliveryDetail(Delivery delivery) {
 	this.deliveryDetailView.updateDeliveryDetail(delivery, this.deliveryColorMap);
     }
 
-    /**
-     * Update the view for the calculated round and orders the nodes in the table
-     * 
-     * @param round
-     */
-    public void updateRound(Round round) {
-	List<SpecialNode> nodesToInsert = new ArrayList<>();
-	List<BestPath> resultPath = round.getResultPath();
-
-	for(int i = 0; i < resultPath.size(); i++) {
-	    SpecialNode start = resultPath.get(i).getStart();
-	    SpecialNode end = resultPath.get(i).getEnd();
-
-	    if(i == 0) {
-		nodesToInsert.add(start);
-	    }
-	    nodesToInsert.add(end);
-
-	    if(!this.deliveryColorMap.containsKey(end.getDelivery().getDeliveryIndex())) {
-		this.deliveryColorMap.put(end.getDelivery().getDeliveryIndex(), generateRandomColor());
-	    }
-	}
-	this.tableBoxView.updateTableBox(nodesToInsert, this.deliveryColorMap);
-	this.mapView.drawRound(round);
-    }
 
     /**
      * Update the displayed message
@@ -151,8 +160,9 @@ public class Window {
 	this.controlPanel.setCurrentMessage(message);
     }
 
-    public void disableButtons(boolean modify, boolean add, boolean remove, boolean undo, boolean redo, boolean cancel) {
-	this.controlPanel.disableButtons(modify, add, remove, undo, redo, cancel);
+    public void disableButtons(boolean modify, boolean add, boolean remove, boolean confirm, 
+	    boolean calculate, boolean undo, boolean redo, boolean cancel) {
+	this.controlPanel.disableButtons(modify, add, remove, confirm, calculate, undo, redo, cancel);
     }
 
     /**
@@ -222,23 +232,154 @@ public class Window {
 	return sideBar;
     }
 
-    private void addRowListeners() {
-	this.tableBoxView.getSelectionModel().selectedItemProperty().addListener((observer, oldSelection, newSelection) -> {
-	    if(newSelection == null) {
-		this.tableBoxView.getSelectionModel().clearSelection();
-	    } else {
-		this.controller.selectDeliveryClick(newSelection.getDeliveryIndex());
+    public void enableDeliveryModification(Delivery delivery) {
+	Map<SpecialNode, Shape> deliveryMarkers =  this.mapView.getMarkers();
+	SpecialNode pickup = delivery.getPickupNode();
+	SpecialNode dropoff = delivery.getDeliveryNode();
+
+	this.mapView.highlightMarkers(delivery, Color.DARKVIOLET);
+	this.addMarkerDragListeners(pickup, deliveryMarkers.get(pickup));
+	this.addMarkerDragListeners(dropoff, deliveryMarkers.get(dropoff));
+    }
+
+    public void setRoundOrdering(boolean enable) {
+	this.tableBoxView.setDrag(enable);
+    }
+
+    public void addMarkerDragListeners(SpecialNode sn, Shape marker) {
+	marker.setOnMousePressed(new EventHandler<MouseEvent>() {
+	    @Override 
+	    public void handle(MouseEvent mouseEvent) {
+	    }
+	});
+
+	marker.setOnMouseReleased(e -> {
+	    marker.getScene().setCursor(Cursor.HAND);
+	});
+
+	marker.setOnMouseDragged(e -> {
+	    String nearestNodeId = this.mapView.moveMarkerToNearestNode(marker, e.getSceneX(), e.getSceneY());
+	    this.controller.changeNodePosition(sn, nearestNodeId);
+	});
+
+	marker.setOnMouseEntered(new EventHandler<MouseEvent>() {
+	    @Override public void handle(MouseEvent mouseEvent) {
+		if (!mouseEvent.isPrimaryButtonDown()) {
+		    marker.getScene().setCursor(Cursor.HAND);
+		}
+	    }
+	});
+
+	marker.setOnMouseExited(new EventHandler<MouseEvent>() {
+	    @Override public void handle(MouseEvent mouseEvent) {
+		if (!mouseEvent.isPrimaryButtonDown()) {
+		    marker.getScene().setCursor(Cursor.DEFAULT);
+		}
 	    }
 	});
     }
 
-    private void addMarkerListeners() {
-	for(Integer deliveryIndex : this.mapView.getMarkers().keySet()) {
-	    for(Shape marker : this.mapView.getMarkers().get(deliveryIndex)) {
-		marker.setOnMouseClicked(e -> {
-		    this.controller.selectDeliveryClick(deliveryIndex);
-		});
+
+
+    public void addRowDragListeners() {
+
+    }
+
+    private void addTableRowListeners() {
+	TableBoxView tbv = this.tableBoxView;
+
+	/* selection listeners */
+	tbv.getSelectionModel().selectedItemProperty().addListener((observer, oldSelection, newSelection) -> {
+	    if(newSelection == null) {
+		tbv.getSelectionModel().clearSelection();
+	    } else {
+		this.controller.selectDeliveryClick(newSelection.getDeliveryIndex());
 	    }
+	});
+
+	/* drag listeners */
+	tbv.setRowFactory(tv -> {
+	    TableRow<SpecialNodeTextView> row = new TableRow<>();
+	    row.setOnDragDetected(e -> {
+		Integer id = row.getIndex();
+		if (tbv.getDrag() && !row.isEmpty() && !(id == 0 || id == tbv.getItems().size() - 1)) {
+		    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+		    db.setDragView(row.snapshot(null, null));
+		    ClipboardContent cc = new ClipboardContent();
+		    cc.put(TableBoxView.SNTV_INDEX_DATA, id);
+		    db.setContent(cc);
+		    e.consume();
+		}
+	    });
+
+	    row.setOnDragOver(e -> {
+		Dragboard db = e.getDragboard();
+		if (db.hasContent(TableBoxView.SNTV_INDEX_DATA)) {
+		    if (row.getIndex() != ((Integer)db.getContent(TableBoxView.SNTV_INDEX_DATA)).intValue()) {
+			e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+			e.consume();
+		    }
+		}
+	    });
+
+	    row.setOnDragDropped(e -> {
+		Dragboard db = e.getDragboard();
+		if (db.hasContent(TableBoxView.SNTV_INDEX_DATA)) {
+		    int dropIndex = row.getIndex();
+		    if(!(dropIndex == 0 || dropIndex >= tbv.getItems().size() - 1)) {
+			int draggedIndex = (Integer) db.getContent(TableBoxView.SNTV_INDEX_DATA);
+			SpecialNodeTextView draggedNode = tbv.getItems().remove(draggedIndex);
+			tbv.getItems().add(dropIndex, draggedNode);
+			e.setDropCompleted(true);
+			tbv.getSelectionModel().select(dropIndex);
+			this.controller.changeRoundOrder(tbv.getItems());
+			e.consume();
+		    }
+		}
+	    });
+	    return row ;
+	});
+    }
+
+    private void addMarkerSelectListeners() {
+	for(SpecialNode sn : this.mapView.getMarkers().keySet()) {
+	    this.mapView.getMarkers().get(sn).setOnMouseClicked(e -> {
+		this.controller.selectDeliveryClick(sn.getDelivery().getDeliveryIndex());	
+	    });
 	}
+    }
+
+    private void addButtonListeners() {
+	this.controlPanel.setModifyAction(e -> {
+	    this.controller.modifyButtonClick();
+	});
+
+	this.controlPanel.setAddAction(e -> {
+	    this.controller.addButtonClick();
+	});
+
+	this.controlPanel.setRemoveAction(e -> {
+	    this.controller.removeButtonClick();
+	});
+
+	this.controlPanel.setConfirmAction(e -> {
+	    this.controller.confirmButtonClick();
+	});
+
+	this.controlPanel.setCalculateAction(e -> {
+	    this.controller.calculateButtonClick();
+	});
+
+	this.controlPanel.setUndoAction(e -> {
+	    this.controller.undo();
+	});
+
+	this.controlPanel.setRedoAction(e -> {
+	    this.controller.redo();
+	});
+
+	this.controlPanel.setCancelAction(e -> {
+	    this.controller.cancelButtonClick();
+	});
     }
 }

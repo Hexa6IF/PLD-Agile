@@ -13,7 +13,7 @@ import model.SpecialNodeType;
  *
  */
 public class SpecialNodeTextView {
-
+    
     private Integer deliveryIndex;
     private Color color;
     private SpecialNodeType type;
