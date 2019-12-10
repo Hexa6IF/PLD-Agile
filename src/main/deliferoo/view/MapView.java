@@ -270,12 +270,16 @@ public class MapView extends Pane {
 		for (Pair<String, String> roadsKey : roundLine.keySet()) {
 			if (roadsKey.getKey() == selectedNode) {
 				for (Line road : roundLine.get(roadsKey)) {
-					road.setFill(Color.GRAY);
+					this.getChildren().remove(road);
+					road.setStroke(Color.GRAY);
+					this.getChildren().add(road);
 				}
 			}
 			else {
 				for (Line road : roundLine.get(roadsKey)) {
-					road.setFill(color);
+					this.getChildren().remove(road);
+					road.setStroke(color);
+					this.getChildren().add(road);
 				}
 			}
 		}
