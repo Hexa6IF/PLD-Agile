@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import algorithm.Dijkstra;
+import algorithm.TSPHeuristic;
 import algorithm.TSPSimple;
 import javafx.application.Platform;
 import model.BestPath;
@@ -28,7 +29,8 @@ public class CalculatingRoundState implements State {
     public void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
 	Runnable runnableTask = () -> {
 	    Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	    controller.tspSolver = new TSPSimple();
+	    //controller.tspSolver = new TSPSimple();
+	    controller.tspSolver = new TSPHeuristic();
 	    controller.tspSolver.registerCallBack(controller);
 	    controller.tspSolver.searchSolution(60000, bestPaths, deliveries);
 	};
