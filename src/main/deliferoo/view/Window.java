@@ -87,6 +87,27 @@ public class Window {
     public void updateMap(FullMap map) {
 	this.mapView.drawMap(map, Color.BLACK, 2);
     }
+    
+    /**
+     * Clear window content and show
+     */
+    public void clearMap() {
+	this.mapView.getChildren().clear();
+    }
+    
+    /**
+     * Clear delivery markers from window content and show
+     */
+    public void clearDeliveriesMarkers() {
+	this.mapView.clearMarkers();
+    }
+    
+    /**
+     * Clear delivery round from window content and show
+     */
+    public void clearDeliveriesRound() {
+	this.mapView.clearRound();
+    }
 
     /**
      * Update the list of deliveries to display
