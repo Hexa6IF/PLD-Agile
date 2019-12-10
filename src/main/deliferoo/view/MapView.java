@@ -94,14 +94,17 @@ public class MapView extends Pane {
 	this.minLat = map.getMinLat();
 	this.maxLat = map.getMaxLat();
 
+	Set<Node> nodes = new HashSet<Node>();
 	this.getChildren().clear();
 	for (Edge edge : map.getEdgeList()) {
 	    drawEdge(edge, color, strokeWidth);
+	    nodes.add(edge.getStart());
+	    nodes.add(edge.getEnd());
 	}
 
-	for (String id : map.getNodeMap().keySet()) {
-	    Shape nodeShape = drawNode(map.getNodeMap().get(id), Color.BLACK, 4);
-	    nodeShapes.put(id, nodeShape);
+	for (Node node : nodes) {
+	    Shape nodeShape = drawNode(node, Color.TRANSPARENT, 4);
+	    nodeShapes.put(node.getNodeId(), nodeShape);
 	}
     }
 
@@ -133,6 +136,7 @@ public class MapView extends Pane {
 	Double y = p.getValue();
 
 	Rectangle nodeShape = new Rectangle(x - 2, y - 2, 4, 4);
+	nodeShape.setFill(color);
 
 	Tooltip tip = new Tooltip(node.getNodeId());
 	Tooltip.install(nodeShape, tip);
@@ -153,7 +157,7 @@ public class MapView extends Pane {
 	    bestPathLines.add(road);
 	}
 
-	Pair<String, String> entry = new Pair<String, String>(startId, endId);    
+	Pair<String, String> entry = new Pair<String, String>(startId, endId);
 	this.roundLine.put(entry, bestPathLines);
     }
 
@@ -200,7 +204,7 @@ public class MapView extends Pane {
      * @param deliveryIndex
      */
     public void highlightMarkers(Delivery delivery, Color color) {
-	for(SpecialNode s : markers.keySet()) {
+	for (SpecialNode s : markers.keySet()) {
 	    markers.get(s).setStroke(Color.BLACK);
 	    markers.get(s).setStrokeWidth(1);
 	}
@@ -208,7 +212,7 @@ public class MapView extends Pane {
 	SpecialNode pickup = delivery.getPickupNode();
 	SpecialNode dropoff = delivery.getDeliveryNode();
 
-	for(SpecialNode sn : Arrays.asList(pickup, dropoff)) {
+	for (SpecialNode sn : Arrays.asList(pickup, dropoff)) {
 	    markers.get(sn).setStroke(color);
 	    markers.get(sn).setStrokeType(StrokeType.OUTSIDE);
 	    markers.get(sn).setStrokeWidth(5);
@@ -219,14 +223,14 @@ public class MapView extends Pane {
      * Clears all markers on map
      */
     public void clearMarkers() {
-	for(SpecialNode sn : this.markers.keySet()) {
+	for (SpecialNode sn : this.markers.keySet()) {
 	    this.getChildren().remove(this.markers.get(sn));
 	}
 	this.markers = new HashMap<>();
     }
 
     public void clearRound() {
-	for(Pair<String, String> p : this.roundLine.keySet()) {
+	for (Pair<String, String> p : this.roundLine.keySet()) {
 	    this.getChildren().removeAll(this.roundLine.get(p));
 	}
     }
@@ -244,7 +248,7 @@ public class MapView extends Pane {
 	String nearestId = null;
 	Double minDistance = Double.POSITIVE_INFINITY;
 
-	for(String id : this.nodeShapes.keySet()) {
+	for (String id : this.nodeShapes.keySet()) {
 	    Shape s = this.nodeShapes.get(id);
 	    Bounds coordinates = s.localToScene(s.getBoundsInLocal());
 
@@ -252,7 +256,7 @@ public class MapView extends Pane {
 	    Double nodeY = coordinates.getCenterY();
 
 	    Double distance = Math.sqrt(Math.pow(x - nodeX, 2) + Math.pow(y - nodeY, 2));
-	    if(minDistance > distance) {
+	    if (minDistance > distance) {
 		minDistance = distance;
 		nearestId = id;
 	    }
