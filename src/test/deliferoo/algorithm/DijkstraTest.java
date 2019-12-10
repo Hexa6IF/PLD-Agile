@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,13 +22,12 @@ import xml.XMLParser;
 
 class DijkstraTest {
 	
-	FullMap map;
+	static FullMap map;
+	static Map<String,Map<String,Double>> result;
+	static List<Delivery> deliveries;
 	
-	Map<String,Map<String,Double>> result;
-	List<Delivery> deliveries;
-	
-	@BeforeEach
-	void setUp() throws Exception {
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
 		map = XMLParser.getInstance().parseMap(new File("src/test/resources/FullMap.xml"));
 		deliveries= XMLParser.getInstance().parseDeliveries(new File("src/test/resources/Deliveries.xml"),map);
 
