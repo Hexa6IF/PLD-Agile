@@ -1,9 +1,10 @@
 package algorithm;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import model.SpecialNode;
+import model.BestPath;
+import model.Delivery;
 
 /**
  * 
@@ -12,8 +13,11 @@ import model.SpecialNode;
  */
 public class TSPSimple extends TSP {
 
-    protected int bound(SpecialNode currentNode, String finishNodeID, ArrayList<SpecialNode> undiscovered,
-	    Map<String, Map<String, Integer>> cost) {
+    public TSPSimple(Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries, Long timeLimit) {
+	super(graph, deliveries, timeLimit);
+    }
+
+    protected int bound(Integer currentNode, List<Integer> undiscovered) {
 	return 0;
     }
 

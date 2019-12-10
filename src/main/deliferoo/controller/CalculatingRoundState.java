@@ -30,18 +30,18 @@ public class CalculatingRoundState implements State {
 	Runnable runnableTask = () -> {
 	    Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
 	    //controller.tspSolver = new TSPSimple();
-	    controller.tspSolver = new TSPHeuristic();
+	    controller.tspSolver = new TSPHeuristic(bestPaths,deliveries,60000l);
 	    controller.tspSolver.registerCallBack(controller);
-	    controller.tspSolver.searchSolution(60000, bestPaths, deliveries);
+	    controller.tspSolver.searchSolution();
 	};
 	controller.executor.execute(runnableTask);
     }
 
     @Override
     public void updateRound(Window window, Controller controller) {
+	Round round = new Round(controller.tspSolver.getBestPathSolution());
 	Platform.runLater(() -> {
 	    try {
-		Round round = new Round(controller.tspSolver.getBestPathSolution());
 		window.updateRound(round);
 		controller.setRound(round);
 	    } catch (Exception ex) {

@@ -1,38 +1,31 @@
 package algorithm;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import model.SpecialNode;
+import model.BestPath;
+import model.Delivery;
 
 public class TSPHeuristic extends TSP {
 
+    public TSPHeuristic(Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries, Long timeLimit) {
+	super(graph, deliveries, timeLimit);
+    }
+
     @Override
-    int bound(SpecialNode currentNode, String finishNodeID, ArrayList<SpecialNode> undiscovered, Map<String, Map<String, Integer>> cost) {
+    int bound(Integer currentNode, List<Integer> undiscovered) {
 	Integer bound = 0;
 	Integer lengthToCurrent = Integer.MAX_VALUE;
-	String currentNodeID = currentNode.getNode().getNodeId();
-	for (int i=0; i<undiscovered.size(); i++) {
-	    SpecialNode undiscoveredNode = undiscovered.get(i);
-	    String undiscoveredNodeID = undiscoveredNode.getNode().getNodeId();
-	    if (cost.get(currentNodeID).get(undiscoveredNodeID) < lengthToCurrent) {
-		lengthToCurrent = cost.get(currentNodeID).get(undiscoveredNodeID);
+	Integer lastDropOff = this.dropoffs.get(this.dropoffs.get(0));
+	for (int i = 0; i < undiscovered.size(); i++) {
+	    Integer undiscoveredNode = undiscovered.get(i);
+	    if (this.cost.get(currentNode).get(undiscoveredNode) < lengthToCurrent) {
+		lengthToCurrent = cost.get(currentNode).get(undiscoveredNode);
 	    }
-	    Integer undiscToUndiscLength = Integer.MAX_VALUE;
-	    /*for (int j=0; j<undiscovered.size(); j++) {
-		SpecialNode anotherUndiscoveredNode = undiscovered.get(j);
-		String anotherUndiscoveredNodeID = anotherUndiscoveredNode.getNode().getNodeId();
-		if (i != j && cost.get(undiscoveredNodeID).get(anotherUndiscoveredNodeID) < undiscToUndiscLength) {
-		    undiscToUndiscLength = cost.get(undiscoveredNodeID).get(anotherUndiscoveredNodeID);
-		}
-	    }*/
-	    if (cost.get(undiscoveredNodeID).get(finishNodeID) < undiscToUndiscLength) {
-		undiscToUndiscLength = cost.get(undiscoveredNodeID).get(finishNodeID);
-	    }
+	    Integer undiscToUndiscLength = cost.get(undiscoveredNode).get(lastDropOff);
 	    bound += undiscToUndiscLength;
 	}
 	bound += lengthToCurrent;
-
 	return bound;
     }
 

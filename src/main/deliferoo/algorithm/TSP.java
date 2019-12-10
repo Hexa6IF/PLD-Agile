@@ -1,11 +1,8 @@
 package algorithm;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +10,6 @@ import controller.TSPCallback;
 import model.BestPath;
 import model.Delivery;
 import model.SpecialNode;
-import model.SpecialNodeType;
 
 /**
  * 
@@ -22,258 +18,170 @@ import model.SpecialNodeType;
  */
 public abstract class TSP {
 
-    private ArrayList<BestPath> bestPathSolution;
-    private ArrayList<SpecialNode> bestSolution;
-    private int bestSolutionCost = 0;
-    private Boolean timeLimitReached;
-    private Map<String, Map<String, BestPath>> graph;
-    private List<Delivery> deliveries;
-    private Map<String, Map<String, Integer>> cost;
-    private TSPCallback tspCallback;
-    private Boolean calculationShouldContinue;
+    protected Map<String, Map<String, BestPath>> graph;
+    protected List<Delivery> deliveries;
+    protected ArrayList<Integer> bestSolution;
+    protected Integer bestSolutionCost;
+    protected ArrayList<ArrayList<Integer>> cost;
+    protected ArrayList<Integer> duration;
+    protected ArrayList<Integer> pickups;
+    protected ArrayList<Integer> dropoffs;
+    protected TSPCallback tspCallback;
+    protected Long timeLimit;
+    protected Long startTime;
+    protected Boolean timeLimitReached;
+    protected Boolean calculationShouldContinue;
 
     /**
      * Constructor for TSP
      */
-    public TSP() {
+    public TSP(Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries, Long timeLimit) {
 	this.calculationShouldContinue = true;
+	this.timeLimit = timeLimit;
+	this.graph = graph;
+	this.deliveries = deliveries;
+	this.cost = new ArrayList<ArrayList<Integer>>();
+	this.duration = new ArrayList<Integer>();
+	this.pickups = new ArrayList<Integer>();
+	this.dropoffs = new ArrayList<Integer>();
+	this.initialise(graph, deliveries);
     }
 
-    /**
-     * @return true if the algorithm's computing time is greater than the time limit
-     *         set by the user
-     */
-    public Boolean getTimeLimitReached() {
-	return timeLimitReached;
-    }
-
-    /**
-     * @return the cost in minutes for the best solution
-     */
-    public int getBestSolutionCost() {
-	return bestSolutionCost;
-    }
-
-    /**
-     * Create a list of BestPath from a list of SpecialNodes The order of the
-     * special nodes is computed by branchAndBound whereas the list of BestPath the
-     * graph computed by Dijkstra
-     * 
-     * @return
-     */
-    public List<BestPath> getBestPathSolution() {
-	if (this.bestSolution == null)
-	    return null;
-	else {
-	    this.setPassageTimeForBestSolution(this.cost);
-	    this.bestPathSolution = new ArrayList<BestPath>();
-	    for (int i = 0; i < this.bestSolution.size() - 1; i++) {
-		BestPath path = this.graph.get(this.bestSolution.get(i).getNode().getNodeId())
-			.get(this.bestSolution.get(i + 1).getNode().getNodeId());
-		this.bestPathSolution.add(path);
+    private void initialise(Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
+	Integer count = 0;
+	for (Delivery i : deliveries) {
+	    String pickupI = i.getPickupNode().getNode().getNodeId();
+	    String dropoffI = i.getDeliveryNode().getNode().getNodeId();
+	    ArrayList<Integer> subCostPickup = new ArrayList<Integer>();
+	    ArrayList<Integer> subCostDropoff = new ArrayList<Integer>();
+	    for (Delivery j : deliveries) {
+		String pickupJ = j.getPickupNode().getNode().getNodeId();
+		String dropoffJ = j.getDeliveryNode().getNode().getNodeId();
+		Integer travelDurationpickupITopickupJ = graph.get(pickupI).get(pickupJ).getDistance().intValue() * 60
+			/ 15000;
+		Integer travelDurationpickupITodropoffJ = graph.get(pickupI).get(dropoffJ).getDistance().intValue() * 60
+			/ 15000;
+		Integer travelDurationdropoffITopickupJ = graph.get(dropoffI).get(pickupJ).getDistance().intValue() * 60
+			/ 15000;
+		Integer travelDurationdropoffITodropoffJ = graph.get(dropoffI).get(dropoffJ).getDistance().intValue()
+			* 60 / 15000;
+		subCostPickup.add(travelDurationpickupITopickupJ);
+		subCostPickup.add(travelDurationpickupITodropoffJ);
+		subCostDropoff.add(travelDurationdropoffITopickupJ);
+		subCostDropoff.add(travelDurationdropoffITodropoffJ);
 	    }
+	    this.cost.add(subCostPickup);
+	    this.cost.add(subCostDropoff);
+	    Integer stayDurationpickupI = i.getPickupNode().getDuration().intValue();
+	    Integer stayDurationdropoffI = i.getPickupNode().getDuration().intValue();
+	    this.duration.add(stayDurationpickupI);
+	    this.duration.add(stayDurationdropoffI);
+	    this.pickups.add(count++);
+	    this.dropoffs.add(count++);
 	}
-	return this.bestPathSolution;
     }
 
-    /**
-     * This is the method to execute if we want to compute the best solution
-     * 
-     * @param timeLimit  the algorithm stops if the time limit in ms is reached
-     * @param graph      computed by Dijkstra
-     * @param deliveries
-     */
-    public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
-	this.initClassVar(timeLimit, graph, deliveries);
-	Long startTime = System.currentTimeMillis();
-	this.cost = this.createCostFromGraph();
-	ArrayList<SpecialNode> undiscovered = this.initUndiscovered();
-	ArrayList<SpecialNode> discovered = new ArrayList<SpecialNode>();
-	SpecialNode startNode = this.deliveries.get(0).getPickupNode();
-	String finishNodeID = this.deliveries.get(0).getDeliveryNode().getNode().getNodeId();
-	discovered.add(startNode);
-	branchAndBound(startNode, undiscovered, discovered, 0, this.bound(startNode, finishNodeID, undiscovered, cost),
-		this.cost, System.currentTimeMillis(), timeLimit);
+    public void searchSolution() {
+	this.timeLimitReached = false;
+	this.startTime = System.currentTimeMillis();
+	this.bestSolutionCost = Integer.MAX_VALUE;
+	this.bestSolution = new ArrayList<Integer>();
+	ArrayList<Integer> undiscovered = new ArrayList<Integer>(this.pickups);
+	ArrayList<Integer> discovered = new ArrayList<Integer>();
+	discovered.add(0);
+	branchAndBound(0, undiscovered, discovered, 0);
 	Long endTime = System.currentTimeMillis();
 	System.out.println((endTime - startTime));
 	if (this.tspCallback != null)
 	    this.tspCallback.calculationsCompleted(); // indicate that calculation is complete
     }
 
-    /**
-     * @param timeLimit
-     * @param graph
-     * @param deliveries
-     */
-    private void initClassVar(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
-	this.graph = graph;
-	this.deliveries = deliveries;
-	this.timeLimitReached = false;
-	this.bestSolutionCost = Integer.MAX_VALUE;
-	int nbNodes = this.deliveries.size() * 2;
-	this.bestSolution = new ArrayList<SpecialNode>(nbNodes);
-    }
+    abstract int bound(Integer currentNode, List<Integer> undiscovered);
 
-    /**
-     * Insert all pickup nodes in an ArrayList At the beginning, delivery nodes are
-     * not discoverable because we have to pick up before delivering
-     * 
-     * @return
-     */
-    private ArrayList<SpecialNode> initUndiscovered() {
-	ArrayList<SpecialNode> undiscovered = new ArrayList<SpecialNode>();
-	for (Delivery delivery : this.deliveries) {
-	    if (delivery.getPickupNode().getSpecialNodeType() != SpecialNodeType.START) {
-		undiscovered.add(delivery.getPickupNode());
-	    }
+    void branchAndBound(Integer currentSummit, ArrayList<Integer> undiscovered, ArrayList<Integer> discovered,
+	    Integer discoveredCost) {
+	if (!this.calculationShouldContinue && System.currentTimeMillis() - this.startTime > this.timeLimit) {
+	    this.timeLimitReached = true;
+	    return;
 	}
-	return undiscovered;
-    }
-
-    /**
-     * Stores in a data structure the time in minutes needed to go from special node
-     * X to special node Y
-     * 
-     * @return
-     */
-    private Map<String, Map<String, Integer>> createCostFromGraph() {
-	HashMap<String, Map<String, Integer>> cost = new HashMap<String, Map<String, Integer>>();
-	for (String nodeIDKeyOne : this.graph.keySet()) {
-	    HashMap<String, Integer> subMap = new HashMap<String, Integer>();
-	    for (String nodeIDKeyTwo : this.graph.get(nodeIDKeyOne).keySet()) {
-		Integer duration = this.graph.get(nodeIDKeyOne).get(nodeIDKeyTwo).getDistance().intValue() * 60 / 15000;
-		subMap.put(nodeIDKeyTwo, duration);
-	    }
-	    cost.put(nodeIDKeyOne, subMap);
-	}
-	return cost;
-    }
-
-    /**
-     * The algorithm's heuristic.
-     * 
-     * @param currentNode
-     * @param undiscovered : tableau des sommets restant a visiter
-     * @param cost         : cout[i][j] = duree pour aller de i a j, avec 0 <= i <
-     *                     nbSommets et 0 <= j < nbSommets
-     * @param duration     : duree[i] = duree pour visiter le sommet i, avec 0 <= i
-     *                     < nbSommets
-     * @return une borne inferieure du cout des permutations commencant par
-     *         sommetCourant, contenant chaque sommet de nonVus exactement une fois
-     *         et terminant par le sommet 0
-     */
-    abstract int bound(SpecialNode currentNode, String startNodeID, ArrayList<SpecialNode> undiscovered,
-	    Map<String, Map<String, Integer>> cost);
-
-    /**
-     * 
-     * @param currentNode
-     * @param undiscovered : tableau des sommets restant a visiter
-     * @param cost         : cout[i][j] = duree pour aller de i a j, avec 0 <= i <
-     *                     nbSommets et 0 <= j < nbSommets
-     * @param duration     : duree[i] = duree pour visiter le sommet i, avec 0 <= i
-     *                     < nbSommets
-     * @return un iterateur permettant d'iterer sur tous les sommets de nonVus
-     */
-    private Iterator<SpecialNode> iterator(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered) {
-	return new IteratorSeq(undiscovered, currentNode);
-    }
-
-    /**
-     * Methode definissant le patron (template) d'une resolution par separation et
-     * evaluation (branch and bound) du TSP
-     * 
-     * @param currentNode    le dernier sommet visite
-     * @param undiscovered   la liste des sommets qui n'ont pas encore ete visites
-     * @param discovered     la liste des sommets visites (y compris sommetCrt)
-     * @param discoveredCost la somme des couts des arcs du chemin passant par tous
-     *                       les sommets de vus + la somme des duree des sommets de
-     *                       vus
-     * @param cost           : cout[i][j] = duree pour aller de i a j, avec 0 <= i <
-     *                       nbSommets et 0 <= j < nbSommets
-     * @param duration       : duree[i] = duree pour visiter le sommet i, avec 0 <=
-     *                       i < nbSommets
-     * @param startTime      : moment ou la resolution a commence
-     * @param timeLimit      : limite de temps pour la resolution
-     */
-    private void branchAndBound(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered,
-	    ArrayList<SpecialNode> discovered, int discoveredCost, int bound, Map<String, Map<String, Integer>> cost,
-	    long startTime, int timeLimit) {
-	if (!this.calculationShouldContinue && (System.currentTimeMillis() - startTime > timeLimit)) {
-	    timeLimitReached = true;
-	} else if (undiscovered.size() == 0 && !discovered.contains(this.deliveries.get(0).getDeliveryNode())) {
-	    undiscovered.add(this.deliveries.get(0).getDeliveryNode());
-	    branchAndBound(currentNode, undiscovered, discovered, discoveredCost, bound, cost, startTime, timeLimit);
-	} else if (undiscovered.size() == 0) { // tous les sommets ont ete visites
-	    SpecialNode startNode = this.deliveries.get(0).getPickupNode();
-	    discoveredCost += cost.get(currentNode.getNode().getNodeId()).get(startNode.getNode().getNodeId());
-	    if (discoveredCost < bestSolutionCost) { // on a trouve une solution meilleure que bestSolution
-		this.bestSolution.clear();
-		this.bestSolution.addAll(discovered);
-		bestSolutionCost = discoveredCost;
-		if (this.tspCallback != null)
-		    this.tspCallback.bestSolutionUpdated(); // indicate that a new best solution has been found
-	    }
-	} else if (discoveredCost + bound < bestSolutionCost) {
-	    sortUndiscovered(currentNode, undiscovered);
-	    Iterator<SpecialNode> it = iterator(currentNode, undiscovered);
-	    while (it.hasNext()) {
-		SpecialNode nextNode = it.next();
-		discovered.add(nextNode);
-		Long costCurrentToNext = cost.get(currentNode.getNode().getNodeId()).get(nextNode.getNode().getNodeId())
-			.longValue();
-		undiscovered.remove(nextNode);
-		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
-		    undiscovered.add(nextNode.getDelivery().getDeliveryNode());
+	Integer lastDropOff = this.dropoffs.get(this.dropoffs.get(0));
+	if (undiscovered.size() == 0) {
+	    if (!discovered.contains(lastDropOff)) {
+		undiscovered.add(lastDropOff);
+		branchAndBound(currentSummit, undiscovered, discovered, discoveredCost);
+	    } else {
+		discoveredCost += cost.get(currentSummit).get(0);
+		if (discoveredCost < this.bestSolutionCost) { // on a trouve une solution meilleure que
+							      // meilleureSolution
+		    this.bestSolution = discovered;
+		    this.bestSolutionCost = discoveredCost;
+		    if (this.tspCallback != null)
+			this.tspCallback.bestSolutionUpdated(); // indicate that a new best solution has been found
 		}
-		SpecialNode finishNode = this.deliveries.get(0).getDeliveryNode();
-		String finishNodeID = finishNode.getNode().getNodeId();
+	    }
+	} else if (discoveredCost + bound(currentSummit, undiscovered) < this.bestSolutionCost) {
+	    this.sortUndiscovered(currentSummit,undiscovered);
+	    for (int i=0; i<undiscovered.size();++i) {
+		Integer nextNode = undiscovered.get(i);
+		discovered.add(nextNode);
+		undiscovered.remove(nextNode);
+		 Integer potentialDeliveryNode = nextNode+1;
+		if (nextNode % 2 == 0) {
+		    undiscovered.add(potentialDeliveryNode);
+		}
 		branchAndBound(nextNode, undiscovered, discovered,
-			discoveredCost + costCurrentToNext.intValue() + nextNode.getDuration().intValue(),
-			this.bound(currentNode, finishNodeID, undiscovered, cost), cost, startTime, timeLimit);
+			discoveredCost + this.cost.get(currentSummit).get(nextNode) + this.duration.get(nextNode));
 		discovered.remove(nextNode);
-		if (nextNode != finishNode) {
+		if (nextNode != lastDropOff) {
 		    undiscovered.add(nextNode);
 		}
-		if (nextNode.getSpecialNodeType() == SpecialNodeType.PICKUP) {
-		    undiscovered.remove(nextNode.getDelivery().getDeliveryNode());
+		if (nextNode % 2 == 0) {
+		    undiscovered.remove(potentialDeliveryNode);
 		}
 	    }
 	}
     }
 
     /**
-     * Set the passage time for special nodes
-     * 
-     * @param cost
-     */
-    private void setPassageTimeForBestSolution(Map<String, Map<String, Integer>> cost) {
-	for (int i = 1; i < this.bestSolution.size(); i++) {
-	    SpecialNode node = this.bestSolution.get(i);
-	    SpecialNode previousNode = this.bestSolution.get(i - 1);
-	    LocalTime previousPassageTime = previousNode.getPassageTime();
-	    Long costToAdd = cost.get(previousNode.getNode().getNodeId()).get(node.getNode().getNodeId()).longValue();
-	    Long minutesToAdd = previousNode.getDuration().longValue() + costToAdd;
-	    node.setPassageTime(previousPassageTime.plusMinutes(minutesToAdd));
-	}
-    }
-
-    /**
-     * Sort undiscovered special node list in ascending order of distance from last seen special node
+     * Sort undiscovered special node list in ascending order of distance from last
+     * seen special node
      * 
      * @param lastDiscovered
      * @param undiscovered
      */
-    private void sortUndiscovered(SpecialNode lastDiscovered, ArrayList<SpecialNode> undiscovered) {
-	Comparator<SpecialNode> comparator = new Comparator<SpecialNode>() {
-	    public int compare(SpecialNode n1, SpecialNode n2) {
-		Map<String,Integer> costsFromLast= cost.get(lastDiscovered.getNode().getNodeId());
-		Integer costFromLastToN1 = costsFromLast.get(n1.getNode().getNodeId());
-		Integer costFromLastToN2 = costsFromLast.get(n2.getNode().getNodeId());
-		return costFromLastToN2 - costFromLastToN1;
-
-	    }};
+    private void sortUndiscovered(Integer lastDiscovered, ArrayList<Integer> undiscovered) {
+	Comparator<Integer> comparator = new Comparator<Integer>() {
+	    public int compare(Integer n1, Integer n2) {
+		ArrayList<Integer> costsFromLast = cost.get(lastDiscovered);
+		Integer costFromLastToN1 = costsFromLast.get(n1);
+		Integer costFromLastToN2 = costsFromLast.get(n2);
+		return costFromLastToN1 - costFromLastToN2;
+	    }
+	};
 	Collections.sort(undiscovered, comparator);
+    }
+
+    public List<BestPath> getBestPathSolution() {
+	if (this.bestSolution == null)
+	    return null;
+	else {
+	    ArrayList<BestPath> bestPathSolution = new ArrayList<BestPath>();
+	    ArrayList<SpecialNode> specialNodeList = new ArrayList<SpecialNode>();
+	    for (Integer node : this.bestSolution) {
+		Integer deliveryIndex = node / 2;
+		Boolean isPickup = (node % 2) == 0;
+		Delivery delivery = this.deliveries.get(deliveryIndex);
+		SpecialNode sNode = isPickup ? delivery.getPickupNode() : delivery.getDeliveryNode();
+		specialNodeList.add(sNode);
+	    }
+	    for (int i = 0; i < specialNodeList.size()-1; ++i) {
+		String specialNodeId1 = specialNodeList.get(i).getNode().getNodeId();
+		String specialNodeId2 = specialNodeList.get(i+1).getNode().getNodeId();
+		BestPath bestPath = graph.get(specialNodeId1).get(specialNodeId2);
+		bestPathSolution.add(bestPath);
+	    }
+	    return bestPathSolution;
+	}
     }
 
     /**
