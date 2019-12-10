@@ -131,7 +131,7 @@ public class XMLParser {
      * parse deliveries - parses the XML deliveries
      * requests file with a XMLStreamReader and
      * creates a list of deliveries (including warehouse)
-     *
+     * 
      * @param deliveriesFile
      * @param map
      * @return listDeliveries
