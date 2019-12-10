@@ -22,15 +22,15 @@ import model.SpecialNodeType;
  */
 public abstract class TSP {
 
-	private ArrayList<BestPath> bestPathSolution;
-	private ArrayList<SpecialNode> bestSolution;
-	private int bestSolutionCost = 0;
-	private Boolean timeLimitReached;
-	private Map<String, Map<String, BestPath>> graph;
-	private List<Delivery> deliveries;
-	private Map<String, Map<String, Integer>> cost;
-	private TSPCallback tspCallback;
-	private Boolean calculationShouldContinue;
+
+    private ArrayList<SpecialNode> bestSolution;
+    private int bestSolutionCost = 0;
+    private Boolean timeLimitReached;
+    private Map<String, Map<String, BestPath>> graph;
+    private List<Delivery> deliveries;
+    private Map<String, Map<String, Integer>> cost;
+    private TSPCallback tspCallback;
+    private Boolean calculationShouldContinue;
 
 	/**
 	 * Constructor for TSP
@@ -54,27 +54,21 @@ public abstract class TSP {
 		return bestSolutionCost;
 	}
 
-	/**
-	 * Create a list of BestPath from a list of SpecialNodes The order of the
-	 * special nodes is computed by branchAndBound whereas the list of BestPath the
-	 * graph computed by Dijkstra
-	 * 
-	 * @return
-	 */
-	public List<BestPath> getBestPathSolution() {
-		if (this.bestSolution == null)
-			return null;
-		else {
-			this.setPassageTimeForBestSolution(this.cost);
-			this.bestPathSolution = new ArrayList<BestPath>();
-			for (int i = 0; i < this.bestSolution.size() - 1; i++) {
-				BestPath path = this.graph.get(this.bestSolution.get(i).getNode().getNodeId())
-						.get(this.bestSolution.get(i + 1).getNode().getNodeId());
-				this.bestPathSolution.add(path);
-			}
-		}
-		return this.bestPathSolution;
+
+    /**
+     * Get the ordered list of SpecialNodes 
+     * The order of the special nodes is computed by branchAndBound
+     * 
+     * @return transformed solution : a list of special nodes
+     */
+    public List<SpecialNode> getTransformedSolution() {
+	if (this.bestSolution == null)
+	    return null;
+	else {
+	    this.setPassageTimeForBestSolution(this.cost);
 	}
+	return this.bestSolution;
+    }
 
 	/**
 	 * This is the method to execute if we want to compute the best solution
