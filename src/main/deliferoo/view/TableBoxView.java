@@ -1,91 +1,110 @@
 package view;
 
+import javafx.scene.control.Label;
+
+import java.util.List;
+import java.util.Map;
+
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-import javafx.util.Callback;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import model.SpecialNode;
 
 /**
  * Class for displaying table of special nodes (pickup and delivery nodes)
  *
  * @author sadsitha
  */
-public class TableBoxView extends TableView<SpecialNodeTextView>{
+public class TableBoxView extends TableView<SpecialNodeTextView> {
 
     /**
      * Constructor
      *
-     * @param height	preferred height of node
-     * @param width	preferred width of node
+     * @param height preferred height of node
+     * @param width  preferred width of node
      */
     public TableBoxView(Double height, Double width) {
 	super();
 	this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-	this.setTableColumns();
+	this.setPrefSize(width, height);
+	this.setPlaceholder(new Label("No deliveries loaded"));
 	
-	this.setPrefHeight(height);
-	this.setPrefWidth(width);
+	this.setColumns();
     }
 
-    /*
+    /**
+     * Updates the contents of the TableBox to correspond with the list of special nodes (order and number)
+     * 
+     * @param specialNodes
+     * @param deliveryColourMap
+     */
+    public void updateTableBox(List<SpecialNode> specialNodes, Map<Integer, Color> deliveryColorMap) {
+	ObservableList<SpecialNodeTextView> specialNodeTextViews = this.getItems();
+	specialNodeTextViews.clear();
+	
+	for (SpecialNode node : specialNodes) {
+	    Integer deliveryIndex = node.getDelivery().getDeliveryIndex();
+	    Color color = deliveryColorMap.get(deliveryIndex);
+	    specialNodeTextViews.add(new SpecialNodeTextView(node, color));
+	}
+    }
+    
+    /**
      * Sets the table columns
      * 
      */
-    private void setTableColumns() {
+    private void setColumns() {
 	TableColumn<SpecialNodeTextView, String> indexColumn = new TableColumn<SpecialNodeTextView, String>("Delivery index");
-	indexColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("deliveryIndex"));
-	indexColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	indexColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryIndex"));
 
 	TableColumn<SpecialNodeTextView, String> typeColumn = new TableColumn<SpecialNodeTextView, String>("Type");
-	typeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("type"));
-	typeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
 	TableColumn<SpecialNodeTextView, Number> durationColumn = new TableColumn<SpecialNodeTextView, Number>("Duration (min)");
-	durationColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, Number>("duration"));
-	durationColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
 	TableColumn<SpecialNodeTextView, String> timeColumn = new TableColumn<SpecialNodeTextView, String>("Time");
-	timeColumn.setCellValueFactory(new PropertyValueFactory<SpecialNodeTextView, String>("time"));
-	timeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
 
-	TableColumn<SpecialNodeTextView, String> colorColumn = this.setColorColumn();
-	colorColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
-	
-	this.getColumns().setAll(indexColumn, typeColumn, durationColumn, timeColumn, colorColumn);
-    }
-
-    /*
-     * Set color column - use color of NodeTextView to create custom css to set
-     * background color of cells
-     * 
-     * @return colorColumn
-     */
-    private TableColumn<SpecialNodeTextView, String> setColorColumn() {
-	TableColumn<SpecialNodeTextView, String> colorColumn = new TableColumn<SpecialNodeTextView, String>("Color code");
-	colorColumn.setCellFactory(new Callback<TableColumn<SpecialNodeTextView, String>, TableCell<SpecialNodeTextView, String>>() {
-	    @Override
-	    public TableCell<SpecialNodeTextView, String> call(TableColumn<SpecialNodeTextView, String> param) {
-		return new TableCell<SpecialNodeTextView, String>() {
-		    @Override
-		    protected void updateItem(String item, boolean empty) {
-			if (!empty) {
-			    /* get index of item in collection */
-			    int currentIndex = indexProperty().getValue() < 0 ? 0 : indexProperty().getValue();
-			    /* get color of item */
-			    Color color = param.getTableView().getItems().get(currentIndex).getColor();
-			    /* set background color of cell */
-			    Double r = color.getRed() * 255;
-			    Double g = color.getGreen() * 255;
-			    Double b = color.getBlue() * 255;
-			    setStyle("-fx-background-color: rgb(" + r + "," + g + ", " + b + ");");
-			}
+	TableColumn<SpecialNodeTextView, Shape> colorColumn = new TableColumn<SpecialNodeTextView, Shape>("Color");
+	colorColumn.setCellFactory(column -> {
+	    TableCell<SpecialNodeTextView, Shape> tc = new TableCell<SpecialNodeTextView, Shape>() {
+		@Override
+		protected void updateItem(Shape item, boolean empty) {
+		    if (empty) {
+			setGraphic(null);
+		    } else {
+			Color color = column.getTableView().getItems().get(indexProperty().getValue()).getColor();
+			setGraphic(new Rectangle(15, 15, color));
 		    }
-		};
-	    }
-
+		}
+	    };
+	    tc.setAlignment(Pos.CENTER);
+	    return tc;
 	});
-	return colorColumn;
+	
+	indexColumn.setSortable(false);
+	typeColumn.setSortable(false);
+	durationColumn.setSortable(false);
+	timeColumn.setSortable(false);
+	colorColumn.setSortable(false);
+
+	indexColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	typeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	durationColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	timeColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+	colorColumn.prefWidthProperty().bind(this.widthProperty().divide(5));
+
+	this.getColumns().add(indexColumn);
+	this.getColumns().add(typeColumn);
+	this.getColumns().add(durationColumn);
+	this.getColumns().add(timeColumn);
+	this.getColumns().add(colorColumn);
     }
 }

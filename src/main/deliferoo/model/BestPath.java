@@ -66,5 +66,16 @@ public class BestPath {
     public void setDistance(Double distance) {
         this.distance = distance;
     }
+
+    @Override
+    public String toString() {
+	String string = "BestPath :\nDistance : " + this.distance + "\nStart : " + start.toString() + "\nEdges : ";
+	for (Edge edge : path) {
+	    string += edge.toString() + "\n";
+	}
+	string += "End : " + end.toString();
+	return string;
+    }
+    
     
 }

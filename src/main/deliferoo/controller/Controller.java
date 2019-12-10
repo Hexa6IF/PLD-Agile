@@ -2,10 +2,16 @@ package controller;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import model.BestPath;
+import algorithm.TSP;
+import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
+import model.Round;
 import view.Window;
 
 /**
@@ -14,20 +20,23 @@ import view.Window;
  * @author sadsitha
  *
  */
-public class Controller {
+public class Controller implements TSPCallback{
 
     private Window window;
     private State currentState;
-    private CommandList commandList;
-    private FullMap currentMap;
-    private List <BestPath> round;
-    private List<Delivery> deliveries;
+    protected CommandList commandList;
+    protected FullMap currentMap;
+    protected Cyclist cyclist;
+    protected Delivery currentSelectedDelivery;
+    protected TSP tspSolver;
+    protected ExecutorService executor;
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
     protected final MapLoadedState MAP_LOADED_STATE = new MapLoadedState();
-    protected final DeliveriesLoadedState DELIVERIES_LOADED_STATE = new DeliveriesLoadedState();
+    protected final RoundCalculatedState ROUND_CALCULATED_STATE = new RoundCalculatedState();
     protected final ModifyDeliveryState MODIFY_DELIVERY_STATE = new ModifyDeliveryState();
+    protected final CalculatingRoundState CALCULATING_ROUND_STATE = new CalculatingRoundState();
 
     /**
      * Creates the controller of the application
@@ -35,7 +44,9 @@ public class Controller {
     public Controller() {
 	this.window = new Window(this);
 	this.window.launchWindow();
-	this.currentState = this.INIT_STATE;
+	this.cyclist = new Cyclist();
+	this.executor = new ThreadPoolExecutor(1, 2, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+	this.setCurrentState(this.INIT_STATE);
     }
 
     /**
@@ -45,6 +56,7 @@ public class Controller {
      */
     protected void setCurrentState(State state) {
 	this.currentState = state;
+	this.currentState.init(this.window, this);
     }
     
     /**
@@ -57,21 +69,21 @@ public class Controller {
     }
     
     /**
-     * Set the controller's current map
+     * Set the current list of deliveries
      * 
-     * @param map the new map
+     * @param deliveries the list of deliveries
      */
     protected void setDeliveries(List<Delivery> deliveries) {
-	this.deliveries = deliveries;
+	this.cyclist.setDeliveries(deliveries);
     }
     
     /**
      * Set the controller's calculated round
      * 
-     * @param round the new round
+     * @param bestPaths the new round
      */
-    protected void setRound(List<BestPath> round) {
-	this.round = round;
+    protected void setRound(Round round) {
+	this.cyclist.setRound(round);
     }
 
     /**
@@ -103,13 +115,30 @@ public class Controller {
     public void loadMap(File mapFile) {
 	this.currentState.loadMap(this.window, this, mapFile);
     }
+
+    /**
+     *  Method called when a delivery is selected
+     *  
+     * @param deliveryIndex
+     */
+    public void selectDeliveryClick(Integer deliveryIndex) {
+	this.currentState.selectDeliveryClick(this.window, this, deliveryIndex);
+    }
     
     /**
-     * Method called to calculate the round
-     * 
+     * Method called by TSP solver to indicate that a new best solution has been
+     * found
      */
-    public void calculateRound() {
-	this.currentState.calculateRound(this.window, this, this.deliveries, this.currentMap);
+    @Override
+    public void bestSolutionUpdated() {
+	this.currentState.updateRound(this.window, this);
     }
-
+    
+    /**
+     * Method called by TSP solver to indicate that it has explored all solutions
+     */
+    @Override
+    public void calculationsCompleted() {
+	this.currentState.stopTSPCalculation(this.window, this);
+    }
 }

@@ -17,6 +17,14 @@ import view.Window;
 public interface State {
 
     /**
+     * Method systematically called when current state changes to this state
+     * 
+     */
+    public default void init(Window window, Controller controller) {
+	
+    }
+    
+    /**
      * Method called when the "Undo" button is clicked
      * 
      * @param l the current command list
@@ -79,7 +87,7 @@ public interface State {
     }
 
     /**
-     * Method called when the "Cencel" button is clicked
+     * Method called when the "Cancel" button is clicked
      * 
      * @param the window
      * @param the controller
@@ -103,7 +111,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void selectDeliveryClick(Window window, Controller controller) {
+    public default void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
     }
 
     /**
@@ -136,5 +144,23 @@ public interface State {
      * @param the map
      */
     public default void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
+    }
+    
+    /**
+     * Method called when the round displayed needs to be updated
+     * 
+     * @param window
+     * @param controller
+     */
+    public default void updateRound(Window window, Controller controller) {
+    }
+    
+    /**
+     * Method called when the TSP calculation needs to be stopped
+     * 
+     * @param window
+     * @param controller
+     */
+    public default void stopTSPCalculation(Window window, Controller controller) {
     }
 }

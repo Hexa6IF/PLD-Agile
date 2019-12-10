@@ -1,6 +1,6 @@
 package view;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 
 import javafx.scene.paint.Color;
 import model.SpecialNode;
@@ -14,128 +14,93 @@ import model.SpecialNodeType;
  */
 public class SpecialNodeTextView {
 
-    private Number deliveryIndex;
+    private Integer deliveryIndex;
     private Color color;
     private SpecialNodeType type;
-    private Float duration;
-    private String time;
-    private SpecialNode node; 
-
-    /**
-     * Constructor
-     * 
-     * @param deliveryIndex
-     * @param color
-     * @param type
-     * @param duration
-     * @param time
-     */
-    public SpecialNodeTextView(Number deliveryIndex, Color color, SpecialNodeType type, Float duration, String time) {
-	this.deliveryIndex = deliveryIndex;
+    private Double duration;
+    private LocalTime time;
+    
+/**
+ * Constructor
+ * 
+ * @param specialNode
+ * @param color
+ */
+    public SpecialNodeTextView(SpecialNode specialNode, Color color) {
+	this.deliveryIndex = specialNode.getDelivery().getDeliveryIndex();
 	this.color = color;
-	this.type = type;
-	this.duration = duration;
-	this.time = time;
-    }
-
-    /**
-     * @param deliveryIndex
-     * @param color
-     * @param node
-     */
-    public SpecialNodeTextView(Number deliveryIndex, Color color, SpecialNode node) {
-	this.node = node;
-	this.deliveryIndex = deliveryIndex;
-	this.color = color;
-	this.type = node.getSpecialNodeType();
-	DateTimeFormatter df = DateTimeFormatter.ofPattern("HH:mm");
-	if (node.getPassageTime() != null) {
-	    this.time = df.format(node.getPassageTime());
-	}
-	this.duration = node.getDuration().floatValue();
+	this.type = specialNode.getSpecialNodeType();
+	this.duration = specialNode.getDuration();
+	this.time = specialNode.getPassageTime();
     }
 
     /**
      * @return the color
      */
     public Color getColor() {
-        return color;
+	return color;
     }
 
     /**
      * @param color the color to set
      */
     public void setColor(Color color) {
-        this.color = color;
+	this.color = color;
     }
 
     /**
      * @return the type
      */
     public SpecialNodeType getType() {
-        return type;
+	return type;
     }
 
     /**
      * @param type the type to set
      */
     public void setType(SpecialNodeType type) {
-        this.type = type;
+	this.type = type;
     }
 
     /**
      * @return the duration
      */
-    public Float getDuration() {
-        return duration;
+    public Double getDuration() {
+	return duration;
     }
 
     /**
      * @param duration the duration to set
      */
-    public void setDuration(Float duration) {
-        this.duration = duration;
+    public void setDuration(Double duration) {
+	this.duration = duration;
     }
 
     /**
      * @return the time
      */
-    public String getTime() {
-        return time;
+    public LocalTime getTime() {
+	return time;
     }
 
     /**
      * @param time the time to set
      */
-    public void setTime(String time) {
-        this.time = time;
+    public void setTime(LocalTime time) {
+	this.time = time;
     }
 
     /**
      * @return the deliveryIndex
      */
-    public Number getDeliveryIndex() {
-        return deliveryIndex;
+    public Integer getDeliveryIndex() {
+	return deliveryIndex;
     }
 
     /**
      * @param deliveryIndex the deliveryIndex to set
      */
-    public void setDeliveryIndex(Number deliveryIndex) {
-        this.deliveryIndex = deliveryIndex;
-    }
-
-    /**
-     * @return the node
-     */
-    public SpecialNode getNode() {
-        return node;
-    }
-
-    /**
-     * @param node the node to set
-     */
-    public void setNode(SpecialNode node) {
-        this.node = node;
+    public void setDeliveryIndex(Integer deliveryIndex) {
+	this.deliveryIndex = deliveryIndex;
     }
 }
