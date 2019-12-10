@@ -382,4 +382,9 @@ public class Window {
 	    this.controller.cancelButtonClick();
 	});
     }
+//TO DELETE
+	public void drawSimulation() {
+		this.mapView.drawSimulation("2", Color.ALICEBLUE,8);
+		
+	}
 }

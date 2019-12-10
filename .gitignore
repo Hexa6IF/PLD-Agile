@@ -85,7 +85,8 @@ local.properties
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
+# doc from uml modification
+doc
 # Package Files #
 *.jar
 *.war

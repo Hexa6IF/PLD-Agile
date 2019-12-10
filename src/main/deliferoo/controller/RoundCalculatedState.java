@@ -22,7 +22,7 @@ public class RoundCalculatedState implements State {
 
     @Override
     public void init(Window window, Controller controller) {
-	window.disableButtons(true, false, true, true, true, true, true, true);
+	window.disableButtons(true, false, true, true, false, true, true, true);
 	window.updateMessage("Round succesfully calculated");
     }
     
@@ -53,5 +53,11 @@ public class RoundCalculatedState implements State {
 	window.updateDeliveries(deliveries);
 	controller.getCyclist().setDeliveries(deliveries);
 	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
+    }
+    //TO DELETE
+    @Override
+    public void calculateButtonClick(Window window, Controller controller) {
+    	window.drawSimulation();
+    	State.super.calculateButtonClick(window, controller);
     }
 }
