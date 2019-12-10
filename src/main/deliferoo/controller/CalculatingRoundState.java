@@ -1,16 +1,14 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javafx.application.Platform;
 
 import algorithm.Dijkstra;
 import algorithm.TSPHeuristic;
-import javafx.application.Platform;
 import model.BestPath;
 import model.Delivery;
 import model.FullMap;
-import model.Round;
 import model.SpecialNode;
 import view.Window;
 
@@ -41,20 +39,10 @@ public class CalculatingRoundState implements State {
 
     @Override
     public void updateRound(Window window, Controller controller) {
-	Round r = new Round(controller.tspSolver.getBestPathSolution());
+	List<SpecialNode> round = controller.tspSolver.getTransformedSolution();
 	Platform.runLater(() -> {
-	    try {
-		List<SpecialNode> round = new ArrayList<>();
-		
-		for(int i = 0; i<r.getResultPath().size(); i++) {
-		    if(i == 0) {
-			round.add(r.getResultPath().get(i).getStart());
-		    }
-		    round.add(r.getResultPath().get(i).getEnd());
-		}
-		
+	    try {		
 		window.updateRound(round, controller.getCyclist().getBestPaths());
-		
 		controller.getCyclist().setShortestPaths(controller.getCyclist().getBestPaths());
 		controller.getCyclist().setRound(round);
 	    } catch (Exception ex) {
