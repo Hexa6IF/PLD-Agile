@@ -35,7 +35,6 @@ public class DeliverySelectedState implements State {
 	    window.disableButtons(false, false, false, true, false, !controller.canUndo(), !controller.canRedo(), true);
 	}
 	window.setRoundOrdering(true);
-	window.updateMessage(controller.canUndo() + "");
     }
     
     @Override

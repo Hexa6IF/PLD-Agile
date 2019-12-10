@@ -39,6 +39,7 @@ public class ModifyDeliveryState implements State {
 	
 	/* Set temp round to reference the special nodes from temporary delivery */
 	List<SpecialNode> tr = new ArrayList<SpecialNode>(controller.getCyclist().getRound());
+	window.updateMessage(controller.getSelectedDelivery().getPickupNode().toString());
 	tr.set(tr.indexOf(controller.getSelectedDelivery().getPickupNode()), td.getPickupNode());
 	tr.set(tr.indexOf(controller.getSelectedDelivery().getDeliveryNode()), td.getDeliveryNode());
 	
@@ -49,7 +50,7 @@ public class ModifyDeliveryState implements State {
 	window.enableDeliveryModification(controller.getSelectedDelivery());
 	window.setRoundOrdering(false);
 	window.disableButtons(true, true, true, false, true, true, true, false);
-	window.updateMessage("Modifying selected node.");
+	//window.updateMessage("Modifying selected node.");
     }
     
     @Override
@@ -63,13 +64,13 @@ public class ModifyDeliveryState implements State {
 	Node newNode = controller.getCurrentMap().getNodeMap().get(newNodeId);
 	
 	/* Remove old entries that do not correspond anymore */
-	/**
+	/*
 	tbp.remove(td.getPickupNode().getNode().getNodeId());
 	tbp.remove(td.getDeliveryNode().getNode().getNodeId());
 	for(String id : tbp.keySet()) {
 	    tbp.get(id).remove(sd.getPickupNode().getNode().getNodeId());
 	    tbp.get(id).remove(sd.getDeliveryNode().getNode().getNodeId());
-	}**/
+	}*/
 	
 	if(nodeToMove.getSpecialNodeType() == SpecialNodeType.PICKUP) {
 	    td.getPickupNode().setNode(newNode);;

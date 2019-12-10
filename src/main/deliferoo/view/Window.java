@@ -98,7 +98,7 @@ public class Window {
 
 	List<SpecialNode> nodesToInsert = new ArrayList<>();
 	for(Delivery delivery : deliveries) {
-	    Color color;	    
+	    Color color;
 	    if(deliveryColorMap.containsKey(delivery.getDeliveryIndex())) {
 		color = this.deliveryColorMap.get(delivery.getDeliveryIndex());
 	    } else {
