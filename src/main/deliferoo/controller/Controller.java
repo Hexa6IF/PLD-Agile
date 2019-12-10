@@ -1,11 +1,15 @@
 package controller;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
+import model.BestPath;
 import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
 import model.SpecialNode;
+import view.SpecialNodeTextView;
 import view.Window;
 
 /**
@@ -18,11 +22,17 @@ public class Controller {
 
     private Window window;
     private State currentState;
+    
     private CommandList commandList;
     private FullMap currentMap;
     private Cyclist cyclist;
+    
     private Delivery selectedDelivery;
-    private Delivery tmpDelivery;
+    
+    private Map<String, Map<String, BestPath>> tempBestPaths;
+    private Delivery tempDelivery;
+    private List<SpecialNode> tempRound;
+    
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
@@ -37,8 +47,10 @@ public class Controller {
     public Controller() {
 	this.window = new Window(this);
 	this.window.launchWindow();
+	
 	this.commandList = new CommandList();
 	this.cyclist = new Cyclist();
+	
 	this.setCurrentState(this.INIT_STATE);
     }
 
@@ -52,6 +64,10 @@ public class Controller {
 	this.currentState.init(this.window, this);
     }
     
+    /**
+     * Get the controller's current map
+     * @return current map
+     */
     protected FullMap getCurrentMap() {
 	return this.currentMap;
     }
@@ -65,39 +81,84 @@ public class Controller {
 	this.currentMap = map;
     }
     
+    /**
+     * Get the controller's cyclist
+     * @return cyclist
+     */
     protected Cyclist getCyclist() { 
 	return this.cyclist;
     }
     
+    /**
+     * Get the current selected delivery
+     * @return
+     */
     protected Delivery getSelectedDelivery() {
 	return this.selectedDelivery;
     }
     
+    /**
+     * Set the current selected delivery
+     * @param selectedDelivery
+     */
     protected void setSelectedDelivery(Delivery selectedDelivery) {
 	this.selectedDelivery = selectedDelivery;
     }
     
-    protected Delivery getTmpDelivery() {
-	return this.tmpDelivery;
+    protected Map<String, Map<String, BestPath>> getTempBestPaths() {
+	return this.tempBestPaths;
     }
     
-    protected void setTmpDelivery(Delivery tmpDelivery) {
-	this.tmpDelivery = tmpDelivery;
+    protected void setTempBestPaths(Map<String, Map<String, BestPath>> tempBestPaths) {
+	this.tempBestPaths = tempBestPaths;
+    }
+    
+    protected Delivery getTempDelivery() {
+	return this.tempDelivery;
+    }
+    
+    protected void setTempDelivery(Delivery tmpDelivery) {
+	this.tempDelivery = tmpDelivery;
+    }
+    
+    protected List<SpecialNode> getTempRound() {
+	return this.tempRound;
+    }
+    
+    protected void setTempRound(List<SpecialNode> tempRound) {
+	this.tempRound = tempRound;
+    }
+    
+    protected boolean canUndo() {
+	return this.commandList.getCurrentIndex() >= 0;
+    }
+    
+    protected boolean canRedo() {
+	return this.commandList.getCurrentIndex() < this.commandList.getLength() - 1;
     }
     
     protected void doCommand(Command cmd) {
 	this.commandList.addCmd(cmd);
+	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 
     /**
      * Method called when the "Undo" button is clicked
      */
-    public void undo() {}
+    public void undo() {
+	this.commandList.undo();
+	this.currentState.init(this.window, this);
+	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
+    }
 
     /**
      * Method called when the "Redo" button is clicked
      */
-    public void redo() {}
+    public void redo() {
+	this.commandList.redo();
+	this.currentState.init(this.window, this);
+	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
+    }
 
     /**
      * Method called when a new deliveries file is loaded
@@ -177,8 +238,12 @@ public class Controller {
 	this.currentState.cancelButtonClick(this.window, this);
     }
     
-    public void moveSpecialNode(SpecialNode node, String newNodeId) {
-	this.currentState.moveSpecialNode(this.window, this, node, newNodeId);
+    public void changeNodePosition(SpecialNode node, String newNodeId) {
+	this.currentState.changeNodePosition(this.window, this, node, newNodeId);
+    }
+    
+    public void changeRoundOrder(List<SpecialNodeTextView> newOrder) {
+	this.currentState.changeRoundOrder(this.window, this, newOrder);
     }
 
     /**

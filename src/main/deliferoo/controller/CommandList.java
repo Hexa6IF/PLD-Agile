@@ -24,6 +24,14 @@ public class CommandList {
 	currentIndex = -1;
 	commandList = new LinkedList<Command>();
     }
+    
+    public Integer getCurrentIndex() { 
+	return this.currentIndex;
+    }
+    
+    public Integer getLength() {
+	return this.commandList.size();
+    }
 
     /**
      * Adding command c to the commandList
@@ -64,7 +72,7 @@ public class CommandList {
     }
 
     /**
-     * Reinsert the last cancelled commande with undo
+     * Reinsert the last cancelled command with undo
      */
     public void redo() {
 	if (this.currentIndex < this.commandList.size() - 1) {

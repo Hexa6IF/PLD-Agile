@@ -6,6 +6,7 @@ import java.util.List;
 import model.Delivery;
 import model.FullMap;
 import model.SpecialNode;
+import view.SpecialNodeTextView;
 import view.Window;
 
 /**
@@ -44,7 +45,10 @@ public interface State {
     public default void leftClick(Window window, Controller controller) {
     }
     
-    public default void moveSpecialNode(Window window, Controller controller, SpecialNode node, String newNodeId) {
+    public default void changeNodePosition(Window window, Controller controller, SpecialNode node, String newNodeId) {
+    }
+    
+    public default void changeRoundOrder(Window window, Controller controller, List<SpecialNodeTextView> newOrder) {
     }
     
     /**

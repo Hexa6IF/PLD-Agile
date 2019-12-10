@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Cyclist {
     private Integer startTime;
-    private Map<String, Map<String, BestPath>> shortestPaths;
+    private Map<String, Map<String, BestPath>> bestPaths;
     private List<Delivery> deliveries;
     private List<SpecialNode> round;
 
@@ -25,12 +25,12 @@ public class Cyclist {
 	this.startTime = startTime;
     }
     
-    public Map<String, Map<String, BestPath>> getShortestPaths() {
-	return this.shortestPaths;
+    public Map<String, Map<String, BestPath>> getBestPaths() {
+	return this.bestPaths;
     }
     
-    public void setShortestPaths(Map<String, Map<String, BestPath>> shortestPaths) {
-	this.shortestPaths = shortestPaths;
+    public void setShortestPaths(Map<String, Map<String, BestPath>> bestPaths) {
+	this.bestPaths = bestPaths;
     }
     
     public List<Delivery> getDeliveries() {
