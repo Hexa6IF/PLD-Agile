@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sapin>
+<boule id="1" couleur="bleu" diametre="4"/>
+<boule id="2" couleur="rouge" diametre="8"/>
+<boule id="3" couleur="vert" diametre="5"/>
+<boule id="4" couleur="jaune" diametre="4"/>
+<boule id="5" couleur="rouge" diametre="5"/>
+<girlande id="42" longueur="78.72686" couleur="blanc"/>
+</sapin>
