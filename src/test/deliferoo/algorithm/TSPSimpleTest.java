@@ -10,71 +10,65 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import model.BestPath;
 import model.Delivery;
 import model.FullMap;
+import model.SpecialNode;
 import xml.XMLParser;
 
 class TSPSimpleTest {
 
-	static FullMap map;
+	/* Test Louis
+	 * 
+    @Test
+    public void testSearchSolution() {
+	TSP tsp = new TSPHeuristic();
+	//TSP tsp = new TSPSimple();
+	final Integer timeLimit = 1000000;
+	XMLParser parser = XMLParser.getInstance();
+	//FullMap map = parser.parseMap(new File("src/main/resources/petitPlan.xml"));
+	FullMap map = parser.parseMap(new File("src/main/resources/grandPlan.xml"));
+	//List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandePetit2.xml"), map);
+	List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandeGrand9.xml"), map);
+	Map<String, Map<String, BestPath>> graph = new HashMap<String, Map<String, BestPath>>();	
 	
-	static Map<String,Map<String,Double>> result;
-	static List<Delivery> deliveries;
-	
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-		map = XMLParser.getInstance().parseMap(new File("src/test/resources/FullMap.xml"));
-		deliveries= XMLParser.getInstance().parseDeliveries(new File("src/test/resources/Deliveries.xml"),map);
+	graph = Dijkstra.calculateAllShortestPaths(deliveries, map);
+	tsp.searchSolution(timeLimit, graph, deliveries);
+	List<BestPath> solution = tsp.getBestPathSolution();
+	Integer totalCost = tsp.getBestSolutionCost();
+    }
+    */
+    @Test
+    public void testTimerGetBestPath() {
 
-		result = new HashMap<String,Map<String,Double>>();
-		//bestPaths from 2
-		Map<String,Double> bp2 = new HashMap<String,Double>();
-		bp2.put("2", 0d);
-		bp2.put("5", 3d);
-		bp2.put("6", 5d);
-		result.put("2", bp2);
-		//bestPaths from 5
-		Map<String,Double> bp5 = new HashMap<String,Double>();
-		bp5.put("2", 3d);
-		bp5.put("5", 0d);
-		bp5.put("6", 8d);
-		result.put("5", bp5);
-		//bestPaths from 6
-		Map<String,Double> bp6 = new HashMap<String,Double>();
-		bp6.put("2", 5d);
-		bp6.put("5", 8d);
-		bp6.put("6", 0d);
-		result.put("6", bp6);
-	}
+    	FullMap map = XMLParser.getInstance().parseMap(new File("src/test/resources/grandPlan.xml"));
+    	List<Delivery> deliveries= XMLParser.getInstance().parseDeliveries(new File("src/test/resources/demandeGrand9.xml"),map);
+    	Map<String,Map<String,BestPath>> bestPaths= Dijkstra.calculateAllShortestPaths(deliveries, map);
 
-	@Test
-	void testGetTimeLimitReached() {
-		fail("Not yet implemented");
-	}
+    	final long timeLimit = 60000;
+    	long startTime = System.currentTimeMillis();
+    	for(int i=0;i<5;i++) {
+    		TSP tsp = new TSPHeuristic();
+    		tsp.searchSolution(10000, bestPaths, deliveries);
+    	}
+    	long duration = System.currentTimeMillis() - startTime;
+    	assertTrue(duration<timeLimit);
+    }
+    
+    @Test
+    public void testGetBestPath() {
 
-	@Test
-	void testSearchSolutionIntIntIntArrayArrayIntArray() {
-		fail("Not yet implemented");
-	}
+    	FullMap map = XMLParser.getInstance().parseMap(new File("src/test/resources/TSPMap.xml"));
+    	List<Delivery> deliveries= XMLParser.getInstance().parseDeliveries(new File("src/test/resources/TSPDeliveries.xml"),map);
+    	Map<String,Map<String,BestPath>> bestPaths= Dijkstra.calculateAllShortestPaths(deliveries, map);
 
-	@Test
-	void testSearchSolutionIntMapOfStringMapOfStringBestPath() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetBestSolution() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetBestSolutionCost() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testGetBestPathSolution() {
-		fail("Not yet implemented");
-	}
-
+		TSP tsp = new TSPHeuristic();
+		tsp.searchSolution(Integer.MAX_VALUE, bestPaths, deliveries);
+		List<SpecialNode> tspResult = tsp.getTransformedSolution();
+		String resultIdOrder = "";
+		for(SpecialNode node : tspResult) {
+			resultIdOrder += node.getNode().getNodeId();
+		}
+		assertEquals(resultIdOrder, "423514");
+    }
 }

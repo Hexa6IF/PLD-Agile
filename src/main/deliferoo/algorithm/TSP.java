@@ -193,7 +193,7 @@ public abstract class TSP {
 	private void branchAndBound(SpecialNode currentNode, ArrayList<SpecialNode> undiscovered,
 			ArrayList<SpecialNode> discovered, int discoveredCost, int bound, Map<String, Map<String, Integer>> cost,
 			long startTime, int timeLimit) {
-		if (!this.calculationShouldContinue && (System.currentTimeMillis() - startTime > timeLimit)) {
+		if (!this.calculationShouldContinue || (System.currentTimeMillis() - startTime > timeLimit)) {
 			timeLimitReached = true;
 		} else if (undiscovered.size() == 0 && !discovered.contains(this.deliveries.get(0).getDeliveryNode())) {
 			undiscovered.add(this.deliveries.get(0).getDeliveryNode());
