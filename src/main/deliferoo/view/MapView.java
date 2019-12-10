@@ -1,6 +1,7 @@
 package view;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,18 +37,19 @@ import model.SpecialNodeType;
  *
  * @author sadsitha
  */
-public class MapView extends Pane{
+public class MapView extends Pane {
 
     private Double minLong;
     private Double maxLong;
     private Double minLat;
-    private Double maxLat;    
+    private Double maxLat;
 
     private Double height;
     private Double width;
     private Double offsetX;
     private Double offsetY;
     private Double dimension;
+
     private Map<Pair<String, String>, Set<Line>> roundLine;
     private Map<String, Shape> nodeShapes;
     private Map<SpecialNode, Shape> markers;
@@ -81,7 +83,7 @@ public class MapView extends Pane{
     }
 
     /**
-     * Draws the map 
+     * Draws the map
      *
      * @param color       Color of the paths of this MapView
      * @param strokeWidth Width of the paths
@@ -106,7 +108,8 @@ public class MapView extends Pane{
     /**
      * Draws a path
      *
-     * @param edge        the corresponding edge to be drawn on the corresponding MapView
+     * @param edge        the corresponding edge to be drawn on the corresponding
+     *                    MapView
      * @param color       the color of the drawn path
      * @param strokeWidth the width of the path drawn
      */
@@ -165,7 +168,7 @@ public class MapView extends Pane{
 	SpecialNode start = delivery.getPickupNode();
 	SpecialNode end = delivery.getDeliveryNode();
 
-	for(SpecialNode sn : Arrays.asList(start, end)) {
+	for (SpecialNode sn : Arrays.asList(start, end)) {
 	    Shape marker = null;
 
 	    Pair<Double, Double> p = calculateRelativePosition(sn.getNode());
@@ -264,10 +267,8 @@ public class MapView extends Pane{
      * @return the coordinates as a pair with X as key and Y as value
      */
     private Pair<Double, Double> calculateRelativePosition(Node point) {
-	Double x = this.offsetX + dimension 
-		* (point.getLongitude() - this.minLong) / (this.maxLong - this.minLong);
-	Double y = this.offsetY + dimension 
-		* (this.maxLat - point.getLatitude()) / (this.maxLat - this.minLat);
+	Double x = this.offsetX + dimension * (point.getLongitude() - this.minLong) / (this.maxLong - this.minLong);
+	Double y = this.offsetY + dimension * (this.maxLat - point.getLatitude()) / (this.maxLat - this.minLat);
 
 	return new Pair<Double, Double>(x, y);
     }

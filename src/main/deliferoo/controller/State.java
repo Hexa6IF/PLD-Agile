@@ -166,4 +166,22 @@ public interface State {
      */
     public default void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
     }
+    
+    /**
+     * Method called when the round displayed needs to be updated
+     * 
+     * @param window
+     * @param controller
+     */
+    public default void updateRound(Window window, Controller controller) {
+    }
+    
+    /**
+     * Method called when the TSP calculation needs to be stopped
+     * 
+     * @param window
+     * @param controller
+     */
+    public default void stopTSPCalculation(Window window, Controller controller) {
+    }
 }

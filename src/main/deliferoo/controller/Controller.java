@@ -4,6 +4,12 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import algorithm.TSP;
 import model.BestPath;
 import model.Cyclist;
 import model.Delivery;
@@ -18,7 +24,7 @@ import view.Window;
  * @author sadsitha
  *
  */
-public class Controller {
+public class Controller implements TSPCallback{
 
     private Window window;
     private State currentState;
@@ -32,6 +38,9 @@ public class Controller {
     private Map<String, Map<String, BestPath>> tempBestPaths;
     private Delivery tempDelivery;
     private List<SpecialNode> tempRound;
+
+    protected TSP tspSolver;
+    protected ExecutorService executor;
     
     protected final InitState INIT_STATE = new InitState();
     protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
@@ -50,7 +59,7 @@ public class Controller {
 	
 	this.commandList = new CommandList();
 	this.cyclist = new Cyclist();
-	
+	this.executor = new ThreadPoolExecutor(1, 2, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 	this.setCurrentState(this.INIT_STATE);
     }
 
@@ -253,5 +262,22 @@ public class Controller {
      */
     public void selectDeliveryClick(Integer deliveryIndex) {
 	this.currentState.selectDeliveryClick(this.window, this, deliveryIndex);
+    }
+    
+    /**
+     * Method called by TSP solver to indicate that a new best solution has been
+     * found
+     */
+    @Override
+    public void bestSolutionUpdated() {
+	this.currentState.updateRound(this.window, this);
+    }
+    
+    /**
+     * Method called by TSP solver to indicate that it has explored all solutions
+     */
+    @Override
+    public void calculationsCompleted() {
+	this.currentState.stopTSPCalculation(this.window, this);
     }
 }
