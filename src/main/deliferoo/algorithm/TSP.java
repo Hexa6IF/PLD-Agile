@@ -22,7 +22,6 @@ import model.SpecialNodeType;
  */
 public abstract class TSP {
 
-    private ArrayList<BestPath> bestPathSolution;
     private ArrayList<SpecialNode> bestSolution;
     private int bestSolutionCost = 0;
     private Boolean timeLimitReached;
@@ -55,25 +54,18 @@ public abstract class TSP {
     }
 
     /**
-     * Create a list of BestPath from a list of SpecialNodes The order of the
-     * special nodes is computed by branchAndBound whereas the list of BestPath the
-     * graph computed by Dijkstra
+     * Get the ordered list of SpecialNodes 
+     * The order of the special nodes is computed by branchAndBound
      * 
-     * @return
+     * @return transformed solution : a list of special nodes
      */
-    public List<BestPath> getBestPathSolution() {
+    public List<SpecialNode> getTransformedSolution() {
 	if (this.bestSolution == null)
 	    return null;
 	else {
 	    this.setPassageTimeForBestSolution(this.cost);
-	    this.bestPathSolution = new ArrayList<BestPath>();
-	    for (int i = 0; i < this.bestSolution.size() - 1; i++) {
-		BestPath path = this.graph.get(this.bestSolution.get(i).getNode().getNodeId())
-			.get(this.bestSolution.get(i + 1).getNode().getNodeId());
-		this.bestPathSolution.add(path);
-	    }
 	}
-	return this.bestPathSolution;
+	return this.bestSolution;
     }
 
     /**
