@@ -96,7 +96,7 @@ public class ModifyDeliveryState implements State {
 	Map<String, Map<String, BestPath>> newBestPaths = controller.getTempBestPaths();
 	Delivery newDelivery = controller.getTempDelivery();
 	Command modifyCommand = new CmdModifyDelivery(controller.getCyclist().getDeliveries(), controller.getCyclist().getRound(),
-		controller.getSelectedDelivery(), newDelivery, controller.getCyclist().getBestPaths(), newBestPaths);
+		controller.getSelectedDelivery(), controller.getTempDelivery(), controller.getCyclist().getBestPaths(), newBestPaths);
 	controller.doCommand(modifyCommand);
 
 	window.drawMarkers(controller.getCyclist().getDeliveries(), 20);

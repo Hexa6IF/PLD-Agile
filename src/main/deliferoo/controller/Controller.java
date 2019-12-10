@@ -157,6 +157,7 @@ public class Controller implements TSPCallback{
     public void undo() {
 	this.commandList.undo();
 	this.currentState.init(this.window, this);
+	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 
@@ -166,6 +167,7 @@ public class Controller implements TSPCallback{
     public void redo() {
 	this.commandList.redo();
 	this.currentState.init(this.window, this);
+	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 

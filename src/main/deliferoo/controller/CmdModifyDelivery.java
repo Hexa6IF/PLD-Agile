@@ -43,8 +43,11 @@ public class CmdModifyDelivery implements Command {
 	
     }
     
-    public void undoCmd() {
+    public void undoCmd() {	
 	deliveries.remove(to);
 	deliveries.add(from);
+	
+	round.set(round.indexOf(to.getPickupNode()), from.getPickupNode());
+	round.set(round.indexOf(to.getDeliveryNode()), from.getDeliveryNode());
     }
 }

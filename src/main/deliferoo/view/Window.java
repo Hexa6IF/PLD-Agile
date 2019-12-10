@@ -111,7 +111,7 @@ public class Window {
 	this.tableBoxView.updateTableBox(nodesToInsert, this.deliveryColorMap);
 	this.drawMarkers(deliveries, 20);
     }
-
+    
     /**
      * Update the view for the calculated round and orders the nodes in the table
      * 
