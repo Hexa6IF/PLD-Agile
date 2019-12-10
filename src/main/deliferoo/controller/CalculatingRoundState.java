@@ -30,6 +30,7 @@ public class CalculatingRoundState implements State {
 	TSPDeliferoo tsp = new TSPDeliferoo();
 	tsp.searchSolution(4000, bestPaths, deliveries);
 	Round r = new Round(tsp.getBestPathSolution());
+	
 	List<SpecialNode> round = new ArrayList<>();
 	
 	for(int i = 0; i<r.getResultPath().size(); i++) {
