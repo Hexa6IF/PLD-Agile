@@ -37,7 +37,6 @@ public class InitState implements State {
 	    } catch (Exception e) {
 		window.updateMessage("Error in loaded XML file. Please correct it or load an other file.");
 		window.clearMap();
-		fail(e);
 	    }
 	    
 	} else {

@@ -52,7 +52,6 @@ public class RoundCalculatedState implements State {
 	    } catch (Exception e) {
 		window.updateMessage("Error in loaded XML file. Please correct it or load an other file.");
 		window.clearMap();
-		fail(e);
 	    }
 	} else {
 	    window.updateMessage("The loaded XML file does not match the expected format. Please correct it or load an other file.");
