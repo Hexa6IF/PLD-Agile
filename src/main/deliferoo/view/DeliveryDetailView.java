@@ -2,6 +2,7 @@ package view;
 
 import java.util.Map;
 
+import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ColorPicker;
@@ -93,7 +94,7 @@ public class DeliveryDetailView extends GridPane{
 	    this.dropoffDurationField.setText(dropoff.getDuration().toString());
 	}
     }
-
+    
     private void initializeComponents() {
 	this.deliveryTitle = new Text("Delivery ");
 	this.deliveryTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));
