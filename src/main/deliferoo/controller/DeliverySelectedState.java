@@ -88,4 +88,10 @@ public class DeliverySelectedState implements State {
 	controller.getCyclist().setDeliveries(deliveries);
 	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
     }
+
+    @Override
+    public void calculateButtonClick(Window window, Controller controller) {
+	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
+    }
+
 }

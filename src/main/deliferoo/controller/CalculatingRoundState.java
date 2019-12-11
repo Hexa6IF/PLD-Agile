@@ -34,7 +34,7 @@ public class CalculatingRoundState implements State {
 	    controller.tspSolver.registerCallBack(controller);
 	    controller.tspSolver.searchSolution(60000, bestPaths, deliveries);
 	};
-	controller.executor.execute(runnableTask);	
+	controller.executor.execute(runnableTask);
     }
 
     @Override
@@ -51,6 +51,13 @@ public class CalculatingRoundState implements State {
 	});
     }
     
+    
+    
+    @Override
+    public void cancelButtonClick(Window window, Controller controller) {
+	this.stopTSPCalculation(window, controller);
+    }
+
     @Override
     public void stopTSPCalculation(Window window, Controller controller) {
 	controller.tspSolver.stopCalculation();
