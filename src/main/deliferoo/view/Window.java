@@ -147,6 +147,15 @@ public class Window {
 	    this.mapView.drawBestPath(bestPath, Color.HOTPINK, 8);
 	}
 	this.tableBoxView.updateTableBox(round, this.deliveryColorMap);
+	this.overviewPanel.updateOverview(round);
+    }
+    
+    /**
+     * Confirm the round calculated and hide difference indicators.
+     *
+     */
+    public void confirmRound() {
+	this.overviewPanel.confirmRound();
     }
 
     public void drawMarkers(List<Delivery> deliveries, Integer markerSize) {

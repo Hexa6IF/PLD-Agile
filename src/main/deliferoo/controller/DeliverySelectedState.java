@@ -68,7 +68,8 @@ public class DeliverySelectedState implements State {
 		controller.getTempRound().set(i, deliveries.get(deliveryId).getDeliveryNode());
 	    }
 	}
-	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), controller.getTempRound(), controller.getCyclist()));
+	CalculationHelper.updatePrecedences(controller.getTempRound());
+	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), controller.getTempRound()));
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
     
