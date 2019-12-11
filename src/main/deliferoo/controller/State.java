@@ -88,7 +88,7 @@ public interface State {
     }
     
     /**
-     * Method called when the "Modify Delivery" button is clicked
+     * Method called when the "Calculate" button is clicked
      * 
      * @param the window
      * @param the controller
