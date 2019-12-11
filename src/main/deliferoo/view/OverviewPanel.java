@@ -81,14 +81,13 @@ public class OverviewPanel extends GridPane {
      */
     private void placeGridComponents() {
 	this.add(this.startTimeLabel, 0, 0);
-	this.add(this.endTimeLabel, 1, 0);
-	this.add(this.durationLabel, 2, 0);
+	this.add(this.endTimeLabel, 2, 0);
+	this.add(this.durationLabel, 4, 0);
 
 	this.add(this.startTimeText, 0, 1);
-	this.add(this.endTimeText, 1, 1);
-	this.add(this.durationText, 2, 1);
-
-	this.add(this.durationDifferenceText, 2, 2);
+	this.add(this.endTimeText, 2, 1);
+	this.add(this.durationText, 4, 1);
+	this.add(this.durationDifferenceText, 5, 1);
     }
 
     public void updateOverview(List<SpecialNode> round) {
@@ -120,7 +119,6 @@ public class OverviewPanel extends GridPane {
 		    this.setVisibilityDurationDifference(true);
 		}
 		this.durationDifferenceText.setText(durationDifferenceDisplay);
-
 	    }
 	}
     }
@@ -148,14 +146,13 @@ public class OverviewPanel extends GridPane {
      * Makes text representation of furation object
      * 
      * @param duration
-     * @return Text representation of duration (HH:mm:ss)
+     * @return Text representation of duration (HH:mm)
      */
     private String durationToText(Duration duration) {
 	Long totalSeconds = duration.getSeconds();
 	Long hours = totalSeconds / 3600;
 	Long minutes = (totalSeconds % 3600) / 60;
-	Long seconds = totalSeconds % 60;
-	String text = String.format("%sH%sm%ss", Math.abs(hours), Math.abs(minutes), Math.abs(seconds));
+	String text = String.format("%sh%sm", Math.abs(hours), Math.abs(minutes));
 	return text;
     }
 }
