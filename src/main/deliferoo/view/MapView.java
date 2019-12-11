@@ -18,6 +18,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -288,7 +289,13 @@ public class MapView extends Pane {
 
 	return new Pair<Double, Double>(x, y);
     }
-
+    
+    /**
+     * Creates a scrollable pane for the map
+     *
+     * @param the pane that will be put in a scallable/scrollable pane
+     * @return the Scrollable pane
+     */
     public Parent createZoomPane(final Pane pane) {
 	final double SCALE_DELTA = 1.1;
 	final StackPane zoomPane = new StackPane();
@@ -308,8 +315,9 @@ public class MapView extends Pane {
 
 	scroller.setPrefViewportWidth(256);
 	scroller.setPrefViewportHeight(256);
-	pane.setScaleX(1.05);
-	pane.setScaleY(1.05);
+	scroller.setHbarPolicy(ScrollBarPolicy.NEVER);
+	scroller.setVbarPolicy(ScrollBarPolicy.NEVER);
+
 	
 	zoomPane.setOnScroll(new EventHandler<ScrollEvent>() {
 	    @Override
@@ -322,7 +330,7 @@ public class MapView extends Pane {
 
 		double scaleFactor = (event.getDeltaY() > 0) ? SCALE_DELTA : 1 / SCALE_DELTA;
 		
-		if ( pane.getScaleX() < 1.1 && scaleFactor <1) {
+		if ( pane.getScaleX() < 1 && scaleFactor <1) {
 		    return;
 		}
 
@@ -370,7 +378,13 @@ public class MapView extends Pane {
 
 	return scroller;
     }
-
+    /**
+     * Creates a scrollable pane for the map
+     *
+     * @param scrollContent Node where the scroll is taking effect
+     * @param scroller the current scrollpane 
+     * @return the Point2D where the zoom should end 
+     */
     private Point2D figureScrollOffset(javafx.scene.Node scrollContent, ScrollPane scroller) {
 	double extraWidth = scrollContent.getLayoutBounds().getWidth() - scroller.getViewportBounds().getWidth();
 	double hScrollProportion = (scroller.getHvalue() - scroller.getHmin())
@@ -383,6 +397,14 @@ public class MapView extends Pane {
 	return new Point2D(scrollXOffset, scrollYOffset);
     }
 
+    /**
+     * Reposition the scrollpane after zooming/scrolling
+     *
+     * @param scrollContent Node where the scroll is taking effect
+     * @param scroller the current scrollpane 
+     * @param scaleFactor the factor by which the scale has changed
+     * @param scrollOffset 
+     */
     private void repositionScroller(javafx.scene.Node scrollContent, ScrollPane scroller, double scaleFactor,
 	    Point2D scrollOffset) {
 	double scrollXOffset = scrollOffset.getX();
