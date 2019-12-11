@@ -214,7 +214,7 @@ public class Window {
 	BorderPane border = new BorderPane();
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
-	border.setCenter(this.mapView);
+	border.setCenter(this.mapView.createZoomPane(this.mapView));
 	return new Scene(border);
     }
 
