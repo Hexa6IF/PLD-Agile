@@ -58,7 +58,6 @@ public class DeliverySelectedState implements State {
     @Override
     public void changeRoundOrder(Window window, Controller controller, List<SpecialNodeTextView> newOrder) {
 	List<Delivery> deliveries = controller.getCyclist().getDeliveries();
-	
 	for(int i = 0; i < newOrder.size(); i++) {
 	    SpecialNodeTextView sntv = newOrder.get(i);
 	    Integer deliveryId = sntv.getDeliveryIndex();
@@ -69,7 +68,7 @@ public class DeliverySelectedState implements State {
 		controller.getTempRound().set(i, deliveries.get(deliveryId).getDeliveryNode());
 	    }
 	}
-	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), controller.getTempRound()));
+	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), controller.getTempRound(), controller.getCyclist()));
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
     
