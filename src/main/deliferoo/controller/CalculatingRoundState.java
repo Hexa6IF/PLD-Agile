@@ -40,6 +40,7 @@ public class CalculatingRoundState implements State {
     @Override
     public void updateRound(Window window, Controller controller) {
 	List<SpecialNode> round = controller.tspSolver.getTransformedSolution();
+	controller.getCyclist().setRound(round);
 	Platform.runLater(() -> {
 	    try {		
 		window.updateRound(round, controller.getCyclist().getBestPaths());
@@ -61,6 +62,13 @@ public class CalculatingRoundState implements State {
     @Override
     public void stopTSPCalculation(Window window, Controller controller) {
 	controller.tspSolver.stopCalculation();
+	Platform.runLater(() -> {
+	    try {		
+		window.confirmRound();;
+	    } catch (Exception ex) {
+		ex.printStackTrace();
+	    }
+	});
 	controller.setCurrentState(controller.ROUND_CALCULATED_STATE);
     }
 }

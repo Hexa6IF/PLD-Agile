@@ -15,6 +15,7 @@ import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
 import model.SpecialNode;
+import model.SpecialNodeType;
 import view.SpecialNodeTextView;
 import view.Window;
 
@@ -148,6 +149,7 @@ public class Controller implements TSPCallback{
     
     protected void doCommand(Command cmd) {
 	this.commandList.addCmd(cmd);
+	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 
@@ -157,6 +159,8 @@ public class Controller implements TSPCallback{
     public void undo() {
 	this.commandList.undo();
 	this.currentState.init(this.window, this);
+	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
+	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 
@@ -166,6 +170,8 @@ public class Controller implements TSPCallback{
     public void redo() {
 	this.commandList.redo();
 	this.currentState.init(this.window, this);
+	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
+	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 
@@ -247,8 +253,8 @@ public class Controller implements TSPCallback{
 	this.currentState.cancelButtonClick(this.window, this);
     }
     
-    public void changeNodePosition(SpecialNode node, String newNodeId) {
-	this.currentState.changeNodePosition(this.window, this, node, newNodeId);
+    public void changeNodePosition(Integer deliveryId, SpecialNodeType type, String newNodeId) {
+	this.currentState.changeNodePosition(this.window, this, deliveryId, type,  newNodeId);
     }
     
     public void changeRoundOrder(List<SpecialNodeTextView> newOrder) {

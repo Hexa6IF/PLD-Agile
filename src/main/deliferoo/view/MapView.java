@@ -1,9 +1,9 @@
 package view;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,7 +30,6 @@ import model.Edge;
 import model.FullMap;
 import model.Node;
 import model.SpecialNode;
-import model.SpecialNodeType;
 
 /**
  * Class for displaying a map
@@ -50,9 +49,9 @@ public class MapView extends Pane {
     private Double offsetY;
     private Double dimension;
 
-    private Map<Pair<String, String>, Set<Line>> roundLine;
+    private Map<Pair<String, String>, Set<Line>> roundLines;
     private Map<String, Shape> nodeShapes;
-    private Map<SpecialNode, Shape> markers;
+    private List<Pair<Shape, Shape>> markers;
 
     /**
      * Constructor
@@ -69,16 +68,24 @@ public class MapView extends Pane {
 	this.offsetX = 0.05 * this.width;
 	this.offsetY = 0.05 * this.height;
 	this.dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
-	this.roundLine = new HashMap<Pair<String, String>, Set<Line>>();
+	this.roundLines = new HashMap<Pair<String, String>, Set<Line>>();
 	this.nodeShapes = new HashMap<String, Shape>();
-	this.markers = new HashMap<SpecialNode, Shape>();
+	this.markers = new ArrayList<Pair<Shape, Shape>>();
     }
 
+    /**
+     * Gets all the lines corresponding to the round
+     * @return	round lines
+     */
     public Map<Pair<String, String>, Set<Line>> getRoundLine() {
-	return this.roundLine;
+	return this.roundLines;
     }
 
-    public Map<SpecialNode, Shape> getMarkers() {
+    /**
+     * Gets the markers on the map
+     * @return	all markers in the map
+     */
+    public List<Pair<Shape, Shape>> getMarkers() {
 	return this.markers;
     }
 
@@ -108,8 +115,7 @@ public class MapView extends Pane {
     /**
      * Draws a path
      *
-     * @param edge        the corresponding edge to be drawn on the corresponding
-     *                    MapView
+     * @param edge        the corresponding edge to be drawn on the corresponding MapView
      * @param color       the color of the drawn path
      * @param strokeWidth the width of the path drawn
      */
@@ -126,6 +132,13 @@ public class MapView extends Pane {
 	return path;
     }
 
+    /**
+     * Draws a square corresponding to a node
+     * @param node	the corresponding node
+     * @param color	the color of the square
+     * @param size	the size of the square
+     * @return		the square drawn
+     */
     public Shape drawNode(Node node, Color color, Integer size) {
 	Pair<Double, Double> p = calculateRelativePosition(node);
 
@@ -142,6 +155,12 @@ public class MapView extends Pane {
 	return nodeShape;
     }
 
+    /**
+     * Draws the best path from one node to another
+     * @param bestPath		the best path from one node to another
+     * @param color		the color of the line to draw
+     * @param strokeWidth	the width of the line
+     */
     public void drawBestPath(BestPath bestPath, Color color, Integer strokeWidth) {
 	String startId = bestPath.getStart().getNode().getNodeId();
 	String endId = bestPath.getEnd().getNode().getNodeId();
@@ -154,9 +173,18 @@ public class MapView extends Pane {
 	}
 
 	Pair<String, String> entry = new Pair<String, String>(startId, endId);    
-	this.roundLine.put(entry, bestPathLines);
+	this.roundLines.put(entry, bestPathLines);
     }
 
+    /**
+     * Clears lines on map corresponding to the round
+     */
+    public void clearRoundLines() {
+	for(Pair<String, String> p : this.roundLines.keySet()) {
+	    this.getChildren().removeAll(this.roundLines.get(p));
+	}
+    }
+    
     /**
      * Draws markers corresponding to checkpoints of a delivery
      *
@@ -165,32 +193,50 @@ public class MapView extends Pane {
      * @param markerSize the size of the markers
      */
     public void drawMarker(Delivery delivery, Color color, Integer markerSize) {
-	SpecialNode start = delivery.getPickupNode();
-	SpecialNode end = delivery.getDeliveryNode();
-
-	for (SpecialNode sn : Arrays.asList(start, end)) {
-	    Shape marker = null;
-
-	    Pair<Double, Double> p = calculateRelativePosition(sn.getNode());
+	if (delivery.getDeliveryIndex() == 0) {
+	    SpecialNode warehouse = delivery.getPickupNode();
+	    
+	    Pair<Double, Double> p = calculateRelativePosition(warehouse.getNode());
+	    
 	    Double x = p.getKey();
 	    Double y = p.getValue();
-
-	    if (sn.getSpecialNodeType() == SpecialNodeType.PICKUP) {
-		marker = new Circle(x, y, markerSize / 2);
-	    } else if (sn.getSpecialNodeType() == SpecialNodeType.DROPOFF) {
-		marker = new Rectangle(x - markerSize / 2, y - markerSize / 2, markerSize, markerSize);
-	    } else {
-		Polyline triangle = new Polyline();
-		triangle.getPoints().addAll(x, y - 2 * markerSize / 3, x - markerSize / 2, y + markerSize / 3,
-			x + markerSize / 2, y + markerSize / 3, x, y - 2 * markerSize / 3);
-		marker = triangle;
-	    }
+	    
+	    Polyline marker = new Polyline();
+	    marker.getPoints().addAll(x, y - 2 * markerSize / 3, x - markerSize / 2, y + markerSize / 3,
+		    x + markerSize / 2, y + markerSize / 3, x, y - 2 * markerSize / 3);
+	    
 	    marker.setFill(color);
 	    marker.setStroke(Color.BLACK);
 	    marker.setStrokeWidth(1);
-
+	    
+	    this.markers.add(delivery.getDeliveryIndex(), new Pair<Shape, Shape>(marker, marker));
 	    this.getChildren().add(marker);
-	    markers.put(sn, marker);
+	} else {
+	    SpecialNode start = delivery.getPickupNode();
+	    SpecialNode end = delivery.getDeliveryNode();
+
+	    Pair<Double, Double> p1 = calculateRelativePosition(start.getNode());
+	    Pair<Double, Double> p2 = calculateRelativePosition(end.getNode());
+
+	    Double x1 = p1.getKey();
+	    Double y1 = p1.getValue();
+
+	    Double x2 = p2.getKey();
+	    Double y2 = p2.getValue();
+
+	    Shape startMarker = new Circle(x1, y1, markerSize / 2);
+	    Shape endMarker = new Rectangle(x2 - markerSize / 2, y2 - markerSize / 2, markerSize, markerSize);
+	    
+	    startMarker.setFill(color);
+	    startMarker.setStroke(Color.BLACK);
+	    startMarker.setStrokeWidth(1);
+	    
+	    endMarker.setFill(color);
+	    endMarker.setStroke(Color.BLACK);
+	    endMarker.setStrokeWidth(1);
+	    
+	    this.markers.add(delivery.getDeliveryIndex(), new Pair<Shape, Shape>(startMarker, endMarker));
+	    this.getChildren().addAll(startMarker, endMarker);
 	}
     }
 
@@ -198,49 +244,60 @@ public class MapView extends Pane {
      * Changes border of markers corresponding to selected delivery
      * 
      * @param deliveryIndex
+     * @param color
      */
     public void highlightMarkers(Delivery delivery, Color color) {
-	for(SpecialNode s : markers.keySet()) {
-	    markers.get(s).setStroke(Color.BLACK);
-	    markers.get(s).setStrokeWidth(1);
+	for(Pair<Shape, Shape> shapes : this.markers) {
+	    shapes.getKey().setStroke(Color.BLACK);
+	    shapes.getKey().setStrokeWidth(1);
+	    shapes.getValue().setStroke(Color.BLACK);
+	    shapes.getValue().setStrokeWidth(1);
 	}
-
-	SpecialNode pickup = delivery.getPickupNode();
-	SpecialNode dropoff = delivery.getDeliveryNode();
-
-	for(SpecialNode sn : Arrays.asList(pickup, dropoff)) {
-	    markers.get(sn).setStroke(color);
-	    markers.get(sn).setStrokeType(StrokeType.OUTSIDE);
-	    markers.get(sn).setStrokeWidth(5);
-	}
+	
+	Shape startMarker = markers.get(delivery.getDeliveryIndex()).getKey();
+	startMarker.setStroke(color);
+	startMarker.setStrokeType(StrokeType.OUTSIDE);
+	startMarker.setStrokeWidth(5);
+	
+	Shape endMarker= markers.get(delivery.getDeliveryIndex()).getValue();
+	endMarker.setStroke(color);
+	endMarker.setStrokeType(StrokeType.OUTSIDE);
+	endMarker.setStrokeWidth(5);
     }
 
     /**
      * Clears all markers on map
      */
     public void clearMarkers() {
-	for(SpecialNode sn : this.markers.keySet()) {
-	    this.getChildren().remove(this.markers.get(sn));
+	for(Pair<Shape, Shape> shapes : this.markers) {
+	    this.getChildren().removeAll(shapes.getKey(), shapes.getValue());
 	}
-	this.markers = new HashMap<>();
+	this.markers = new ArrayList<>();
     }
 
-    public void clearRound() {
-	for(Pair<String, String> p : this.roundLine.keySet()) {
-	    this.getChildren().removeAll(this.roundLine.get(p));
-	}
-    }
-
+    /**
+     * Moves marker to the nearest node from coordinates (x, y)
+     * @param marker	marker to move
+     * @param x		x-value 
+     * @param y		y-value 
+     * @return		ID of the nearest node
+     */
     public String moveMarkerToNearestNode(Shape marker, Double x, Double y) {
-	Pair<String, Bounds> nearestNodeBounds = getNearestNodeBounds(x, y);
+	Pair<String, Bounds> nearestNodeBounds = this.getNearestNodeBounds(x, y);
 	Double newX = nearestNodeBounds.getValue().getCenterX();
 	Double newY = nearestNodeBounds.getValue().getCenterY();
 	marker.setLayoutX(newX - marker.getLayoutBounds().getCenterX());
 	marker.setLayoutY(newY - marker.getLayoutBounds().getCenterY());
 	return nearestNodeBounds.getKey();
     }
-
-    public Pair<String, Bounds> getNearestNodeBounds(Double x, Double y) {
+    
+    /**
+     * Gets the position of the nearest node from coordinates (x, y)
+     * @param x		x-value
+     * @param y		y-value
+     * @return		the bounds of the nearest node as value and its ID as key
+     */
+    private Pair<String, Bounds> getNearestNodeBounds(Double x, Double y) {
 	String nearestId = null;
 	Double minDistance = Double.POSITIVE_INFINITY;
 
