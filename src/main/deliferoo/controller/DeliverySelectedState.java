@@ -26,9 +26,6 @@ public class DeliverySelectedState implements State {
     
     @Override
     public void init(Window window, Controller controller) {
-	List<SpecialNode> tr = new ArrayList<SpecialNode>(controller.getCyclist().getRound());
-	controller.setTempRound(tr);
-	
 	if(controller.getSelectedDelivery().getDeliveryIndex() == 0) {
 	    window.disableButtons(true, false, true, true, false, !controller.canUndo(), !controller.canRedo(), true);
 	} else {
@@ -57,18 +54,19 @@ public class DeliverySelectedState implements State {
     @Override
     public void changeRoundOrder(Window window, Controller controller, List<SpecialNodeTextView> newOrder) {
 	List<Delivery> deliveries = controller.getCyclist().getDeliveries();
+	List<SpecialNode> tr = new ArrayList<SpecialNode>();
 	
 	for(int i = 0; i < newOrder.size(); i++) {
 	    SpecialNodeTextView sntv = newOrder.get(i);
 	    Integer deliveryId = sntv.getDeliveryIndex();
 	    SpecialNodeType type = sntv.getType();
 	    if(type == SpecialNodeType.START || type == SpecialNodeType.PICKUP) {
-		controller.getTempRound().set(i, deliveries.get(deliveryId).getPickupNode());
+		tr.add(i, deliveries.get(deliveryId).getPickupNode());
 	    } else {
-		controller.getTempRound().set(i, deliveries.get(deliveryId).getDeliveryNode());
+		tr.add(i, deliveries.get(deliveryId).getDeliveryNode());
 	    }
 	}
-	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), controller.getTempRound()));
+	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), tr));
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
     

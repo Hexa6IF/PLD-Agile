@@ -15,6 +15,7 @@ import model.Cyclist;
 import model.Delivery;
 import model.FullMap;
 import model.SpecialNode;
+import model.SpecialNodeType;
 import view.SpecialNodeTextView;
 import view.Window;
 
@@ -249,8 +250,8 @@ public class Controller implements TSPCallback{
 	this.currentState.cancelButtonClick(this.window, this);
     }
     
-    public void changeNodePosition(SpecialNode node, String newNodeId) {
-	this.currentState.changeNodePosition(this.window, this, node, newNodeId);
+    public void changeNodePosition(Integer deliveryId, SpecialNodeType type, String newNodeId) {
+	this.currentState.changeNodePosition(this.window, this, deliveryId, type,  newNodeId);
     }
     
     public void changeRoundOrder(List<SpecialNodeTextView> newOrder) {
