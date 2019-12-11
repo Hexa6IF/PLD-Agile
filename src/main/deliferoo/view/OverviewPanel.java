@@ -155,7 +155,7 @@ public class OverviewPanel extends GridPane {
 	Long hours = totalSeconds / 3600;
 	Long minutes = (totalSeconds % 3600) / 60;
 	Long seconds = totalSeconds % 60;
-	String text = String.format("%sH%sm%ss", hours, minutes, seconds);
+	String text = String.format("%sH%sm%ss", Math.abs(hours), Math.abs(minutes), Math.abs(seconds));
 	return text;
     }
 }
