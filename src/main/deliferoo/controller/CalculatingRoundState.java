@@ -51,6 +51,13 @@ public class CalculatingRoundState implements State {
 	});
     }
     
+    
+    
+    @Override
+    public void cancelButtonClick(Window window, Controller controller) {
+	this.stopTSPCalculation(window, controller);
+    }
+
     @Override
     public void stopTSPCalculation(Window window, Controller controller) {
 	controller.tspSolver.stopCalculation();
