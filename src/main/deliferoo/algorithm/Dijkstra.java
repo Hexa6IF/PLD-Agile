@@ -122,6 +122,9 @@ public class Dijkstra {
 	Dijkstra.finishNode = deliveries.get(0).getDeliveryNode();
 	
 	for(Delivery delivery : deliveries) {
+	    if(delivery == null) {
+		continue;
+	    }
 	    specialNodes.add(delivery.getDeliveryNode());
 	    specialNodes.add(delivery.getPickupNode());
 	}

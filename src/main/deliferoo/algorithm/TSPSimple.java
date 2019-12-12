@@ -1,6 +1,6 @@
 package algorithm;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import model.SpecialNode;
@@ -12,8 +12,13 @@ import model.SpecialNode;
  */
 public class TSPSimple extends TSP {
 
-    protected int bound(SpecialNode currentNode, String finishNodeID, ArrayList<SpecialNode> undiscovered,
-	    Map<String, Map<String, Integer>> cost) {
+    public TSPSimple(Number speed) {
+	super(speed);
+    }
+
+    @Override
+    int bound(SpecialNode currentNode, SpecialNode startNode, List<SpecialNode> undiscovered,
+	    Map<SpecialNode, Map<SpecialNode, Integer>> cost) {
 	return 0;
     }
 

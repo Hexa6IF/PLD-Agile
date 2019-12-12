@@ -22,14 +22,14 @@ public class RoundCalculatedState implements State {
 
     @Override
     public void init(Window window, Controller controller) {
-	window.disableButtons(true, false, true, true, true, true, true, true);
+	window.disableButtons(true, false, true, true, true, !controller.canUndo(), !controller.canRedo(), true);
 	window.updateMessage("Round succesfully calculated");
     }
     
     @Override
     public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
 	for(Delivery delivery : controller.getCyclist().getDeliveries()) {
-	    if(delivery.getDeliveryIndex() == deliveryIndex) {
+	    if(delivery != null && delivery.getDeliveryIndex() == deliveryIndex) {
 		window.updateSelectedDelivery(delivery);
 		controller.setSelectedDelivery(delivery);
 		break;
@@ -41,25 +41,25 @@ public class RoundCalculatedState implements State {
     @Override
     public void loadMap(Window window, Controller controller, File mapFile) {
 	FullMap map = XMLParser.getInstance().parseMap(mapFile);
-	if (map.getEdgeList().size()>0 && map.getNodeMap().size()>0) {
+	if (map.getEdgeList().size() > 0 && map.getNodeMap().size() > 0) {
 	    try {
 		window.updateMap(map);
 		window.updateDeliveries(new ArrayList<Delivery>());
 		controller.setCurrentMap(map);
 		controller.setCurrentState(controller.MAP_LOADED_STATE);
 	    } catch (Exception e) {
-		window.updateMessage("Error in loaded XML file. Please correct it or load an other file.");
+		window.updateMessage("Error in loaded XML file. Please correct it or load another file.");
 		window.clearMap();
 	    }
 	} else {
-	    window.updateMessage("The loaded XML file does not match the expected format. Please correct it or load an other file.");
+	    window.updateMessage("The loaded XML file does not match the expected format. Please correct it or load another file.");
 	}
     }
 
     @Override
     public void loadDeliveries(Window window, Controller controller, File deliveriesFile, FullMap map) {
 	List<Delivery> deliveries = XMLParser.getInstance().parseDeliveries(deliveriesFile, map);
-	if (deliveries.size()>0) {
+	if (deliveries.size() > 0) {
 	    try {
 		window.updateDeliveries(deliveries);
 		controller.getCyclist().setDeliveries(deliveries);

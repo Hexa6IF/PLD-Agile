@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import algorithm.TSP;
+import javafx.geometry.Bounds;
 import model.BestPath;
 import model.Cyclist;
 import model.Delivery;
@@ -44,7 +45,9 @@ public class Controller implements TSPCallback{
     protected ExecutorService executor;
     
     protected final InitState INIT_STATE = new InitState();
-    protected final AddDeliveryState ADD_DELIVERY_STATE = new AddDeliveryState();
+    protected final AddWarehouseNodeState ADD_WAREHOUSE_NODE_STATE = new AddWarehouseNodeState();
+    protected final AddPickupNodeState ADD_PICKUP_NODE_STATE = new AddPickupNodeState();
+    protected final AddDropoffNodeState ADD_DROPOFF_NODE_STATE = new AddDropoffNodeState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
     protected final MapLoadedState MAP_LOADED_STATE = new MapLoadedState();
     protected final RoundCalculatedState ROUND_CALCULATED_STATE = new RoundCalculatedState();
@@ -59,7 +62,7 @@ public class Controller implements TSPCallback{
 	this.window.launchWindow();
 	
 	this.commandList = new CommandList();
-	this.cyclist = new Cyclist();
+	this.cyclist = new Cyclist(250); //speed of cyclist is 250gm/minute
 	this.executor = new ThreadPoolExecutor(1, 2, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 	this.setCurrentState(this.INIT_STATE);
     }
@@ -150,6 +153,9 @@ public class Controller implements TSPCallback{
     protected void doCommand(Command cmd) {
 	this.commandList.addCmd(cmd);
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
+	this.window.clearTempMarkers();
+	this.window.updateDeliveries(this.cyclist.getDeliveries());
+	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 
@@ -162,6 +168,12 @@ public class Controller implements TSPCallback{
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
 	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
+	this.selectedDelivery = cyclist.getDeliveries().get(selectedDelivery.getDeliveryIndex());
+	
+	if(selectedDelivery != null) {
+	    System.out.println(selectedDelivery);
+	    this.window.updateDeliveryDetail(selectedDelivery);
+	}
     }
 
     /**
@@ -173,6 +185,11 @@ public class Controller implements TSPCallback{
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
 	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
+	this.selectedDelivery = cyclist.getDeliveries().get(selectedDelivery.getDeliveryIndex());
+	
+	if(selectedDelivery != null) {
+	    this.window.updateDeliveryDetail(selectedDelivery);
+	}
     }
 
     /**
@@ -285,5 +302,9 @@ public class Controller implements TSPCallback{
     @Override
     public void calculationsCompleted() {
 	this.currentState.stopTSPCalculation(this.window, this);
+    }
+    
+    public void placeNode(String nodeId, Bounds bounds) {
+	this.currentState.placeNode(this.window, this, nodeId, bounds);
     }
 }
