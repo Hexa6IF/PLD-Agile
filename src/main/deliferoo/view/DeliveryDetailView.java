@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 import model.Delivery;
 import model.SpecialNode;
 
@@ -65,21 +64,17 @@ public class DeliveryDetailView extends GridPane{
 	placeGridComponents();
     }
     
-    public void enableDurationEdit() {
-	this.pickupDurationField.setEditable(true);
-	this.dropoffDurationField.setEditable(true);
+    public void setDurationEdit(boolean pickup, boolean dropoff) {
+	this.pickupDurationField.setEditable(pickup);
+	this.dropoffDurationField.setEditable(dropoff);
     }
     
-    public void disableDurationEdit() {
-	this.pickupDurationField.setEditable(false);
-	this.dropoffDurationField.setEditable(false);
+    public Double getPickupDuration() {
+	return Double.parseDouble(this.pickupDurationField.getText());
     }
     
-    public Pair<Double, Double> getDurations() {
-	Double pickup = Double.parseDouble(this.pickupDurationField.getText());
-	Double dropoff = Double.parseDouble(this.dropoffDurationField.getText());
-	
-	return new Pair<Double, Double>(pickup, dropoff);
+    public Double getDropoffDuration() {
+	return Double.parseDouble(this.dropoffDurationField.getText());
     }
 
     /**
@@ -102,6 +97,10 @@ public class DeliveryDetailView extends GridPane{
 	    }
 	    this.pickupPointField.setText(pickup.getNode().getNodeId());
 	    this.pickupDurationField.setText(pickup.getDuration().toString());
+	} else {
+	    this.startTimeField.setText("");
+	    this.pickupPointField.setText("");
+	    this.pickupDurationField.setText("");
 	}
 	if(dropoff != null) {
 	    if(dropoff.getPassageTime() != null) {
@@ -109,6 +108,10 @@ public class DeliveryDetailView extends GridPane{
 	    }
 	    this.dropoffPointField.setText(dropoff.getNode().getNodeId());
 	    this.dropoffDurationField.setText(dropoff.getDuration().toString());
+	} else {
+	    this.endTimeField.setText("");
+	    this.dropoffPointField.setText("");
+	    this.dropoffDurationField.setText("");
 	}
     }
     

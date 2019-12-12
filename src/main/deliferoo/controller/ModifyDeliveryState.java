@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import algorithm.Dijkstra;
-import javafx.util.Pair;
 import model.BestPath;
 import model.Delivery;
 import model.FullMap;
@@ -49,6 +48,7 @@ public class ModifyDeliveryState implements State {
 	controller.setTempRound(tr);
 
 	window.enableDeliveryModification(td.getDeliveryIndex());
+	window.setDurationEdit(true, true);
 	window.setRoundOrdering(false);
 	window.disableButtons(true, true, true, false, true, true, true, false);
 	window.updateMessage("Modifying selected node.");
@@ -104,19 +104,15 @@ public class ModifyDeliveryState implements State {
 	Delivery newDelivery = controller.getTempDelivery();
 
 	try {
-	    Pair<Double, Double> duration = window.getDurations();
-	    newDelivery.getPickupNode().setDuration(duration.getKey());
-	    newDelivery.getDeliveryNode().setDuration(duration.getValue());
+	    newDelivery.getPickupNode().setDuration(window.getPickupDuration());
+	    newDelivery.getDeliveryNode().setDuration(window.getDropoffDuration());
 	    Command modifyCommand = new CmdModifyDelivery(controller.getCyclist().getDeliveries(), controller.getCyclist().getRound(),
 		    controller.getSelectedDelivery(), controller.getTempDelivery(), controller.getCyclist().getBestPaths(), newBestPaths);
-	    
 	    controller.doCommand(modifyCommand);
-	    window.disableDeliveryModification();
 	    window.drawMarkers(controller.getCyclist().getDeliveries(), 20);
 	    window.updateSelectedDelivery(newDelivery);
 	    controller.setSelectedDelivery(newDelivery);
 	    controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
-	    
 	} catch (Exception e) {
 	    window.updateMessage("Invalid durations. Please reenter.");
 	}
@@ -126,7 +122,7 @@ public class ModifyDeliveryState implements State {
     public void cancelButtonClick(Window window, Controller controller) {
 	window.updateRound(controller.getCyclist().getRound(), controller.getCyclist().getBestPaths());
 	window.drawMarkers(controller.getCyclist().getDeliveries(), 20);
-	window.disableDeliveryModification();
+	window.setDurationEdit(false, false);
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
 

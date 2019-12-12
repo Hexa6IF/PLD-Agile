@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class Cyclist {
     private List<SpecialNode> round;
 
     public Cyclist() {
+	this.bestPaths = new HashMap<>();
 	this.deliveries = new ArrayList<>();
 	this.round = new ArrayList<>();
     }

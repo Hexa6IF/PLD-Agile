@@ -48,6 +48,7 @@ public class Controller implements TSPCallback{
     protected final AddWarehouseNodeState ADD_WAREHOUSE_NODE_STATE = new AddWarehouseNodeState();
     protected final AddPickupNodeState ADD_PICKUP_NODE_STATE = new AddPickupNodeState();
     protected final AddDropoffNodeState ADD_DROPOFF_NODE_STATE = new AddDropoffNodeState();
+    protected final AddToRoundState ADD_TO_ROUND_STATE = new AddToRoundState();
     protected final DeliverySelectedState DELIVERY_SELECTED_STATE = new DeliverySelectedState();
     protected final MapLoadedState MAP_LOADED_STATE = new MapLoadedState();
     protected final RoundCalculatedState ROUND_CALCULATED_STATE = new RoundCalculatedState();
@@ -164,14 +165,17 @@ public class Controller implements TSPCallback{
      */
     public void undo() {
 	this.commandList.undo();
-	this.currentState.init(this.window, this);
+	if(this.cyclist.getDeliveries().size() > 0) {
+	    this.currentState.init(this.window, this);
+	} else {
+	    this.setCurrentState(MAP_LOADED_STATE);
+	}	
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
 	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
-	this.selectedDelivery = cyclist.getDeliveries().get(selectedDelivery.getDeliveryIndex());
+	this.selectedDelivery = cyclist.getDeliveries().get(0);
 	
 	if(selectedDelivery != null) {
-	    System.out.println(selectedDelivery);
 	    this.window.updateDeliveryDetail(selectedDelivery);
 	}
     }
@@ -181,7 +185,7 @@ public class Controller implements TSPCallback{
      */
     public void redo() {
 	this.commandList.redo();
-	this.currentState.init(this.window, this);
+	this.setCurrentState(DELIVERY_SELECTED_STATE);
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
 	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
@@ -283,8 +287,8 @@ public class Controller implements TSPCallback{
      *  
      * @param deliveryIndex
      */
-    public void selectDeliveryClick(Integer deliveryIndex) {
-	this.currentState.selectDeliveryClick(this.window, this, deliveryIndex);
+    public void selectDeliveryClick(Integer deliveryIndex, SpecialNodeType type) {
+	this.currentState.selectDeliveryClick(this.window, this, deliveryIndex, type);
     }
     
     /**

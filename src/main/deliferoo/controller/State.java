@@ -132,7 +132,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
+    public default void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex, SpecialNodeType type) {
     }
 
     /**

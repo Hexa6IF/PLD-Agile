@@ -52,7 +52,7 @@ public class DeliverySelectedState implements State {
     }
     
     @Override
-    public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
+    public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex, SpecialNodeType type) {
 	for(Delivery delivery : controller.getCyclist().getDeliveries()) {
 	    if(delivery != null && delivery.getDeliveryIndex() == deliveryIndex) {
 		window.updateSelectedDelivery(delivery);
