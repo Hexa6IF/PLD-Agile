@@ -45,4 +45,5 @@ public class MapLoadedState implements State {
 	controller.setDeliveries(deliveries);
 	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
     }
+   
 }

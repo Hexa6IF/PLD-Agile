@@ -60,7 +60,6 @@ public class Window {
 	this.tableBoxView = new TableBoxView(this.bounds.getHeight() / 2, 4 * this.bounds.getWidth() / 9);
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.deliveryColorMap = new HashMap<>();
-
 	this.addRowListeners();
     }
 
@@ -221,7 +220,7 @@ public class Window {
 	sideBar.getChildren().addAll(this.overviewPanel, this.deliveryDetailView, this.controlPanel, this.tableBoxView);
 	return sideBar;
     }
-
+  
     private void addRowListeners() {
 	this.tableBoxView.getSelectionModel().selectedItemProperty().addListener((observer, oldSelection, newSelection) -> {
 	    if(newSelection == null) {
