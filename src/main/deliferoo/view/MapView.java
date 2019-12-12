@@ -193,6 +193,11 @@ public class MapView extends Pane {
      * @param markerSize the size of the markers
      */
     public void drawMarker(Delivery delivery, Color color, Integer markerSize) {
+	if(delivery == null) {
+	    this.markers.add(null);
+	    return;
+	}
+	
 	if (delivery.getDeliveryIndex() == 0) {
 	    SpecialNode warehouse = delivery.getPickupNode();
 	    
@@ -248,6 +253,9 @@ public class MapView extends Pane {
      */
     public void highlightMarkers(Delivery delivery, Color color) {
 	for(Pair<Shape, Shape> shapes : this.markers) {
+	    if(shapes == null) {
+		continue;
+	    }
 	    shapes.getKey().setStroke(Color.BLACK);
 	    shapes.getKey().setStrokeWidth(1);
 	    shapes.getValue().setStroke(Color.BLACK);
@@ -270,6 +278,9 @@ public class MapView extends Pane {
      */
     public void clearMarkers() {
 	for(Pair<Shape, Shape> shapes : this.markers) {
+	    if(shapes == null) {
+		continue;
+	    }
 	    this.getChildren().removeAll(shapes.getKey(), shapes.getValue());
 	}
 	this.markers = new ArrayList<>();

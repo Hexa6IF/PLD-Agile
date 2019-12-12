@@ -35,6 +35,17 @@ public class DeliverySelectedState implements State {
     }
     
     @Override
+    public void removeButtonClick(Window window, Controller controller) {
+	List<Delivery> deliveries = controller.getCyclist().getDeliveries();
+	List<SpecialNode> round = controller.getCyclist().getRound();
+	
+	controller.doCommand(new CmdRemoveDelivery(deliveries, round, controller.getSelectedDelivery()));
+	controller.setSelectedDelivery(deliveries.get(0));
+	window.updateSelectedDelivery(deliveries.get(0));
+	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
+    }
+    
+    @Override
     public void modifyButtonClick(Window window, Controller controller) {
 	controller.setCurrentState(controller.MODIFY_DELIVERY_STATE);
     }
@@ -42,7 +53,7 @@ public class DeliverySelectedState implements State {
     @Override
     public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
 	for(Delivery delivery : controller.getCyclist().getDeliveries()) {
-	    if(delivery.getDeliveryIndex() == deliveryIndex) {
+	    if(delivery != null && delivery.getDeliveryIndex() == deliveryIndex) {
 		window.updateSelectedDelivery(delivery);
 		controller.setSelectedDelivery(delivery);
 		break;

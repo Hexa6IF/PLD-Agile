@@ -119,6 +119,10 @@ public class Window {
 
 	List<SpecialNode> nodesToInsert = new ArrayList<>();
 	for(Delivery delivery : deliveries) {
+	    if(delivery == null) {
+		continue;
+	    }
+	    
 	    Color color;
 	    if(deliveryColorMap.containsKey(delivery.getDeliveryIndex())) {
 		color = this.deliveryColorMap.get(delivery.getDeliveryIndex());
@@ -161,7 +165,11 @@ public class Window {
     public void drawMarkers(List<Delivery> deliveries, Integer markerSize) {
 	this.mapView.clearMarkers();
 	for(Delivery delivery : deliveries) {
-	    this.mapView.drawMarker(delivery, this.deliveryColorMap.get(delivery.getDeliveryIndex()), markerSize);
+	    if(delivery == null) {
+		this.mapView.drawMarker(null, null, null);
+	    } else {
+		this.mapView.drawMarker(delivery, this.deliveryColorMap.get(delivery.getDeliveryIndex()), markerSize);
+	    }
 	}
 	this.addMarkerSelectListeners();
     }
@@ -361,12 +369,15 @@ public class Window {
     private void addMarkerSelectListeners() {
 	List<Pair<Shape, Shape>> markers = this.mapView.getMarkers();
 	for(int i = 0; i < markers.size(); i++) {
-	    Integer deliveryIndex = i;
+	    if(markers.get(i) == null) {
+		continue;
+	    }    
+	    Integer deliveryIndex = i;	    
 	    markers.get(i).getKey().setOnMouseClicked(e -> {
 		this.controller.selectDeliveryClick(deliveryIndex);	
 	    });
 	    markers.get(i).getValue().setOnMouseClicked(e -> {
-		this.controller.selectDeliveryClick(deliveryIndex);	
+		this.controller.selectDeliveryClick(deliveryIndex);
 	    });
 	}
     }

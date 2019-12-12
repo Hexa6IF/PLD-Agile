@@ -150,6 +150,8 @@ public class Controller implements TSPCallback{
     protected void doCommand(Command cmd) {
 	this.commandList.addCmd(cmd);
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
+	this.window.updateDeliveries(this.cyclist.getDeliveries());
+	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
     }
 
