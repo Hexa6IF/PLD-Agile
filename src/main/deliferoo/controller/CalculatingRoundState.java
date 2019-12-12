@@ -28,11 +28,10 @@ public class CalculatingRoundState implements State {
     public void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
 	Runnable runnableTask = () -> {
 	    Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	    controller.getCyclist().setShortestPaths(bestPaths);    
-	    //controller.tspSolver = new TSPSimple();
-	    controller.tspSolver = new TSPHeuristic();
+	    controller.getCyclist().setBestPaths(bestPaths);
+	    controller.tspSolver = new TSPHeuristic(controller.getCyclist().getSpeed());
 	    controller.tspSolver.registerCallBack(controller);
-	    controller.tspSolver.searchSolution(60000, bestPaths, deliveries);
+	    controller.tspSolver.searchSolution(100000, bestPaths, deliveries);
 	};
 	controller.executor.execute(runnableTask);
     }
@@ -40,20 +39,21 @@ public class CalculatingRoundState implements State {
     @Override
     public void updateRound(Window window, Controller controller) {
 	List<SpecialNode> round = controller.tspSolver.getTransformedSolution();
-	controller.getCyclist().setRound(round);
-	Platform.runLater(() -> {
-	    try {		
-		window.updateRound(round, controller.getCyclist().getBestPaths());
-		controller.getCyclist().setShortestPaths(controller.getCyclist().getBestPaths());
-		controller.getCyclist().setRound(round);
-	    } catch (Exception ex) {
-		ex.printStackTrace();
-	    }
-	});
+	if (round != null) {
+	    CalculationHelper.updatePassageTimesSpecialNodes(round, controller.getCyclist());
+	    controller.getCyclist().setRound(round);
+	    Platform.runLater(() -> {
+		try {
+		    window.updateRound(round, controller.getCyclist().getBestPaths());
+		    controller.getCyclist().setBestPaths(controller.getCyclist().getBestPaths());
+		    controller.getCyclist().setRound(round);
+		} catch (Exception ex) {
+		    ex.printStackTrace();
+		}
+	    });
+	}
     }
-    
-    
-    
+
     @Override
     public void cancelButtonClick(Window window, Controller controller) {
 	this.stopTSPCalculation(window, controller);
@@ -63,8 +63,9 @@ public class CalculatingRoundState implements State {
     public void stopTSPCalculation(Window window, Controller controller) {
 	controller.tspSolver.stopCalculation();
 	Platform.runLater(() -> {
-	    try {		
-		window.confirmRound();;
+	    try {
+		window.confirmRound();
+		;
 	    } catch (Exception ex) {
 		ex.printStackTrace();
 	    }

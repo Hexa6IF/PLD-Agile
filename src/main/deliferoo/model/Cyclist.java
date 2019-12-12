@@ -14,38 +14,88 @@ public class Cyclist {
     private Map<String, Map<String, BestPath>> bestPaths;
     private List<Delivery> deliveries;
     private List<SpecialNode> round;
+    private Number speed;
 
-    public Cyclist() {}
+    public Cyclist(Number speed) {
+	this.speed = speed;
+    }
 
+
+    /**
+     * @return the speed
+     */
+    public Number getSpeed() {
+        return speed;
+    }
+
+    /**
+     * @param speed the speed to set
+     */
+    public void setSpeed(Number speed) {
+        this.speed = speed;
+    }
+
+
+    /**
+     * @return the startTime
+     */
     public Integer getStartTime() {
-	return this.startTime;
+        return startTime;
     }
 
+
+    /**
+     * @param startTime the startTime to set
+     */
     public void setStartTime(Integer startTime) {
-	this.startTime = startTime;
+        this.startTime = startTime;
     }
-    
+
+
+    /**
+     * @return the bestPaths
+     */
     public Map<String, Map<String, BestPath>> getBestPaths() {
-	return this.bestPaths;
+        return bestPaths;
     }
-    
-    public void setShortestPaths(Map<String, Map<String, BestPath>> bestPaths) {
-	this.bestPaths = bestPaths;
+
+
+    /**
+     * @param bestPaths the bestPaths to set
+     */
+    public void setBestPaths(Map<String, Map<String, BestPath>> bestPaths) {
+        this.bestPaths = bestPaths;
     }
-    
+
+
+    /**
+     * @return the deliveries
+     */
     public List<Delivery> getDeliveries() {
-	return this.deliveries;
+        return deliveries;
     }
 
+
+    /**
+     * @param deliveries the deliveries to set
+     */
     public void setDeliveries(List<Delivery> deliveries) {
-	this.deliveries = deliveries;
+        this.deliveries = deliveries;
     }
 
+
+    /**
+     * @return the round
+     */
     public List<SpecialNode> getRound() {
-	return round;
+        return round;
     }
 
+
+    /**
+     * @param round the round to set
+     */
     public void setRound(List<SpecialNode> round) {
-	this.round = round;
+        this.round = round;
     }
 }

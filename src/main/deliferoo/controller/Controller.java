@@ -59,7 +59,7 @@ public class Controller implements TSPCallback{
 	this.window.launchWindow();
 	
 	this.commandList = new CommandList();
-	this.cyclist = new Cyclist();
+	this.cyclist = new Cyclist(250); //speed of cyclist is 250gm/minute
 	this.executor = new ThreadPoolExecutor(1, 2, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 	this.setCurrentState(this.INIT_STATE);
     }
