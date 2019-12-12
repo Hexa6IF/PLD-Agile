@@ -164,7 +164,7 @@ public interface State {
      * @param the deliveries
      * @param the map
      */
-    public default void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
+    public default void calculateRound(Window window, Controller controller) {
     }
     
     /**

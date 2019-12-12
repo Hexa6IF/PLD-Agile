@@ -47,11 +47,11 @@ public class ModifyDeliveryState implements State {
 	controller.setTempDelivery(td);
 	controller.setTempRound(tr);
 
-	window.enableDeliveryModification(controller.getSelectedDelivery());
+	window.enableDeliveryModification(td.getDeliveryIndex());
 	window.setRoundOrdering(false);
 	window.disableButtons(true, true, true, false, true, true, true, false);
-	//window.updateMessage("Modifying selected node.");
-    }
+	window.updateMessage("Modifying selected node.");
+    } 
 
     @Override
     public void changeNodePosition(Window window, Controller controller, Integer deliveryId, SpecialNodeType type, String newNodeId) {
@@ -109,6 +109,10 @@ public class ModifyDeliveryState implements State {
 		controller.getSelectedDelivery(), controller.getTempDelivery(), controller.getCyclist().getBestPaths(), newBestPaths);
 	controller.doCommand(modifyCommand);
 
+	for(Delivery d : controller.getCyclist().getDeliveries()) {
+	    System.out.println(d);
+	}
+	
 	window.drawMarkers(controller.getCyclist().getDeliveries(), 20);
 	window.updateSelectedDelivery(newDelivery);
 	controller.setSelectedDelivery(newDelivery);

@@ -180,7 +180,7 @@ public class Window {
      * @param delivery
      */
     public void updateSelectedDelivery(Delivery delivery) {
-	this.mapView.highlightMarkers(delivery, Color.DODGERBLUE);
+	this.mapView.highlightMarkers(delivery.getDeliveryIndex(), Color.DODGERBLUE);
 	this.updateDeliveryDetail(delivery);
     }
 
@@ -270,12 +270,12 @@ public class Window {
 	return sideBar;
     }
 
-    public void enableDeliveryModification(Delivery delivery) {
-	if(delivery.getDeliveryIndex() != 0) {
-	    Pair<Shape, Shape> deliveryMarkers =  this.mapView.getMarkers().get(delivery.getDeliveryIndex());
-	    this.mapView.highlightMarkers(delivery, Color.DARKVIOLET);
-	    this.addMarkerDragListeners(delivery.getDeliveryIndex(), SpecialNodeType.PICKUP, deliveryMarkers.getKey());
-	    this.addMarkerDragListeners(delivery.getDeliveryIndex(), SpecialNodeType.DROPOFF, deliveryMarkers.getValue());
+    public void enableDeliveryModification(Integer deliveryIndex) {
+	if(deliveryIndex != 0) {
+	    Pair<Shape, Shape> deliveryMarkers =  this.mapView.getMarkers().get(deliveryIndex);
+	    this.mapView.highlightMarkers(deliveryIndex, Color.DARKVIOLET);
+	    this.addMarkerDragListeners(deliveryIndex, SpecialNodeType.PICKUP, deliveryMarkers.getKey());
+	    this.addMarkerDragListeners(deliveryIndex, SpecialNodeType.DROPOFF, deliveryMarkers.getValue());
 	}
     }
 

@@ -251,7 +251,7 @@ public class MapView extends Pane {
      * @param deliveryIndex
      * @param color
      */
-    public void highlightMarkers(Delivery delivery, Color color) {
+    public void highlightMarkers(Integer deliveryIndex, Color color) {
 	for(Pair<Shape, Shape> shapes : this.markers) {
 	    if(shapes == null) {
 		continue;
@@ -262,12 +262,12 @@ public class MapView extends Pane {
 	    shapes.getValue().setStrokeWidth(1);
 	}
 	
-	Shape startMarker = markers.get(delivery.getDeliveryIndex()).getKey();
+	Shape startMarker = markers.get(deliveryIndex).getKey();
 	startMarker.setStroke(color);
 	startMarker.setStrokeType(StrokeType.OUTSIDE);
 	startMarker.setStrokeWidth(5);
 	
-	Shape endMarker= markers.get(delivery.getDeliveryIndex()).getValue();
+	Shape endMarker= markers.get(deliveryIndex).getValue();
 	endMarker.setStroke(color);
 	endMarker.setStrokeType(StrokeType.OUTSIDE);
 	endMarker.setStrokeWidth(5);

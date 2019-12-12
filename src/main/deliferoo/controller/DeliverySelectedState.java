@@ -72,11 +72,12 @@ public class DeliverySelectedState implements State {
 	    Integer deliveryId = sntv.getDeliveryIndex();
 	    SpecialNodeType type = sntv.getType();
 	    if(type == SpecialNodeType.START || type == SpecialNodeType.PICKUP) {
-		tr.add(i, deliveries.get(deliveryId).getPickupNode());
+		tr.add(deliveries.get(deliveryId).getPickupNode());
 	    } else {
-		tr.add(i, deliveries.get(deliveryId).getDeliveryNode());
+		tr.add(deliveries.get(deliveryId).getDeliveryNode());
 	    }
 	}
+
 	CalculationHelper.updatePrecedences(tr);
 	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), tr));
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
@@ -103,5 +104,4 @@ public class DeliverySelectedState implements State {
     public void calculateButtonClick(Window window, Controller controller) {
 	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
     }
-
 }

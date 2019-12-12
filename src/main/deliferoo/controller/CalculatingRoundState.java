@@ -21,18 +21,18 @@ public class CalculatingRoundState implements State {
     public void init(Window window, Controller controller) {
 	window.disableButtons(true, true, true, true, true, true, true, false);
 	window.updateMessage("Calculating optimal round...");
-	this.calculateRound(window, controller, controller.getCyclist().getDeliveries(), controller.getCurrentMap());
+	this.calculateRound(window, controller);
     }
 
     @Override
-    public void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
+    public void calculateRound(Window window, Controller controller) {
 	Runnable runnableTask = () -> {
-	    Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	    controller.getCyclist().setShortestPaths(bestPaths);    
+	    Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(controller.getCyclist().getDeliveries(), controller.getCurrentMap());
+	    controller.getCyclist().setBestPaths(bestPaths);    
 	    //controller.tspSolver = new TSPSimple();
 	    controller.tspSolver = new TSPHeuristic();
 	    controller.tspSolver.registerCallBack(controller);
-	    controller.tspSolver.searchSolution(60000, bestPaths, deliveries);
+	    controller.tspSolver.searchSolution(60000, bestPaths, controller.getCyclist().getDeliveries());
 	};
 	controller.executor.execute(runnableTask);
     }
@@ -42,17 +42,14 @@ public class CalculatingRoundState implements State {
 	List<SpecialNode> round = controller.tspSolver.getTransformedSolution();
 	controller.getCyclist().setRound(round);
 	Platform.runLater(() -> {
-	    try {		
-		window.updateRound(round, controller.getCyclist().getBestPaths());
-		controller.getCyclist().setShortestPaths(controller.getCyclist().getBestPaths());
+	    try {
 		controller.getCyclist().setRound(round);
+		window.updateRound(round, controller.getCyclist().getBestPaths());
 	    } catch (Exception ex) {
 		ex.printStackTrace();
 	    }
 	});
     }
-    
-    
     
     @Override
     public void cancelButtonClick(Window window, Controller controller) {
@@ -64,7 +61,7 @@ public class CalculatingRoundState implements State {
 	controller.tspSolver.stopCalculation();
 	Platform.runLater(() -> {
 	    try {		
-		window.confirmRound();;
+		window.confirmRound();
 	    } catch (Exception ex) {
 		ex.printStackTrace();
 	    }

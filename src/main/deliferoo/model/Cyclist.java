@@ -29,7 +29,7 @@ public class Cyclist {
 	return this.bestPaths;
     }
     
-    public void setShortestPaths(Map<String, Map<String, BestPath>> bestPaths) {
+    public void setBestPaths(Map<String, Map<String, BestPath>> bestPaths) {
 	this.bestPaths = bestPaths;
     }
     
