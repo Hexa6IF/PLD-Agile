@@ -35,6 +35,11 @@ public class CalculationHelper {
 		String specialNodePreviousIndex = specialNodePrevious.getNode().getNodeId();
 		SpecialNode specialNodeCurrent = specialNodes.get(i);
 		String specialNodeCurrentIndex = specialNodeCurrent.getNode().getNodeId();
+		if (bestPaths.get(specialNodePreviousIndex).get(specialNodeCurrentIndex)==null) {
+		    System.out.println("is null");
+		    System.out.println(specialNodePreviousIndex);
+		    System.out.println(specialNodeCurrentIndex);
+		}
 		Double timeSpent = bestPaths.get(specialNodePreviousIndex).get(specialNodeCurrentIndex).getDistance()
 			/ cyclist.getSpeed().doubleValue();
 		timeSpent += specialNodeCurrent.getDuration();

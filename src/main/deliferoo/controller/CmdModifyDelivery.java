@@ -29,15 +29,15 @@ public class CmdModifyDelivery implements Command {
     
     public void doCmd() {
 	deliveries.set(deliveries.indexOf(from), to);
-	
 	round.set(round.indexOf(from.getPickupNode()), to.getPickupNode());
 	round.set(round.indexOf(from.getDeliveryNode()), to.getDeliveryNode());
-	
-	bestPaths.put(to.getPickupNode().getNode().getNodeId(), modifiedBestPaths.get(to.getPickupNode().getNode().getNodeId()));
-	bestPaths.put(to.getDeliveryNode().getNode().getNodeId(), modifiedBestPaths.get(to.getDeliveryNode().getNode().getNodeId()));
+	String pickupNodeId = to.getPickupNode().getNode().getNodeId();
+	String deliveryNodeId = to.getDeliveryNode().getNode().getNodeId();
+	bestPaths.put(pickupNodeId, modifiedBestPaths.get(pickupNodeId));
+	bestPaths.put(deliveryNodeId, modifiedBestPaths.get(deliveryNodeId));
 	for(String id : bestPaths.keySet()) {
-	    bestPaths.get(id).put(to.getPickupNode().getNode().getNodeId(), modifiedBestPaths.get(to.getPickupNode().getNode().getNodeId()).get(id));
-	    bestPaths.get(id).put(to.getDeliveryNode().getNode().getNodeId(), modifiedBestPaths.get(to.getDeliveryNode().getNode().getNodeId()).get(id));
+	    bestPaths.get(id).put(pickupNodeId, modifiedBestPaths.get(pickupNodeId).get(id));
+	    bestPaths.get(id).put(deliveryNodeId, modifiedBestPaths.get(deliveryNodeId).get(id));
 	}
     }
     

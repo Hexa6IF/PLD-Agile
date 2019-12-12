@@ -32,6 +32,14 @@ public class CalculatingRoundState implements State {
 	    List<Delivery> deliveries = cyclist.getDeliveries();
 	    FullMap map = controller.getCurrentMap();
 	    Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
+	    System.out.println(deliveries);
+//	    for (String key : bestPaths.keySet()) {
+//		Map<String, BestPath> subBestPaths = bestPaths.get(key);
+//		System.out.println(key + " :");
+//		for (String key2 : subBestPaths.keySet()) {
+//		    System.out.println("    "+key2);
+//		}
+//	    }
 	    controller.getCyclist().setBestPaths(bestPaths);
 	    controller.tspSolver = new TSPHeuristic(cyclist.getSpeed());
 	    controller.tspSolver.registerCallBack(controller);
