@@ -30,9 +30,6 @@ public class CmdModifyDelivery implements Command {
     public void doCmd() {
 	deliveries.set(deliveries.indexOf(from), to);
 	
-	System.out.println(to);
-	System.out.println("--------------------------");
-	
 	round.set(round.indexOf(from.getPickupNode()), to.getPickupNode());
 	round.set(round.indexOf(from.getDeliveryNode()), to.getDeliveryNode());
 	

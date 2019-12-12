@@ -7,8 +7,6 @@ import javafx.application.Platform;
 import algorithm.Dijkstra;
 import algorithm.TSPHeuristic;
 import model.BestPath;
-import model.Delivery;
-import model.FullMap;
 import model.SpecialNode;
 import view.Window;
 

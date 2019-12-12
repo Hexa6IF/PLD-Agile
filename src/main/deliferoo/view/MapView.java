@@ -30,6 +30,7 @@ import model.Edge;
 import model.FullMap;
 import model.Node;
 import model.SpecialNode;
+import model.SpecialNodeType;
 
 /**
  * Class for displaying a map
@@ -52,6 +53,10 @@ public class MapView extends Pane {
     private Map<Pair<String, String>, Set<Line>> roundLines;
     private Map<String, Shape> nodeShapes;
     private List<Pair<Shape, Shape>> markers;
+
+    private Shape tempPickup;
+    private Shape tempDropoff;
+    private Shape tempWarehouse;
 
     /**
      * Constructor
@@ -102,6 +107,7 @@ public class MapView extends Pane {
 	this.maxLat = map.getMaxLat();
 
 	this.getChildren().clear();
+	
 	for (Edge edge : map.getEdgeList()) {
 	    drawEdge(edge, color, strokeWidth);
 	}
@@ -184,7 +190,7 @@ public class MapView extends Pane {
 	    this.getChildren().removeAll(this.roundLines.get(p));
 	}
     }
-    
+
     /**
      * Draws markers corresponding to checkpoints of a delivery
      *
@@ -197,23 +203,23 @@ public class MapView extends Pane {
 	    this.markers.add(null);
 	    return;
 	}
-	
+
 	if (delivery.getDeliveryIndex() == 0) {
 	    SpecialNode warehouse = delivery.getPickupNode();
-	    
+
 	    Pair<Double, Double> p = calculateRelativePosition(warehouse.getNode());
-	    
+
 	    Double x = p.getKey();
 	    Double y = p.getValue();
-	    
+
 	    Polyline marker = new Polyline();
 	    marker.getPoints().addAll(x, y - 2 * markerSize / 3, x - markerSize / 2, y + markerSize / 3,
 		    x + markerSize / 2, y + markerSize / 3, x, y - 2 * markerSize / 3);
-	    
+
 	    marker.setFill(color);
 	    marker.setStroke(Color.BLACK);
 	    marker.setStrokeWidth(1);
-	    
+
 	    this.markers.add(delivery.getDeliveryIndex(), new Pair<Shape, Shape>(marker, marker));
 	    this.getChildren().add(marker);
 	} else {
@@ -231,18 +237,53 @@ public class MapView extends Pane {
 
 	    Shape startMarker = new Circle(x1, y1, markerSize / 2);
 	    Shape endMarker = new Rectangle(x2 - markerSize / 2, y2 - markerSize / 2, markerSize, markerSize);
-	    
+
 	    startMarker.setFill(color);
 	    startMarker.setStroke(Color.BLACK);
 	    startMarker.setStrokeWidth(1);
-	    
+
 	    endMarker.setFill(color);
 	    endMarker.setStroke(Color.BLACK);
 	    endMarker.setStrokeWidth(1);
-	    
+
 	    this.markers.add(delivery.getDeliveryIndex(), new Pair<Shape, Shape>(startMarker, endMarker));
 	    this.getChildren().addAll(startMarker, endMarker);
 	}
+    }
+
+    public void drawTempMarker(SpecialNode toDraw, Color color, Integer markerSize) {
+	Pair<Double, Double> p = calculateRelativePosition(toDraw.getNode());
+	Double x = p.getKey();
+	Double y = p.getValue();
+	if(toDraw.getSpecialNodeType() == SpecialNodeType.PICKUP) {
+	    this.getChildren().remove(this.tempPickup);
+	    this.tempPickup = new Circle(x, y, markerSize / 2);
+	    this.tempPickup.setFill(color);
+	    this.tempPickup.setStroke(Color.BLACK);
+	    this.tempPickup.setStrokeWidth(1);
+	    this.getChildren().add(tempPickup);
+	} else if(toDraw.getSpecialNodeType() == SpecialNodeType.DROPOFF){
+	    this.getChildren().remove(this.tempDropoff);
+	    this.tempDropoff = new Rectangle(x - markerSize / 2, y - markerSize / 2, markerSize, markerSize);
+	    this.tempDropoff.setFill(color);
+	    this.tempDropoff.setStroke(Color.BLACK);
+	    this.tempDropoff.setStrokeWidth(1);
+	    this.getChildren().add(tempDropoff);
+	} else {
+	    this.getChildren().remove(this.tempWarehouse);
+	    Polyline marker = new Polyline();
+	    marker.getPoints().addAll(x, y - 2 * markerSize / 3, x - markerSize / 2, y + markerSize / 3,
+		    x + markerSize / 2, y + markerSize / 3, x, y - 2 * markerSize / 3);
+	    this.tempWarehouse = marker;
+	    this.tempWarehouse.setFill(color);
+	    this.tempWarehouse.setStroke(Color.BLACK);
+	    this.tempWarehouse.setStrokeWidth(1);
+	    this.getChildren().add(tempWarehouse);
+	}
+    }
+    
+    public void clearTempMarker() {
+	this.getChildren().removeAll(this.tempPickup, this.tempDropoff, this.tempWarehouse);
     }
 
     /**
@@ -261,12 +302,12 @@ public class MapView extends Pane {
 	    shapes.getValue().setStroke(Color.BLACK);
 	    shapes.getValue().setStrokeWidth(1);
 	}
-	
+
 	Shape startMarker = markers.get(deliveryIndex).getKey();
 	startMarker.setStroke(color);
 	startMarker.setStrokeType(StrokeType.OUTSIDE);
 	startMarker.setStrokeWidth(5);
-	
+
 	Shape endMarker= markers.get(deliveryIndex).getValue();
 	endMarker.setStroke(color);
 	endMarker.setStrokeType(StrokeType.OUTSIDE);
@@ -301,14 +342,14 @@ public class MapView extends Pane {
 	marker.setLayoutY(newY - marker.getLayoutBounds().getCenterY());
 	return nearestNodeBounds.getKey();
     }
-    
+
     /**
      * Gets the position of the nearest node from coordinates (x, y)
      * @param x		x-value
      * @param y		y-value
      * @return		the bounds of the nearest node as value and its ID as key
      */
-    private Pair<String, Bounds> getNearestNodeBounds(Double x, Double y) {
+    public Pair<String, Bounds> getNearestNodeBounds(Double x, Double y) {
 	String nearestId = null;
 	Double minDistance = Double.POSITIVE_INFINITY;
 

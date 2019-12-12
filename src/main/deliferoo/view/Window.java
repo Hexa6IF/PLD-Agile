@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 import javafx.collections.FXCollections;
+import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -17,6 +18,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -67,6 +69,11 @@ public class Window {
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.deliveryColorMap = new HashMap<>();
 
+	this.mapView.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+	    Pair<String, Bounds> nearestNode = this.mapView.getNearestNodeBounds(e.getSceneX(), e.getSceneY());
+	    this.controller.placeNode(nearestNode.getKey(), nearestNode.getValue());
+	});
+
 	this.addTableRowListeners();
 	this.addButtonListeners();
     }
@@ -87,26 +94,42 @@ public class Window {
     public void updateMap(FullMap map) {
 	this.mapView.drawMap(map, Color.BLACK, 2);
     }
-    
+
     /**
      * Clear window content and show
      */
     public void clearMap() {
 	this.mapView.getChildren().clear();
     }
-    
+
     /**
      * Clear delivery markers from window content and show
      */
     public void clearDeliveriesMarkers() {
 	this.mapView.clearMarkers();
     }
-    
+
     /**
      * Clear delivery round from window content and show
      */
     public void clearDeliveriesRound() {
 	this.mapView.clearMarkers();
+    }
+    
+    public void clearTempMarkers() {
+	this.mapView.clearTempMarker();
+    }
+
+    public void drawTempMarker(SpecialNode toDraw, Integer deliveryIndex) {
+	Color color;
+	if(deliveryColorMap.containsKey(deliveryIndex)) {
+	    color = deliveryColorMap.get(deliveryIndex);
+	} else {
+	    color = generateRandomColor();
+	    System.out.println(color);
+	    deliveryColorMap.put(deliveryIndex, color);
+	}
+	this.mapView.drawTempMarker(toDraw, color, 20);
     }
 
     /**
@@ -122,7 +145,7 @@ public class Window {
 	    if(delivery == null) {
 		continue;
 	    }
-	    
+
 	    Color color;
 	    if(deliveryColorMap.containsKey(delivery.getDeliveryIndex())) {
 		color = this.deliveryColorMap.get(delivery.getDeliveryIndex());
@@ -144,16 +167,18 @@ public class Window {
      */
     public void updateRound(List<SpecialNode> round, Map<String, Map<String, BestPath>> bestPaths) {
 	this.mapView.clearRoundLines();
-	for(int i = 0; i < round.size() - 1; i++) {
-	    String startId = round.get(i).getNode().getNodeId();
-	    String endId = round.get(i + 1).getNode().getNodeId();
-	    BestPath bestPath = bestPaths.get(startId).get(endId);
-	    this.mapView.drawBestPath(bestPath, Color.HOTPINK, 8);
+	if(round.size() > 2) {
+	    for(int i = 0; i < round.size() - 1; i++) {
+		String startId = round.get(i).getNode().getNodeId();
+		String endId = round.get(i + 1).getNode().getNodeId();
+		BestPath bestPath = bestPaths.get(startId).get(endId);
+		this.mapView.drawBestPath(bestPath, Color.HOTPINK, 8);
+	    }
 	}
 	this.tableBoxView.updateTableBox(round, this.deliveryColorMap);
 	this.overviewPanel.updateOverview(round);
     }
-    
+
     /**
      * Confirm the round calculated and hide difference indicators.
      *
@@ -277,6 +302,15 @@ public class Window {
 	    this.addMarkerDragListeners(deliveryIndex, SpecialNodeType.PICKUP, deliveryMarkers.getKey());
 	    this.addMarkerDragListeners(deliveryIndex, SpecialNodeType.DROPOFF, deliveryMarkers.getValue());
 	}
+	this.deliveryDetailView.enableDurationEdit();
+    }
+    
+    public void disableDeliveryModification() {
+	this.deliveryDetailView.disableDurationEdit();
+    }
+    
+    public Pair<Double, Double> getDurations() {
+	return this.deliveryDetailView.getDurations();
     }
 
     public void setRoundOrdering(boolean enable) {

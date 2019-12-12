@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,10 @@ public class Cyclist {
     private List<Delivery> deliveries;
     private List<SpecialNode> round;
 
-    public Cyclist() {}
+    public Cyclist() {
+	this.deliveries = new ArrayList<>();
+	this.round = new ArrayList<>();
+    }
 
     public Integer getStartTime() {
 	return this.startTime;

@@ -31,6 +31,7 @@ public class DeliverySelectedState implements State {
 	} else {
 	    window.disableButtons(false, false, false, true, false, !controller.canUndo(), !controller.canRedo(), true);
 	}
+	window.updateMessage("Delivery " + controller.getSelectedDelivery().getDeliveryIndex() + " selected.");
 	window.setRoundOrdering(true);
     }
     
@@ -81,6 +82,11 @@ public class DeliverySelectedState implements State {
 	CalculationHelper.updatePrecedences(tr);
 	controller.doCommand(new CmdModifyRound(controller.getCyclist().getRound(), tr));
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
+    }
+    
+    @Override
+    public void addButtonClick(Window window, Controller controller) {
+	controller.setCurrentState(controller.ADD_PICKUP_NODE_STATE);
     }
     
     @Override

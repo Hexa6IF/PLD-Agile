@@ -22,7 +22,7 @@ public class RoundCalculatedState implements State {
 
     @Override
     public void init(Window window, Controller controller) {
-	window.disableButtons(true, false, true, true, true, true, true, true);
+	window.disableButtons(true, false, true, true, true, !controller.canUndo(), !controller.canRedo(), true);
 	window.updateMessage("Round succesfully calculated");
     }
     

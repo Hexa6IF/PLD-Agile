@@ -23,13 +23,13 @@ public class MapLoadedState implements State {
 
     @Override
     public void init(Window window, Controller controller) {
-	window.disableButtons(true, false, true, true, true, true, true, true);
+	window.disableButtons(true, false, true, true, true, !controller.canUndo(), !controller.canRedo(), true);
 	window.updateMessage("Map succesfully loaded.");
     }
     
     @Override
     public void addButtonClick(Window window, Controller controller) {
-	controller.setCurrentState(controller.ADD_DELIVERY_STATE);
+	controller.setCurrentState(controller.ADD_WAREHOUSE_NODE_STATE);
     }
     
     @Override

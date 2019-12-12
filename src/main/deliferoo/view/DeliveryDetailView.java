@@ -2,7 +2,6 @@ package view;
 
 import java.util.Map;
 
-import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ColorPicker;
@@ -14,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 import model.Delivery;
 import model.SpecialNode;
 
@@ -63,6 +63,23 @@ public class DeliveryDetailView extends GridPane{
 
 	initializeComponents();
 	placeGridComponents();
+    }
+    
+    public void enableDurationEdit() {
+	this.pickupDurationField.setEditable(true);
+	this.dropoffDurationField.setEditable(true);
+    }
+    
+    public void disableDurationEdit() {
+	this.pickupDurationField.setEditable(false);
+	this.dropoffDurationField.setEditable(false);
+    }
+    
+    public Pair<Double, Double> getDurations() {
+	Double pickup = Double.parseDouble(this.pickupDurationField.getText());
+	Double dropoff = Double.parseDouble(this.dropoffDurationField.getText());
+	
+	return new Pair<Double, Double>(pickup, dropoff);
     }
 
     /**

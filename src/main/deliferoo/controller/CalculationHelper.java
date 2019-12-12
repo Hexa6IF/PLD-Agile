@@ -29,7 +29,7 @@ public class CalculationHelper {
     public static void updatePassageTimesSpecialNodes(List<SpecialNode> specialNodes, Cyclist cyclist) {
 	Integer listLength = specialNodes.size();
 	Map<String, Map<String, BestPath>> bestPaths = cyclist.getBestPaths();
-	if (listLength >= 1) {
+	if (listLength > 2) {
 	    for (int i = 1; i < listLength; ++i) {
 		SpecialNode specialNodePrevious = specialNodes.get(i - 1);
 		String specialNodePreviousIndex = specialNodePrevious.getNode().getNodeId();
