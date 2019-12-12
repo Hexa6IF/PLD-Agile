@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +18,10 @@ public class Cyclist {
     private Number speed;
 
     public Cyclist(Number speed) {
-	this.speed = speed;
+    this.speed = speed;
+    this.deliveries = new ArrayList<>();
+	this.round = new ArrayList<>();
     }
-
 
     /**
      * @return the speed

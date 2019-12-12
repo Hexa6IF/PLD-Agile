@@ -10,6 +10,10 @@ public class Delivery {
     private SpecialNode deliveryNode;
     private SpecialNode pickupNode;
     private Integer deliveryIndex;
+    
+    public Delivery() {
+	
+    }
 
     /**
      * @param deliveryNode

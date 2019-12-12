@@ -95,7 +95,7 @@ public abstract class TSP {
     private List<SpecialNode> initUndiscovered() {
 	List<SpecialNode> undiscovered = new ArrayList<SpecialNode>();
 	for (Delivery delivery : this.deliveries) {
-	    if (delivery.getPickupNode().getSpecialNodeType() != SpecialNodeType.START) {
+	    if (delivery != null && delivery.getPickupNode().getSpecialNodeType() != SpecialNodeType.START) {
 		undiscovered.add(delivery.getPickupNode());
 	    }
 	}
