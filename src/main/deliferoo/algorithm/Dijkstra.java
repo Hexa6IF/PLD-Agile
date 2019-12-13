@@ -31,7 +31,6 @@ public class Dijkstra {
 	    }
 	    totalShortPaths.put(startNode.getNode().getNodeId(), calculateShortestPaths(startNode, specialNodes, map));
 	}
-	reverseMissingBestPaths(totalShortPaths, specialNodes);
 	return totalShortPaths;
     }
 
@@ -156,22 +155,6 @@ public class Dijkstra {
 	}
 
 	return neighbors;
-    }
-
-    private static void reverseMissingBestPaths(Map<String, Map<String, BestPath>> bestPathMap,
-	    Set<SpecialNode> specialNodes) {
-	for (SpecialNode specialNode1 : specialNodes) {
-	    String specialNode1Id = specialNode1.getNode().getNodeId();
-	    for (SpecialNode specialNode2 : specialNodes) {
-		String specialNode2Id = specialNode2.getNode().getNodeId();
-		if (bestPathMap.containsKey(specialNode1Id)) {
-		    if((!bestPathMap.get(specialNode1Id).containsKey(specialNode2Id)) && bestPathMap.get(specialNode2Id).containsKey(specialNode1Id)) {
-			bestPathMap.get(specialNode1Id).put(specialNode2Id, bestPathMap.get(specialNode2Id).get(specialNode1Id));
-			System.out.println("Reversing");
-		    }
-		}
-	    }
-	}
     }
 
 }

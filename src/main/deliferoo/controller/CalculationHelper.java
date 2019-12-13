@@ -37,9 +37,6 @@ public class CalculationHelper {
 		String specialNodePreviousIndex = specialNodePrevious.getNode().getNodeId();
 		SpecialNode specialNodeCurrent = specialNodes.get(i);
 		String specialNodeCurrentIndex = specialNodeCurrent.getNode().getNodeId();
-		if (bestPaths.get(specialNodePreviousIndex).get(specialNodeCurrentIndex) == null) {
-//		    bestPaths.get(specialNodePreviousIndex).put(bestPaths.get(specialNodeCurrentIndex).get(specialNodePreviousIndex));
-		}
 		Double timeSpent = bestPaths.get(specialNodePreviousIndex).get(specialNodeCurrentIndex).getDistance()
 			/ cyclist.getSpeed().doubleValue();
 		timeSpent += specialNodeCurrent.getDuration();
@@ -70,26 +67,6 @@ public class CalculationHelper {
 		    if (specialNodeType == SpecialNodeType.PICKUP && consequentDelivery == currentDelivery) {
 			specialNodes.remove(j); // naive remove and insert
 			specialNodes.add(i, consequentNode);
-		    }
-		}
-	    }
-	}
-    }
-
-    private static void reverseMissingBestPaths(Map<String, Map<String, BestPath>> bestPathMap,
-	    List<SpecialNode> specialNodes) {
-	for (SpecialNode specialNode1 : specialNodes) {
-	    String specialNode1Id = specialNode1.getNode().getNodeId();
-	    for (SpecialNode specialNode2 : specialNodes) {
-		String specialNode2Id = specialNode2.getNode().getNodeId();
-		if (bestPathMap.containsKey(specialNode1Id)) {
-		    if (bestPathMap.get(specialNode1Id) == null) {
-			bestPathMap.put(specialNode1Id, new HashMap<String, BestPath>());
-		    } else {
-			if ((!bestPathMap.get(specialNode1Id).containsKey(specialNode2Id)) && bestPathMap.get(specialNode2Id).containsKey(specialNode1Id)) {
-			    bestPathMap.get(specialNode1Id).put(specialNode2Id,bestPathMap.get(specialNode2Id).get(specialNode1Id));
-			    System.out.println("Reversing");
-			}
 		    }
 		}
 	    }
