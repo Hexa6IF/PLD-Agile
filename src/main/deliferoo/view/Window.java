@@ -383,8 +383,8 @@ public class Window {
 	});
     }
 //TO DELETE
-	public void drawSimulation() {
-		this.mapView.drawSimulation("2", Color.ALICEBLUE,8);
+	public void drawSimulation(String selectedNode) {
+		this.mapView.drawSimulation(selectedNode, Color.DARKBLUE,8);
 		
 	}
 }

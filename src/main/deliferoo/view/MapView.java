@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javafx.geometry.Bounds;
@@ -267,22 +269,38 @@ public class MapView extends Pane {
 	 * 
 	 */
 	public void drawSimulation(String selectedNode, Color color, Integer strokeWidth) {
-		for (Pair<String, String> roadsKey : roundLine.keySet()) {
-			if (roadsKey.getKey() == selectedNode) {
-				for (Line road : roundLine.get(roadsKey)) {
-					this.getChildren().remove(road);
-					road.setStroke(Color.GRAY);
-					this.getChildren().add(road);
-				}
+		Color currentcolor = color;
+		Map<String, Pair<String, Set<Line>>> predecessorMap = new HashMap<String, Pair<String, Set<Line>>>();
+
+		String previousNode = "0";
+		String nextNode;
+		for (Pair<String, String> x : roundLine.keySet())
+			System.out.println(x.getKey() + " " + x.getValue());
+		for (Entry<Pair<String, String>, Set<Line>> roads : roundLine.entrySet()) {
+			if (roads.getKey().getKey() == "0") {
+				System.out.println("zero");
+				previousNode = roads.getKey().getKey();
 			}
-			else {
-				for (Line road : roundLine.get(roadsKey)) {
-					this.getChildren().remove(road);
-					road.setStroke(color);
-					this.getChildren().add(road);
-				}
-			}
+			predecessorMap.put(roads.getKey().getKey(),
+					new Pair<String, Set<Line>>(roads.getKey().getValue(), roads.getValue()));
 		}
+
+		do {
+			nextNode = predecessorMap.get(previousNode).getKey();
+			if (previousNode == selectedNode) {
+				currentcolor = Color.GRAY;
+			}
+			System.out.println(predecessorMap.get(previousNode).getValue());
+			if (predecessorMap.containsKey(previousNode)) {
+				for (Line road : predecessorMap.get(previousNode).getValue()) {
+					this.getChildren().removeAll(road);
+					road.setStroke(currentcolor);
+					// road.toBack();
+					this.getChildren().add(road);
+				}
+			}
+			previousNode = nextNode;
+		} while (previousNode != "0");
 	}
 
 	/**

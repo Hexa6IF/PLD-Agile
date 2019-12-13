@@ -36,6 +36,7 @@ public class DeliverySelectedState implements State {
 	}
 	window.setRoundOrdering(true);
 	window.updateMessage(controller.canUndo() + "");
+	window.drawSimulation(controller.getSelectedDelivery().getDeliveryNode().getNode().getNodeId());
     }
     
     @Override

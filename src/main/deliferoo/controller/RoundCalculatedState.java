@@ -57,7 +57,7 @@ public class RoundCalculatedState implements State {
     //TO DELETE
     @Override
     public void calculateButtonClick(Window window, Controller controller) {
-    	window.drawSimulation();
+    	window.drawSimulation("2");
     	State.super.calculateButtonClick(window, controller);
     }
 }
