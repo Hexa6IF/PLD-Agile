@@ -184,6 +184,7 @@ public class MapView extends Pane {
 	for(Set<Line> lines : this.roundLines) {
 	    this.getChildren().removeAll(lines);
 	}
+	this.roundLines = new ArrayList<>();
     }
     
     public void grayBestPaths(Integer index) {
