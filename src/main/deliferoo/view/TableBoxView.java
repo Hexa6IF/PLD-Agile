@@ -62,7 +62,6 @@ public class TableBoxView extends TableView<SpecialNodeTextView> {
     public void updateTableBox(List<SpecialNode> specialNodes, Map<Integer, Color> deliveryColorMap) {
 	ObservableList<SpecialNodeTextView> specialNodeTextViews = this.getItems();
 	specialNodeTextViews.clear();
-
 	for (SpecialNode node : specialNodes) {
 	    Integer deliveryIndex = node.getDelivery().getDeliveryIndex();
 	    Color color = deliveryColorMap.get(deliveryIndex);
