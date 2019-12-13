@@ -77,6 +77,7 @@ public class Dijkstra {
 		    if(shortestPaths.get(neighborId) > currentNode.getValue() + distance) { // Check if discovered distance is shorter than current shortest distance
 			shortestPaths.put(neighborId, currentNode.getValue() + distance);
 			predecessor.put(neighborId, currentNode.getKey());
+			//predecessor.put(currentNode.getKey(), neighborId);
 			unsettledNodes.add(new Pair<String, Double>(neighborId, currentNode.getValue() + distance)); 
 		    }
 		    
@@ -107,6 +108,7 @@ public class Dijkstra {
 		    break;
 		}
 		Edge partialPath = neighborGraph.get(precedingId).get(nodeId);
+		//Edge partialPath = neighborGraph.get(nodeId).get(precedingId);
 		edges.addFirst(partialPath);
 		nodeId = precedingId;
 	    }
@@ -144,7 +146,7 @@ public class Dijkstra {
 	    String endId = edge.getEnd().getNodeId();
 	    
 	    neighbors.get(startId).put(endId, edge);
-	    neighbors.get(endId).put(startId, edge);	    
+	    neighbors.get(endId).put(startId, edge);    
 	}
 	
 	return neighbors;

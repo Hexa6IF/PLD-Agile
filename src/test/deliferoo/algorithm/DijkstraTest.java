@@ -28,8 +28,10 @@ class DijkstraTest {
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		map = XMLParser.getInstance().parseMap(new File("src/test/resources/FullMap.xml"));
-		deliveries= XMLParser.getInstance().parseDeliveries(new File("src/test/resources/Deliveries.xml"),map);
+		//map = XMLParser.getInstance().parseMap(new File("src/test/resources/FullMap.xml"));
+	    	map = XMLParser.getInstance().parseMap(new File("src/test/resources/petitPlan.xml"));
+		//deliveries= XMLParser.getInstance().parseDeliveries(new File("src/test/resources/Deliveries.xml"),map);
+	    	deliveries= XMLParser.getInstance().parseDeliveries(new File("src/test/resources/demandePetit2.xml"),map);
 
 		result = new HashMap<String,Map<String,Double>>();
 		//bestPaths from 2

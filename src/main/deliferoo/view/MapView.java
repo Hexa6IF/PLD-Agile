@@ -183,16 +183,25 @@ public class MapView extends Pane {
 	Edge edgeArrow = edges.get(edges.size()/2);
 	Pair<Double, Double> start = this.calculateRelativePosition(edgeArrow.getStart());
 	Pair<Double, Double> end = this.calculateRelativePosition(edgeArrow.getEnd());
-	this.drawArrows(start.getKey(), start.getValue(), end.getKey(), end.getValue());
+	Pair<Double, Double> bpStart = this.calculateRelativePosition(bestPath.getStart().getNode());
+	Pair<Double, Double> bpEnd = this.calculateRelativePosition(bestPath.getEnd().getNode());
+	this.drawArrows(start.getKey(), start.getValue(), end.getKey(), end.getValue(),
+		bpStart.getKey(), bpStart.getValue(), bpEnd.getKey(), bpEnd.getValue());
     }
     
-    private void drawArrows(Double start_x, Double start_y ,Double end_x, Double end_y) {
+    private void drawArrows(Double start_x, Double start_y ,Double end_x, Double end_y,
+	    Double bp_start_x, Double bp_start_y, Double bp_end_x, Double bp_end_y) {
 		Color c = Color.web("#4a80f5");
 		double ARROW_SIZE=20;
 		Line righthead;
 		Line lefthead;
 	double angle = Math.atan2((end_y - start_y), (end_x - start_x)) - Math.PI / 2.0;
-        double sin = Math.sin(angle);
+	double angleBp = Math.atan2((bp_end_y - bp_start_y), (bp_end_x - bp_start_x)) - Math.PI / 2.0;
+        
+        if (angle*angleBp <0) {
+            angle += Math.PI;
+        }
+	double sin = Math.sin(angle);
         double cos = Math.cos(angle);
         
         double right_x = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROW_SIZE + end_x;
@@ -202,9 +211,10 @@ public class MapView extends Pane {
         double left_y = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROW_SIZE + end_y;
         
         righthead=new Line(right_x,right_y,end_x,end_y);
+        lefthead=new Line(left_x,left_y,end_x,end_y);
 	  righthead.setStroke(c);
 	  righthead.setStrokeWidth(3);
-	  lefthead=new Line(left_x,left_y,end_x,end_y);
+	  
 	  lefthead.setStroke(c);
 	  lefthead.setStrokeWidth(3);
 	  this.arrows.add(righthead);
