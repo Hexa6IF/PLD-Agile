@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<reseau>
+<noeud id="1" latitude="0" longitude="0"/>
+<noeud id="2" latitude="33" longitude="0"/>
+<noeud id="3" latitude="33" longitude="33"/>
+<noeud id="4" latitude="0" longitude="33"/>
+<noeud id="5" latitude="0" longitude="5.7"/>
+<noeud id="5,5" latitude="3" longitude="6.9"/>
+<noeud id="6" latitude="4" longitude="6.5"/>
+<noeud id="7" latitude="5" longitude="5.5"/>
+<noeud id="8" latitude="6" longitude="5"/>
+<noeud id="9" latitude="7" longitude="4.5"/>
+<noeud id="10" latitude="8" longitude="4.5"/>
+<noeud id="11" latitude="11" longitude="5"/>
+<noeud id="12" latitude="12" longitude="5.3"/>
+<noeud id="13" latitude="14" longitude="5.7"/>
+<noeud id="14" latitude="15" longitude="5.8"/>
+<noeud id="15" latitude="16" longitude="6"/>
+<noeud id="16" latitude="17.7" longitude="7"/>
+<noeud id="17" latitude="19" longitude="8"/>
+<noeud id="18" latitude="20" longitude="5"/>
+<noeud id="19" latitude="22" longitude="4"/>
+<noeud id="20" latitude="24" longitude="3"/>
+<noeud id="21" latitude="26" longitude="2"/>
+<noeud id="22" latitude="28" longitude="1.6"/>
+<noeud id="23" latitude="30" longitude="1.2"/>
+<noeud id="24" latitude="31.7" longitude="1"/>
+<noeud id="25" latitude="29.6" longitude="4"/>
+<noeud id="26" latitude="28.2" longitude="5.5"/>
+<noeud id="27" latitude="26" longitude="8"/>
+<noeud id="28" latitude="23.4" longitude="10"/>
+<noeud id="29" latitude="21.6" longitude="11.5"/>
+<noeud id="30" latitude="21.4" longitude="12.4"/>
+<noeud id="31" latitude="21.6" longitude="15"/>
+<noeud id="32" latitude="21.4" longitude="17"/>
+<noeud id="33" latitude="21.1" longitude="19"/>
+<noeud id="34" latitude="22" longitude="21"/>
+<noeud id="35" latitude="24" longitude="25"/>
+<noeud id="36" latitude="25" longitude="27"/>
+<noeud id="37" latitude="26.2" longitude="30"/>
+<noeud id="38" latitude="27" longitude="32"/>
+<noeud id="39" latitude="27.4" longitude="33"/>
+<noeud id="40" latitude="24.3" longitude="33"/>
+<noeud id="41" latitude="23.3" longitude="32.2"/>
+<noeud id="42" latitude="22" longitude="31"/>
+<noeud id="43" latitude="21" longitude="29.8"/>
+<noeud id="44" latitude="20" longitude="28.5"/>
+<noeud id="45" latitude="18.8" longitude="27"/>
+<noeud id="46" latitude="17" longitude="25"/>
+<noeud id="47" latitude="15" longitude="26"/>
+<noeud id="48" latitude="13" longitude="26.7"/>
+<noeud id="49" latitude="11" longitude="26.9"/>
+<noeud id="50" latitude="10" longitude="26.8"/>
+<noeud id="51" latitude="8" longitude="27.2"/>
+<noeud id="52" latitude="6" longitude="28"/>
+<noeud id="53" latitude="4" longitude="28.4"/>
+<noeud id="54" latitude="2" longitude="28.8"/>
+<noeud id="55" latitude="0" longitude="29"/>
+<noeud id="57" latitude="11.4" longitude="5.7"/>
+<noeud id="58" latitude="11.6" longitude="6.6"/>
+<noeud id="59" latitude="11" longitude="7.9"/>
+<noeud id="60" latitude="9.7" longitude="8.6"/>
+<noeud id="61" latitude="8.1" longitude="8.1"/>
+<noeud id="62" latitude="7.5" longitude="7"/>
+<noeud id="63" latitude="7.6" longitude="5.8"/>
+<noeud id="64" latitude="8.1" longitude="4.9"/>
+<noeud id="65" latitude="8.8" longitude="4.6"/>
+<noeud id="66" latitude="11.6" longitude="20.4"/>
+<noeud id="67" latitude="11" longitude="21.6"/>
+<noeud id="68" latitude="10.1" longitude="22.1"/>
+<noeud id="69" latitude="9" longitude="22.3"/>
+<noeud id="70" latitude="8" longitude="22"/>
+<noeud id="71" latitude="7.6" longitude="21"/>
+<noeud id="72" latitude="7.4" longitude="20"/>
+<noeud id="73" latitude="7.6" longitude="19"/>
+<noeud id="74" latitude="9" longitude="18.3"/>
+<noeud id="75" latitude="10" longitude="18.4"/>
+<noeud id="76" latitude="11" longitude="19"/>
+<noeud id="77" latitude="10.6" longitude="12"/>
+<noeud id="78" latitude="10.5" longitude="13.5"/>
+<noeud id="79" latitude="10.2" longitude="15"/>
+<noeud id="80" latitude="9.8" longitude="15.3"/>
+<noeud id="81" latitude="8.9" longitude="15.4"/>
+<noeud id="82" latitude="7.8" longitude="15"/>
+<noeud id="83" latitude="7.5" longitude="14"/>
+<noeud id="84" latitude="7.6" longitude="12.8"/>
+<noeud id="85" latitude="8.3" longitude="11.8"/>
+<noeud id="86" latitude="9" longitude="11.5"/>
+<noeud id="87" latitude="10" longitude="11.5"/>
+<noeud id="88" latitude="9" longitude="11.8"/>
+<noeud id="89" latitude="9.8" longitude="12.2"/>
+<noeud id="90" latitude="12.6" longitude="12.2"/>
+<noeud id="91" latitude="12.9" longitude="13"/>
+<noeud id="92" latitude="12.6" longitude="14"/>
+<noeud id="93" latitude="12.1" longitude="13.4"/>
+<noeud id="94" latitude="12.1" longitude="12.9"/>
+<noeud id="95" latitude="15.6" longitude="9.8"/>
+<noeud id="96" latitude="15.7" longitude="10.3"/>
+<noeud id="97" latitude="15.1" longitude="11"/>
+<noeud id="98" latitude="14.4" longitude="11"/>
+<noeud id="99" latitude="13.9" longitude="10.5"/>
+<noeud id="100" latitude="13.8" longitude="10"/>
+<noeud id="101" latitude="14" longitude="9.5"/>
+<noeud id="102" latitude="14.6" longitude="9.1"/>
+<noeud id="103" latitude="15.3" longitude="9.3"/>
+<noeud id="104" latitude="15" longitude="9.5"/>
+<noeud id="105" latitude="14.9" longitude="10.1"/>
+<noeud id="106" latitude="15.3" longitude="10.3"/>
+<noeud id="107" latitude="15.6" longitude="17.8"/>
+<noeud id="108" latitude="15.7" longitude="18.3"/>
+<noeud id="109" latitude="15.1" longitude="19"/>
+<noeud id="110" latitude="14.4" longitude="19"/>
+<noeud id="111" latitude="13.9" longitude="18.5"/>
+<noeud id="112" latitude="13.8" longitude="18"/>
+<noeud id="113" latitude="14" longitude="17.5"/>
+<noeud id="114" latitude="14.6" longitude="17.1"/>
+<noeud id="115" latitude="15.3" longitude="17.3"/>
+<noeud id="116" latitude="15" longitude="17.5"/>
+<noeud id="117" latitude="14.9" longitude="18.1"/>
+<noeud id="118" latitude="15.3" longitude="18.3"/>
+<noeud id="119" latitude="24" longitude="3.4"/>
+<noeud id="120" latitude="26" longitude="3.4"/>
+<noeud id="121" latitude="28.7" longitude="4"/>
+<noeud id="122" latitude="25.5" longitude="33"/>
+<troncon destination="1" longueur="69.979805" nomRue="Rue Danton" origine="2"/>
+<troncon destination="2" longueur="69.979805" nomRue="Rue Danton" origine="3"/>
+<troncon destination="3" longueur="69.979805" nomRue="Rue Danton" origine="4"/>
+<troncon destination="1" longueur="69.979805" nomRue="Rue Danton" origine="4"/>
+<troncon destination="1" longueur="69.979805" nomRue="Rue Danton" origine="5"/>
+<troncon destination="5" longueur="69.979805" nomRue="Rue Danton" origine="5,5"/>
+<troncon destination="5,5" longueur="69.979805" nomRue="Rue Danton" origine="6"/>
+<troncon destination="6" longueur="69.979805" nomRue="Rue Danton" origine="7"/>
+<troncon destination="7" longueur="69.979805" nomRue="Rue Danton" origine="8"/>
+<troncon destination="8" longueur="69.979805" nomRue="Rue Danton" origine="9"/>
+<troncon destination="9" longueur="69.979805" nomRue="Rue Danton" origine="10"/>
+<troncon destination="10" longueur="69.979805" nomRue="Rue Danton" origine="11"/>
+<troncon destination="11" longueur="69.979805" nomRue="Rue Danton" origine="12"/>
+<troncon destination="12" longueur="69.979805" nomRue="Rue Danton" origine="13"/>
+<troncon destination="13" longueur="69.979805" nomRue="Rue Danton" origine="14"/>
+<troncon destination="14" longueur="69.979805" nomRue="Rue Danton" origine="15"/>
+<troncon destination="15" longueur="69.979805" nomRue="Rue Danton" origine="16"/>
+<troncon destination="16" longueur="69.979805" nomRue="Rue Danton" origine="17"/>
+<troncon destination="16" longueur="69.979805" nomRue="Rue Danton" origine="18"/>
+<troncon destination="18" longueur="69.979805" nomRue="Rue Danton" origine="19"/>
+<troncon destination="19" longueur="69.979805" nomRue="Rue Danton" origine="20"/>
+<troncon destination="20" longueur="69.979805" nomRue="Rue Danton" origine="21"/>
+<troncon destination="21" longueur="69.979805" nomRue="Rue Danton" origine="22"/>
+<troncon destination="22" longueur="69.979805" nomRue="Rue Danton" origine="23"/>
+<troncon destination="23" longueur="69.979805" nomRue="Rue Danton" origine="24"/>
+<troncon destination="24" longueur="69.979805" nomRue="Rue Danton" origine="25"/>
+<troncon destination="25" longueur="69.979805" nomRue="Rue Danton" origine="26"/>
+<troncon destination="26" longueur="69.979805" nomRue="Rue Danton" origine="27"/>
+<troncon destination="27" longueur="69.979805" nomRue="Rue Danton" origine="28"/>
+<troncon destination="28" longueur="69.979805" nomRue="Rue Danton" origine="29"/>
+<troncon destination="29" longueur="69.979805" nomRue="Rue Danton" origine="30"/>
+<troncon destination="30" longueur="69.979805" nomRue="Rue Danton" origine="31"/>
+<troncon destination="31" longueur="69.979805" nomRue="Rue Danton" origine="32"/>
+<troncon destination="32" longueur="69.979805" nomRue="Rue Danton" origine="33"/>
+<troncon destination="33" longueur="69.979805" nomRue="Rue Danton" origine="34"/>
+<troncon destination="34" longueur="69.979805" nomRue="Rue Danton" origine="35"/>
+<troncon destination="35" longueur="69.979805" nomRue="Rue Danton" origine="36"/>
+<troncon destination="36" longueur="69.979805" nomRue="Rue Danton" origine="37"/>
+<troncon destination="37" longueur="69.979805" nomRue="Rue Danton" origine="38"/>
+<troncon destination="38" longueur="69.979805" nomRue="Rue Danton" origine="39"/>
+<troncon destination="40" longueur="69.979805" nomRue="Rue Danton" origine="41"/>
+<troncon destination="41" longueur="69.979805" nomRue="Rue Danton" origine="42"/>
+<troncon destination="42" longueur="69.979805" nomRue="Rue Danton" origine="43"/>
+<troncon destination="43" longueur="69.979805" nomRue="Rue Danton" origine="44"/>
+<troncon destination="44" longueur="69.979805" nomRue="Rue Danton" origine="45"/>
+<troncon destination="45" longueur="69.979805" nomRue="Rue Danton" origine="46"/>
+<troncon destination="46" longueur="69.979805" nomRue="Rue Danton" origine="47"/>
+<troncon destination="47" longueur="69.979805" nomRue="Rue Danton" origine="48"/>
+<troncon destination="48" longueur="69.979805" nomRue="Rue Danton" origine="49"/>
+<troncon destination="49" longueur="69.979805" nomRue="Rue Danton" origine="50"/>
+<troncon destination="50" longueur="69.979805" nomRue="Rue Danton" origine="51"/>
+<troncon destination="51" longueur="69.979805" nomRue="Rue Danton" origine="52"/>
+<troncon destination="52" longueur="69.979805" nomRue="Rue Danton" origine="53"/>
+<troncon destination="53" longueur="69.979805" nomRue="Rue Danton" origine="54"/>
+<troncon destination="54" longueur="69.979805" nomRue="Rue Danton" origine="55"/>
+<troncon destination="11" longueur="69.979805" nomRue="Rue Danton" origine="57"/>
+<troncon destination="57" longueur="69.979805" nomRue="Rue Danton" origine="58"/>
+<troncon destination="58" longueur="69.979805" nomRue="Rue Danton" origine="59"/>
+<troncon destination="59" longueur="69.979805" nomRue="Rue Danton" origine="60"/>
+<troncon destination="60" longueur="69.979805" nomRue="Rue Danton" origine="61"/>
+<troncon destination="61" longueur="69.979805" nomRue="Rue Danton" origine="62"/>
+<troncon destination="62" longueur="69.979805" nomRue="Rue Danton" origine="63"/>
+<troncon destination="63" longueur="69.979805" nomRue="Rue Danton" origine="64"/>
+<troncon destination="64" longueur="69.979805" nomRue="Rue Danton" origine="65"/>
+<troncon destination="66" longueur="69.979805" nomRue="Rue Danton" origine="67"/>
+<troncon destination="67" longueur="69.979805" nomRue="Rue Danton" origine="68"/>
+<troncon destination="68" longueur="69.979805" nomRue="Rue Danton" origine="69"/>
+<troncon destination="69" longueur="69.979805" nomRue="Rue Danton" origine="70"/>
+<troncon destination="70" longueur="69.979805" nomRue="Rue Danton" origine="71"/>
+<troncon destination="71" longueur="69.979805" nomRue="Rue Danton" origine="72"/>
+<troncon destination="72" longueur="69.979805" nomRue="Rue Danton" origine="73"/>
+<troncon destination="73" longueur="69.979805" nomRue="Rue Danton" origine="74"/>
+<troncon destination="74" longueur="69.979805" nomRue="Rue Danton" origine="75"/>
+<troncon destination="75" longueur="69.979805" nomRue="Rue Danton" origine="76"/>
+<troncon destination="76" longueur="69.979805" nomRue="Rue Danton" origine="66"/>
+<troncon destination="77" longueur="69.979805" nomRue="Rue Danton" origine="78"/>
+<troncon destination="78" longueur="69.979805" nomRue="Rue Danton" origine="79"/>
+<troncon destination="79" longueur="69.979805" nomRue="Rue Danton" origine="80"/>
+<troncon destination="80" longueur="69.979805" nomRue="Rue Danton" origine="81"/>
+<troncon destination="81" longueur="69.979805" nomRue="Rue Danton" origine="82"/>
+<troncon destination="82" longueur="69.979805" nomRue="Rue Danton" origine="83"/>
+<troncon destination="83" longueur="69.979805" nomRue="Rue Danton" origine="84"/>
+<troncon destination="84" longueur="69.979805" nomRue="Rue Danton" origine="85"/>
+<troncon destination="85" longueur="69.979805" nomRue="Rue Danton" origine="86"/>
+<troncon destination="85" longueur="69.979805" nomRue="Rue Danton" origine="88"/>
+<troncon destination="86" longueur="69.979805" nomRue="Rue Danton" origine="87"/>
+<troncon destination="87" longueur="69.979805" nomRue="Rue Danton" origine="77"/>
+<troncon destination="88" longueur="69.979805" nomRue="Rue Danton" origine="89"/>
+<troncon destination="89" longueur="69.979805" nomRue="Rue Danton" origine="78"/>
+<troncon destination="90" longueur="69.979805" nomRue="Rue Danton" origine="91"/>
+<troncon destination="91" longueur="69.979805" nomRue="Rue Danton" origine="92"/>
+<troncon destination="92" longueur="69.979805" nomRue="Rue Danton" origine="93"/>
+<troncon destination="93" longueur="69.979805" nomRue="Rue Danton" origine="94"/>
+<troncon destination="94" longueur="69.979805" nomRue="Rue Danton" origine="90"/>
+<troncon destination="95" longueur="69.979805" nomRue="Rue Danton" origine="96"/>
+<troncon destination="96" longueur="69.979805" nomRue="Rue Danton" origine="97"/>
+<troncon destination="97" longueur="69.979805" nomRue="Rue Danton" origine="98"/>
+<troncon destination="98" longueur="69.979805" nomRue="Rue Danton" origine="99"/>
+<troncon destination="99" longueur="69.979805" nomRue="Rue Danton" origine="100"/>
+<troncon destination="100" longueur="69.979805" nomRue="Rue Danton" origine="101"/>
+<troncon destination="101" longueur="69.979805" nomRue="Rue Danton" origine="102"/>
+<troncon destination="102" longueur="69.979805" nomRue="Rue Danton" origine="103"/>
+<troncon destination="103" longueur="69.979805" nomRue="Rue Danton" origine="95"/>
+<troncon destination="104" longueur="69.979805" nomRue="Rue Danton" origine="105"/>
+<troncon destination="105" longueur="69.979805" nomRue="Rue Danton" origine="106"/>
+<troncon destination="106" longueur="69.979805" nomRue="Rue Danton" origine="95"/>
+<troncon destination="95" longueur="69.979805" nomRue="Rue Danton" origine="104"/>
+<troncon destination="107" longueur="69.979805" nomRue="Rue Danton" origine="108"/>
+<troncon destination="108" longueur="69.979805" nomRue="Rue Danton" origine="109"/>
+<troncon destination="109" longueur="69.979805" nomRue="Rue Danton" origine="110"/>
+<troncon destination="110" longueur="69.979805" nomRue="Rue Danton" origine="111"/>
+<troncon destination="111" longueur="69.979805" nomRue="Rue Danton" origine="112"/>
+<troncon destination="112" longueur="69.979805" nomRue="Rue Danton" origine="113"/>
+<troncon destination="113" longueur="69.979805" nomRue="Rue Danton" origine="114"/>
+<troncon destination="114" longueur="69.979805" nomRue="Rue Danton" origine="115"/>
+<troncon destination="115" longueur="69.979805" nomRue="Rue Danton" origine="107"/>
+<troncon destination="116" longueur="69.979805" nomRue="Rue Danton" origine="117"/>
+<troncon destination="117" longueur="69.979805" nomRue="Rue Danton" origine="118"/>
+<troncon destination="107" longueur="69.979805" nomRue="Rue Danton" origine="116"/>
+<troncon destination="95" longueur="69.979805" nomRue="Rue Danton" origine="96"/>
+<troncon destination="96" longueur="69.979805" nomRue="Rue Danton" origine="97"/>
+<troncon destination="97" longueur="69.979805" nomRue="Rue Danton" origine="98"/>
+<troncon destination="98" longueur="69.979805" nomRue="Rue Danton" origine="99"/>
+<troncon destination="99" longueur="69.979805" nomRue="Rue Danton" origine="100"/>
+<troncon destination="100" longueur="69.979805" nomRue="Rue Danton" origine="101"/>
+<troncon destination="101" longueur="69.979805" nomRue="Rue Danton" origine="102"/>
+<troncon destination="102" longueur="69.979805" nomRue="Rue Danton" origine="103"/>
+<troncon destination="103" longueur="69.979805" nomRue="Rue Danton" origine="95"/>
+<troncon destination="104" longueur="69.979805" nomRue="Rue Danton" origine="105"/>
+<troncon destination="105" longueur="69.979805" nomRue="Rue Danton" origine="106"/>
+<troncon destination="106" longueur="69.979805" nomRue="Rue Danton" origine="95"/>
+<troncon destination="118" longueur="69.979805" nomRue="Rue Danton" origine="107"/>
+<troncon destination="19" longueur="69.979805" nomRue="Rue Danton" origine="119"/>
+<troncon destination="119" longueur="69.979805" nomRue="Rue Danton" origine="120"/>
+<troncon destination="120" longueur="69.979805" nomRue="Rue Danton" origine="121"/>
+<troncon destination="121" longueur="69.979805" nomRue="Rue Danton" origine="26"/>
+<troncon destination="122" longueur="69.979805" nomRue="Rue Danton" origine="41"/>
+
+</reseau>
