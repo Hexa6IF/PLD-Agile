@@ -118,7 +118,7 @@ public class Window {
      * Clear delivery round from window content and show
      */
     public void clearDeliveriesRound() {
-	this.mapView.clearMarkers();
+	this.mapView.clearRoundLines();;
     }
 
     public void clearTempMarkers() {
