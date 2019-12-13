@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -218,6 +219,8 @@ public class Controller implements TSPCallback{
      */
     public void loadMap(File mapFile) {
 	this.currentState.loadMap(this.window, this, mapFile);
+	this.cyclist.setDeliveries(new ArrayList<Delivery>());
+	this.cyclist.setRound(new ArrayList<SpecialNode>());
     }
     
     /**
