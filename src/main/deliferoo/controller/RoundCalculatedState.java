@@ -6,6 +6,7 @@ import java.util.List;
 
 import model.Delivery;
 import model.FullMap;
+import model.SpecialNodeType;
 import view.Window;
 import xml.XMLParser;
 
@@ -27,7 +28,7 @@ public class RoundCalculatedState implements State {
     }
     
     @Override
-    public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
+    public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex, SpecialNodeType type) {
 	for(Delivery delivery : controller.getCyclist().getDeliveries()) {
 	    if(delivery != null && delivery.getDeliveryIndex() == deliveryIndex) {
 		window.updateSelectedDelivery(delivery);
@@ -36,6 +37,11 @@ public class RoundCalculatedState implements State {
 	    }
 	}
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
+    }
+    
+    @Override
+    public void addButtonClick(Window window, Controller controller) {
+	controller.setCurrentState(controller.ADD_PICKUP_NODE_STATE);
     }
     
     @Override

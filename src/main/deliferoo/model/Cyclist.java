@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +19,9 @@ public class Cyclist {
     private Number speed;
 
     public Cyclist(Number speed) {
-    this.speed = speed;
-    this.deliveries = new ArrayList<>();
+	this.speed = speed;
+	this.deliveries = new ArrayList<>();
+	this.bestPaths = new HashMap<>();
 	this.round = new ArrayList<>();
     }
 
@@ -27,77 +29,69 @@ public class Cyclist {
      * @return the speed
      */
     public Number getSpeed() {
-        return speed;
+	return speed;
     }
 
     /**
      * @param speed the speed to set
      */
     public void setSpeed(Number speed) {
-        this.speed = speed;
+	this.speed = speed;
     }
-
 
     /**
      * @return the startTime
      */
     public Integer getStartTime() {
-        return startTime;
+	return startTime;
     }
-
 
     /**
      * @param startTime the startTime to set
      */
     public void setStartTime(Integer startTime) {
-        this.startTime = startTime;
+	this.startTime = startTime;
     }
-
 
     /**
      * @return the bestPaths
      */
     public Map<String, Map<String, BestPath>> getBestPaths() {
-        return bestPaths;
+	return bestPaths;
     }
-
 
     /**
      * @param bestPaths the bestPaths to set
      */
     public void setBestPaths(Map<String, Map<String, BestPath>> bestPaths) {
-        this.bestPaths = bestPaths;
+	this.bestPaths = bestPaths;
     }
-
 
     /**
      * @return the deliveries
      */
     public List<Delivery> getDeliveries() {
-        return deliveries;
+	return deliveries;
     }
-
 
     /**
      * @param deliveries the deliveries to set
      */
     public void setDeliveries(List<Delivery> deliveries) {
-        this.deliveries = deliveries;
+	this.deliveries = deliveries;
     }
-
 
     /**
      * @return the round
      */
     public List<SpecialNode> getRound() {
-        return round;
+	return round;
     }
-
 
     /**
      * @param round the round to set
      */
     public void setRound(List<SpecialNode> round) {
-        this.round = round;
+	this.round = round;
     }
 }

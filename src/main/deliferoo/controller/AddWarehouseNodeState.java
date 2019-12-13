@@ -2,8 +2,10 @@ package controller;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 import javafx.geometry.Bounds;
+import model.BestPath;
 import model.Delivery;
 import model.SpecialNode;
 import model.SpecialNodeType;
@@ -43,10 +45,13 @@ public class AddWarehouseNodeState implements State{
     
     @Override
     public void confirmButtonClick(Window window, Controller controller) {
+	controller.getCyclist().getBestPaths().put(controller.getTempDelivery().getPickupNode().getNode().getNodeId(), new HashMap<String, BestPath>());
 	controller.setSelectedDelivery(controller.getTempDelivery());
-	controller.doCommand(new CmdAddDelivery(controller, controller.getCyclist().getRound(), controller.getCyclist().getDeliveries(), 
+	controller.doCommand(new CmdAddDelivery(controller.getCyclist().getRound(), controller.getCyclist().getDeliveries(), 
 		0, controller.getTempDelivery()));
 	window.updateDeliveryDetail(controller.getTempDelivery());
+	window.drawMarkers(controller.getCyclist().getDeliveries(), 20);
+	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
     
     @Override
