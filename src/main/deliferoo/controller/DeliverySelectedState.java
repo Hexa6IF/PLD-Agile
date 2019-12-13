@@ -60,6 +60,7 @@ public class DeliverySelectedState implements State {
 		break;
 	    }
 	}
+	
 	controller.setCurrentState(controller.DELIVERY_SELECTED_STATE);
     }
     

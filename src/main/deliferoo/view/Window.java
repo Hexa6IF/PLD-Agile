@@ -350,6 +350,7 @@ public class Window {
 	    if(newSelection == null) {
 		tbv.getSelectionModel().clearSelection();
 	    } else {
+		this.mapView.grayBestPaths(tbv.getItems().indexOf(newSelection));
 		this.controller.selectDeliveryClick(newSelection.getDeliveryIndex(), newSelection.getType());
 	    }
 	});
@@ -414,10 +415,24 @@ public class Window {
 
 	    Integer deliveryIndex = i;
 	    markers.get(i).getKey().setOnMouseClicked(e -> {
-		this.controller.selectDeliveryClick(deliveryIndex, SpecialNodeType.PICKUP);	
+		for(int j = 0; j < this.tableBoxView.getItems().size(); j++) {
+		    SpecialNodeTextView sntv = this.tableBoxView.getItems().get(j);
+		    if(sntv.getDeliveryIndex() == deliveryIndex && sntv.getType() == SpecialNodeType.PICKUP) {
+			this.tableBoxView.getSelectionModel().select(j);
+			break;
+		    }
+		}
+		//this.controller.selectDeliveryClick(deliveryIndex, SpecialNodeType.PICKUP);
 	    });
 	    markers.get(i).getValue().setOnMouseClicked(e -> {
-		this.controller.selectDeliveryClick(deliveryIndex, SpecialNodeType.DROPOFF);
+		for(int j = 0; j < this.tableBoxView.getItems().size(); j++) {
+		    SpecialNodeTextView sntv = this.tableBoxView.getItems().get(j);
+		    if(sntv.getDeliveryIndex() == deliveryIndex && sntv.getType() == SpecialNodeType.DROPOFF) {
+			this.tableBoxView.getSelectionModel().select(j);
+			break;
+		    }
+		}
+		//this.controller.selectDeliveryClick(deliveryIndex, SpecialNodeType.DROPOFF);
 	    });
 	}
     }

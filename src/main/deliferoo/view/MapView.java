@@ -50,7 +50,7 @@ public class MapView extends Pane {
     private Double offsetY;
     private Double dimension;
 
-    private Map<Pair<String, String>, Set<Line>> roundLines;
+    private List<Set<Line>> roundLines;
     private Map<String, Shape> nodeShapes;
     private List<Pair<Shape, Shape>> markers;
 
@@ -73,7 +73,7 @@ public class MapView extends Pane {
 	this.offsetX = 0.05 * this.width;
 	this.offsetY = 0.05 * this.height;
 	this.dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
-	this.roundLines = new HashMap<Pair<String, String>, Set<Line>>();
+	this.roundLines = new ArrayList<Set<Line>>();
 	this.nodeShapes = new HashMap<String, Shape>();
 	this.markers = new ArrayList<Pair<Shape, Shape>>();
     }
@@ -82,7 +82,7 @@ public class MapView extends Pane {
      * Gets all the lines corresponding to the round
      * @return	round lines
      */
-    public Map<Pair<String, String>, Set<Line>> getRoundLine() {
+    public List<Set<Line>> getRoundLine() {
 	return this.roundLines;
     }
 
@@ -168,26 +168,35 @@ public class MapView extends Pane {
      * @param strokeWidth	the width of the line
      */
     public void drawBestPath(BestPath bestPath, Color color, Integer strokeWidth) {
-	String startId = bestPath.getStart().getNode().getNodeId();
-	String endId = bestPath.getEnd().getNode().getNodeId();
-
 	Set<Line> bestPathLines = new HashSet<>();
 	for (Edge edge : bestPath.getPath()) {
 	    Line road = drawEdge(edge, color, strokeWidth);
 	    road.toBack();
 	    bestPathLines.add(road);
 	}
-
-	Pair<String, String> entry = new Pair<String, String>(startId, endId);    
-	this.roundLines.put(entry, bestPathLines);
+	this.roundLines.add(bestPathLines);
     }
 
     /**
      * Clears lines on map corresponding to the round
      */
     public void clearRoundLines() {
-	for(Pair<String, String> p : this.roundLines.keySet()) {
-	    this.getChildren().removeAll(this.roundLines.get(p));
+	for(Set<Line> lines : this.roundLines) {
+	    this.getChildren().removeAll(lines);
+	}
+    }
+    
+    public void grayBestPaths(Integer index) {
+	for(int i = 0; i < this.roundLines.size(); i++){
+	    if(i >= index) {
+		for(Line l : this.roundLines.get(i)) {
+		    l.setStroke(Color.DARKGRAY);
+		};
+	    } else {
+		for(Line l : this.roundLines.get(i)) {
+		    l.setStroke(Color.HOTPINK);
+		};
+	    }
 	}
     }
 
