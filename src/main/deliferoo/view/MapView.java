@@ -53,6 +53,7 @@ public class MapView extends Pane {
     private List<Set<Line>> roundLines;
     private Map<String, Shape> nodeShapes;
     private List<Pair<Shape, Shape>> markers;
+    private List<Line> arrows;
 
     private Shape tempPickup;
     private Shape tempDropoff;
@@ -74,6 +75,7 @@ public class MapView extends Pane {
 	this.offsetY = 0.05 * this.height;
 	this.dimension = Math.min(this.width - 2 * this.offsetX, this.height - 4 * this.offsetY);
 	this.roundLines = new ArrayList<Set<Line>>();
+	this.arrows = new ArrayList<Line>();
 	this.nodeShapes = new HashMap<String, Shape>();
 	this.markers = new ArrayList<Pair<Shape, Shape>>();
     }
@@ -169,12 +171,45 @@ public class MapView extends Pane {
      */
     public void drawBestPath(BestPath bestPath, Color color, Integer strokeWidth) {
 	Set<Line> bestPathLines = new HashSet<>();
-	for (Edge edge : bestPath.getPath()) {
+	List<Edge> edges = bestPath.getPath();
+	for (Edge edge : edges) {
 	    Line road = drawEdge(edge, color, strokeWidth);
 	    road.toBack();
 	    bestPathLines.add(road);
+	    System.out.println(edge.toString());
+	    System.out.println(edge.toString());
 	}
 	this.roundLines.add(bestPathLines);
+	Edge edgeArrow = edges.get(edges.size()/2);
+	Pair<Double, Double> start = this.calculateRelativePosition(edgeArrow.getStart());
+	Pair<Double, Double> end = this.calculateRelativePosition(edgeArrow.getEnd());
+	this.drawArrows(start.getKey(), start.getValue(), end.getKey(), end.getValue());
+    }
+    
+    private void drawArrows(Double start_x, Double start_y ,Double end_x, Double end_y) {
+		Color c = Color.web("#4a80f5");
+		double ARROW_SIZE=20;
+		Line righthead;
+		Line lefthead;
+	double angle = Math.atan2((end_y - start_y), (end_x - start_x)) - Math.PI / 2.0;
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
+        
+        double right_x = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROW_SIZE + end_x;
+        double right_y = (- 1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROW_SIZE + end_y;
+        
+        double left_x = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROW_SIZE + end_x;
+        double left_y = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROW_SIZE + end_y;
+        
+        righthead=new Line(right_x,right_y,end_x,end_y);
+	  righthead.setStroke(c);
+	  righthead.setStrokeWidth(3);
+	  lefthead=new Line(left_x,left_y,end_x,end_y);
+	  lefthead.setStroke(c);
+	  lefthead.setStrokeWidth(3);
+	  this.arrows.add(righthead);
+	  this.arrows.add(lefthead);
+          this.getChildren().addAll(righthead, lefthead);
     }
 
     /**
@@ -185,6 +220,8 @@ public class MapView extends Pane {
 	    this.getChildren().removeAll(lines);
 	}
 	this.roundLines = new ArrayList<>();
+	this.getChildren().removeAll(this.arrows);
+	this.arrows.clear();
     }
     
     public void grayBestPaths(Integer index) {
