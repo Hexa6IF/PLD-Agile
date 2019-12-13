@@ -105,6 +105,9 @@ public class XMLParser {
 			String destination = streamReader.getAttributeValue(null, "destination");
 
 			Double longueur = Double.parseDouble(streamReader.getAttributeValue(null, "longueur"));
+			if (longueur < 0) {
+			    throw new NullPointerException("Parameter street lenght cannot be negative.");
+			}
 			String nomRue = streamReader.getAttributeValue(null, "nomRue");
 
 			Node originNode = nodeMap.get(origin);
