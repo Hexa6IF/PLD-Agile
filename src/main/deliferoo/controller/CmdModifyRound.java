@@ -13,7 +13,6 @@ public class CmdModifyRound implements Command {
     public CmdModifyRound(List<SpecialNode> round, List<SpecialNode> newRound) {
 	this.round = round;
 	this.order = new ArrayList<Integer>();
-	
 	for(int i = 0; i < round.size(); i++) {
 	    for(int j = 0; i < newRound.size(); j++) {
 		if(round.get(i) == newRound.get(j)) {

@@ -63,6 +63,19 @@ public class DeliveryDetailView extends GridPane{
 	initializeComponents();
 	placeGridComponents();
     }
+    
+    public void setDurationEdit(boolean pickup, boolean dropoff) {
+	this.pickupDurationField.setEditable(pickup);
+	this.dropoffDurationField.setEditable(dropoff);
+    }
+    
+    public Double getPickupDuration() {
+	return Double.parseDouble(this.pickupDurationField.getText());
+    }
+    
+    public Double getDropoffDuration() {
+	return Double.parseDouble(this.dropoffDurationField.getText());
+    }
 
     /**
      * Method to update each field with the details of a delivery
@@ -84,6 +97,10 @@ public class DeliveryDetailView extends GridPane{
 	    }
 	    this.pickupPointField.setText(pickup.getNode().getNodeId());
 	    this.pickupDurationField.setText(pickup.getDuration().toString());
+	} else {
+	    this.startTimeField.setText("");
+	    this.pickupPointField.setText("");
+	    this.pickupDurationField.setText("");
 	}
 	if(dropoff != null) {
 	    if(dropoff.getPassageTime() != null) {
@@ -91,9 +108,13 @@ public class DeliveryDetailView extends GridPane{
 	    }
 	    this.dropoffPointField.setText(dropoff.getNode().getNodeId());
 	    this.dropoffDurationField.setText(dropoff.getDuration().toString());
+	} else {
+	    this.endTimeField.setText("");
+	    this.dropoffPointField.setText("");
+	    this.dropoffDurationField.setText("");
 	}
     }
-
+    
     private void initializeComponents() {
 	this.deliveryTitle = new Text("Delivery ");
 	this.deliveryTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 20));

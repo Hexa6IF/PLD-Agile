@@ -28,8 +28,7 @@ public class CmdModifyDelivery implements Command {
     }
     
     public void doCmd() {
-	deliveries.remove(from);
-	deliveries.add(to);
+	deliveries.set(deliveries.indexOf(from), to);
 	
 	round.set(round.indexOf(from.getPickupNode()), to.getPickupNode());
 	round.set(round.indexOf(from.getDeliveryNode()), to.getDeliveryNode());
@@ -40,11 +39,12 @@ public class CmdModifyDelivery implements Command {
 	    bestPaths.get(id).put(to.getPickupNode().getNode().getNodeId(), modifiedBestPaths.get(to.getPickupNode().getNode().getNodeId()).get(id));
 	    bestPaths.get(id).put(to.getDeliveryNode().getNode().getNodeId(), modifiedBestPaths.get(to.getDeliveryNode().getNode().getNodeId()).get(id));
 	}
-	
     }
     
-    public void undoCmd() {
-	deliveries.remove(to);
-	deliveries.add(from);
+    public void undoCmd() {	
+	deliveries.set(deliveries.indexOf(to), from);
+	
+	round.set(round.indexOf(to.getPickupNode()), from.getPickupNode());
+	round.set(round.indexOf(to.getDeliveryNode()), from.getDeliveryNode());
     }
 }

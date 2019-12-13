@@ -1,16 +1,15 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javafx.application.Platform;
 
 import algorithm.Dijkstra;
 import algorithm.TSPHeuristic;
-import javafx.application.Platform;
-import model.BestPath;
 import model.Delivery;
 import model.FullMap;
-import model.Round;
+import model.Cyclist;
+import model.BestPath;
 import model.SpecialNode;
 import view.Window;
 
@@ -23,40 +22,32 @@ public class CalculatingRoundState implements State {
     public void init(Window window, Controller controller) {
 	window.disableButtons(true, true, true, true, true, true, true, false);
 	window.updateMessage("Calculating optimal round...");
-	this.calculateRound(window, controller, controller.getCyclist().getDeliveries(), controller.getCurrentMap());
+	this.calculateRound(window, controller);
     }
 
     @Override
-    public void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
+    public void calculateRound(Window window, Controller controller) {
 	Runnable runnableTask = () -> {
+	    Cyclist cyclist = controller.getCyclist();
+	    List<Delivery> deliveries = cyclist.getDeliveries();
+	    FullMap map = controller.getCurrentMap();
 	    Map<String, Map<String, BestPath>> bestPaths = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	    controller.getCyclist().setShortestPaths(bestPaths);    
-	    //controller.tspSolver = new TSPSimple();
-	    controller.tspSolver = new TSPHeuristic();
+	    controller.getCyclist().setBestPaths(bestPaths);
+	    controller.tspSolver = new TSPHeuristic(cyclist.getSpeed());
 	    controller.tspSolver.registerCallBack(controller);
-	    controller.tspSolver.searchSolution(60000, bestPaths, deliveries);
+	    controller.tspSolver.searchSolution(100000, bestPaths, deliveries);
 	};
-	controller.executor.execute(runnableTask);	
+	controller.executor.execute(runnableTask);
     }
 
     @Override
     public void updateRound(Window window, Controller controller) {
-	Round r = new Round(controller.tspSolver.getBestPathSolution());
+	List<SpecialNode> round = controller.tspSolver.getTransformedSolution();
+	CalculationHelper.updatePassageTimesSpecialNodes(round, controller.getCyclist());
+	controller.getCyclist().setRound(round);
 	Platform.runLater(() -> {
 	    try {
-		List<SpecialNode> round = new ArrayList<>();
-		
-		for(int i = 0; i<r.getResultPath().size(); i++) {
-		    if(i == 0) {
-			round.add(r.getResultPath().get(i).getStart());
-		    }
-		    round.add(r.getResultPath().get(i).getEnd());
-		}
-		
 		window.updateRound(round, controller.getCyclist().getBestPaths());
-		
-		controller.getCyclist().setShortestPaths(controller.getCyclist().getBestPaths());
-		controller.getCyclist().setRound(round);
 	    } catch (Exception ex) {
 		ex.printStackTrace();
 	    }
@@ -64,8 +55,21 @@ public class CalculatingRoundState implements State {
     }
     
     @Override
+    public void cancelButtonClick(Window window, Controller controller) {
+	this.stopTSPCalculation(window, controller);
+    }
+
+    @Override
     public void stopTSPCalculation(Window window, Controller controller) {
 	controller.tspSolver.stopCalculation();
+	Platform.runLater(() -> {
+	    try {
+		window.confirmRound();
+		;
+	    } catch (Exception ex) {
+		ex.printStackTrace();
+	    }
+	});
 	controller.setCurrentState(controller.ROUND_CALCULATED_STATE);
     }
 }

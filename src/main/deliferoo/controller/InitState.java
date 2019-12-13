@@ -27,9 +27,18 @@ public class InitState implements State {
     @Override
     public void loadMap(Window window, Controller controller, File mapFile) {
 	FullMap map = XMLParser.getInstance().parseMap(mapFile);
-	window.updateMap(map);
-	controller.setCurrentMap(map);
-	controller.setCurrentState(controller.MAP_LOADED_STATE);
+	if (map.getEdgeList().size() > 0 && map.getNodeMap().size() > 0) {
+	    try {
+		window.updateMap(map);
+		controller.setCurrentMap(map);
+		controller.setCurrentState(controller.MAP_LOADED_STATE);
+	    } catch (Exception e) {
+		window.updateMessage("Error in loaded XML file. Please correct it or load another file.");
+		window.clearMap();
+	    }
+	} else {
+	    window.updateMessage("The loaded XML file does not match the expected format. Please correct it or load another file.");
+	}
     }
 
     @Override

@@ -3,9 +3,9 @@ package controller;
 import java.io.File;
 import java.util.List;
 
-import model.Delivery;
+import javafx.geometry.Bounds;
 import model.FullMap;
-import model.SpecialNode;
+import model.SpecialNodeType;
 import view.SpecialNodeTextView;
 import view.Window;
 
@@ -23,7 +23,7 @@ public interface State {
      * 
      */
     public default void init(Window window, Controller controller) {
-	
+
     }
 
     /**
@@ -33,7 +33,7 @@ public interface State {
      * @param the controller
      */
     public default void rightClick(Window window, Controller controller) {
-	
+
     }
 
     /**
@@ -42,15 +42,15 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void leftClick(Window window, Controller controller) {
+    public default void leftClick(Window window, Controller controller, Double x, Double y) {
     }
-    
-    public default void changeNodePosition(Window window, Controller controller, SpecialNode node, String newNodeId) {
+
+    public default void changeNodePosition(Window window, Controller controller, Integer deliveryId, SpecialNodeType type, String newNodeId) {
     }
-    
+
     public default void changeRoundOrder(Window window, Controller controller, List<SpecialNodeTextView> newOrder) {
     }
-    
+
     /**
      * Method called when the "Modify Delivery" button is clicked
      * 
@@ -68,7 +68,7 @@ public interface State {
      */
     public default void addButtonClick(Window window, Controller controller) {
     }
-    
+
     /**
      * Method called when the "Modify Delivery" button is clicked
      * 
@@ -77,7 +77,7 @@ public interface State {
      */
     public default void removeButtonClick(Window window, Controller controller) {
     }
-    
+
     /**
      * Method called when the "Modify Delivery" button is clicked
      * 
@@ -86,16 +86,16 @@ public interface State {
      */
     public default void confirmButtonClick(Window window, Controller controller) {
     }
-    
+
     /**
-     * Method called when the "Modify Delivery" button is clicked
+     * Method called when the "Calculate" button is clicked
      * 
      * @param the window
      * @param the controller
      */
     public default void calculateButtonClick(Window window, Controller controller) {
     }
-    
+
     /**
      * Method called when the "Modify Delivery" button is clicked
      * 
@@ -104,7 +104,7 @@ public interface State {
      */
     public default void undoButtonClick(Window window, Controller controller) {
     }
-    
+
     /**
      * Method called when the "Modify Delivery" button is clicked
      * 
@@ -123,7 +123,7 @@ public interface State {
     public default void cancelButtonClick(Window window, Controller controller) {
     }
 
-    
+
 
     /**
      * Method called when a Delivery is clicked on (either on the map or on the text
@@ -132,7 +132,7 @@ public interface State {
      * @param the window
      * @param the controller
      */
-    public default void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex) {
+    public default void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex, SpecialNodeType type) {
     }
 
     /**
@@ -164,9 +164,9 @@ public interface State {
      * @param the deliveries
      * @param the map
      */
-    public default void calculateRound(Window window, Controller controller, List<Delivery> deliveries, FullMap map) {
+    public default void calculateRound(Window window, Controller controller) {
     }
-    
+
     /**
      * Method called when the round displayed needs to be updated
      * 
@@ -175,7 +175,7 @@ public interface State {
      */
     public default void updateRound(Window window, Controller controller) {
     }
-    
+
     /**
      * Method called when the TSP calculation needs to be stopped
      * 
@@ -183,5 +183,9 @@ public interface State {
      * @param controller
      */
     public default void stopTSPCalculation(Window window, Controller controller) {
+    }
+
+    public default void placeNode(Window window, Controller controller, String nodeId, Bounds bounds) {
+
     }
 }
