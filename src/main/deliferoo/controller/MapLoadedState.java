@@ -65,6 +65,7 @@ public class MapLoadedState implements State {
 	    if (deliveries.size() > 0) {
 		try {
 		    window.updateDeliveries(deliveries);
+		    window.addMouseListener();
 		    controller.getCyclist().setDeliveries(deliveries);
 		    controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
         	} catch (Exception e) {

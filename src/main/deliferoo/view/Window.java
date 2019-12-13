@@ -52,6 +52,7 @@ public class Window {
     private ControlPanel controlPanel;
     private TableBoxView tableBoxView;
     private Map<Integer, Color> deliveryColorMap;
+    private boolean mouseListenerAdded = false;
 
     /**
      * Constructor
@@ -69,11 +70,6 @@ public class Window {
 	this.tableBoxView.setItems(FXCollections.observableList(new ArrayList<SpecialNodeTextView>()));
 	this.deliveryColorMap = new HashMap<>();
 
-	this.mapView.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-	    Pair<String, Bounds> nearestNode = this.mapView.getNearestNodeBounds(e.getSceneX(), e.getSceneY());
-	    this.controller.placeNode(nearestNode.getKey(), nearestNode.getValue());
-	});
-
 	this.addTableRowListeners();
 	this.addButtonListeners();
     }
@@ -86,6 +82,15 @@ public class Window {
 	buildAndShowStage(stage);
     }
 
+    public void addMouseListener() {
+	if (!this.mouseListenerAdded) {
+	    this.mapView.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+	    	Pair<String, Bounds> nearestNode = this.mapView.getNearestNodeBounds(e.getSceneX(), e.getSceneY());
+	    	this.controller.placeNode(nearestNode.getKey(), nearestNode.getValue());
+	    });
+	}
+	this.mouseListenerAdded = true;
+    }
     /**
      * Update the map graphical view
      * 
