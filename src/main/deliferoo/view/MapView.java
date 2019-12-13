@@ -105,16 +105,19 @@ public class MapView extends Pane {
 	this.maxLong = map.getMaxLong();
 	this.minLat = map.getMinLat();
 	this.maxLat = map.getMaxLat();
-
+	
+	Set<Node> nodes = new HashSet<Node>();
 	this.getChildren().clear();
 	
 	for (Edge edge : map.getEdgeList()) {
 	    drawEdge(edge, color, strokeWidth);
+	    nodes.add(edge.getStart());
+	    nodes.add(edge.getEnd());
 	}
 
-	for (String id : map.getNodeMap().keySet()) {
-	    Shape nodeShape = drawNode(map.getNodeMap().get(id), Color.BLACK, 4);
-	    nodeShapes.put(id, nodeShape);
+	for (Node node : nodes) {
+	    Shape nodeShape = drawNode(node, Color.TRANSPARENT, 4);
+	    nodeShapes.put(node.getNodeId(), nodeShape);
 	}
     }
 
@@ -152,6 +155,7 @@ public class MapView extends Pane {
 	Double y = p.getValue();
 
 	Rectangle nodeShape = new Rectangle(x - 2, y - 2, 4, 4);
+	nodeShape.setFill(color);
 
 	Tooltip tip = new Tooltip(node.getNodeId());
 	Tooltip.install(nodeShape, tip);

@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,7 @@ public class Controller implements TSPCallback{
     protected final RoundCalculatedState ROUND_CALCULATED_STATE = new RoundCalculatedState();
     protected final ModifyDeliveryState MODIFY_DELIVERY_STATE = new ModifyDeliveryState();
     protected final CalculatingRoundState CALCULATING_ROUND_STATE = new CalculatingRoundState();
+    protected final ErrorState ERROR_STATE = new ErrorState();
 
     /**
      * Creates the controller of the application
@@ -171,6 +173,8 @@ public class Controller implements TSPCallback{
 	    this.setCurrentState(MAP_LOADED_STATE);
 	}	
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
+	
+	this.window.updateDeliveries(this.cyclist.getDeliveries());
 	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
 	this.selectedDelivery = cyclist.getDeliveries().get(0);
@@ -178,6 +182,10 @@ public class Controller implements TSPCallback{
 	if(selectedDelivery != null) {
 	    this.window.updateDeliveryDetail(selectedDelivery);
 	}
+    }
+    
+    public void resetCommands() {
+	this.commandList.reset();
     }
 
     /**
@@ -212,6 +220,8 @@ public class Controller implements TSPCallback{
      */
     public void loadMap(File mapFile) {
 	this.currentState.loadMap(this.window, this, mapFile);
+	this.cyclist.setDeliveries(new ArrayList<Delivery>());
+	this.cyclist.setRound(new ArrayList<SpecialNode>());
     }
     
     /**

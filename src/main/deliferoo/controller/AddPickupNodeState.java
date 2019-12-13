@@ -27,6 +27,7 @@ public class AddPickupNodeState implements State {
 	window.disableButtons(true, true, true, false, true, true, true, false);
 	window.updateDeliveryDetail(td);
 	window.setDurationEdit(true, false);
+	window.setRoundOrdering(false);
 	window.updateMessage("Select pickup location and enter pickup duration.");
     }
     
