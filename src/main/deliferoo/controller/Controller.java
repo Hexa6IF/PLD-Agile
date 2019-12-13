@@ -171,6 +171,8 @@ public class Controller implements TSPCallback{
 	    this.setCurrentState(MAP_LOADED_STATE);
 	}	
 	CalculationHelper.updatePassageTimesSpecialNodes(this.cyclist.getRound(), this.getCyclist());
+	
+	this.window.updateDeliveries(this.cyclist.getDeliveries());
 	this.window.drawMarkers(this.cyclist.getDeliveries(), 20);
 	this.window.updateRound(this.cyclist.getRound(), this.cyclist.getBestPaths());
 	this.selectedDelivery = cyclist.getDeliveries().get(0);
@@ -178,6 +180,10 @@ public class Controller implements TSPCallback{
 	if(selectedDelivery != null) {
 	    this.window.updateDeliveryDetail(selectedDelivery);
 	}
+    }
+    
+    public void resetCommands() {
+	this.commandList.reset();
     }
 
     /**

@@ -105,10 +105,12 @@ public class DeliverySelectedState implements State {
 	window.updateDeliveries(deliveries);
 	controller.getCyclist().setDeliveries(deliveries);
 	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
+	controller.resetCommands();
     }
 
     @Override
     public void calculateButtonClick(Window window, Controller controller) {
 	controller.setCurrentState(controller.CALCULATING_ROUND_STATE);
+	controller.resetCommands();
     }
 }
