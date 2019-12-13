@@ -3,10 +3,9 @@ package model;
 import java.time.LocalTime;;
 
 /**
- * Model class.
- * SpecialNode corresponds to a Node used in a delivery 
+ * Model class. SpecialNode corresponds to a Node used in a delivery
  * 
- * @author 
+ * @author
  */
 public class SpecialNode {
     private Node node;
@@ -23,14 +22,15 @@ public class SpecialNode {
      * @param passageTime
      * @param delivery
      */
-    public SpecialNode(Node node, SpecialNodeType specialNodeType, Double duration, LocalTime passageTime, Delivery delivery) {
+    public SpecialNode(Node node, SpecialNodeType specialNodeType, Double duration, LocalTime passageTime,
+	    Delivery delivery) {
 	this.node = node;
 	this.specialNodeType = specialNodeType;
 	this.duration = duration;
 	this.passageTime = passageTime;
 	this.delivery = delivery;
     }
-    
+
     public SpecialNode(SpecialNode nodeToCopy) {
 	this.node = nodeToCopy.getNode();
 	this.specialNodeType = nodeToCopy.getSpecialNodeType();
@@ -77,7 +77,7 @@ public class SpecialNode {
     public Double getDuration() {
 	return this.duration;
     }
-    
+
     /**
      * 
      * @param duration
@@ -85,7 +85,7 @@ public class SpecialNode {
     public void setDuration(Double duration) {
 	this.duration = duration;
     }
-    
+
     /**
      * 
      * @return passageTime
@@ -93,7 +93,7 @@ public class SpecialNode {
     public LocalTime getPassageTime() {
 	return this.passageTime;
     }
-    
+
     /**
      * 
      * @param passageTime
@@ -107,20 +107,54 @@ public class SpecialNode {
      */
     @Override
     public String toString() {
-	return "SpecialNode [node=" + node.toString() + ", duration=" + duration + ", passageTime=" + passageTime + "type=" + specialNodeType + "]";
+	return "SpecialNode [node=" + node.toString() + ", duration=" + duration + ", passageTime=" + passageTime
+		+ "type=" + specialNodeType + "]";
     }
 
     /**
      * @return the delivery
      */
     public Delivery getDelivery() {
-        return delivery;
+	return delivery;
     }
 
     /**
      * @param delivery the delivery to set
      */
     public void setDelivery(Delivery delivery) {
-        this.delivery = delivery;
+	this.delivery = delivery;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	SpecialNode other = (SpecialNode) obj;
+	if (this.getDelivery() != other.getDelivery())
+	    return false;
+	if (this.getSpecialNodeType() != other.getSpecialNodeType())
+	    return false;
+	return true;
+    }
+
+    @Override
+    public int hashCode() {
+	int result = this.delivery.getDeliveryIndex() * 10;
+	if (this.specialNodeType == SpecialNodeType.START) {
+	    result = result + 1;
+	} else if (this.specialNodeType == SpecialNodeType.PICKUP){
+	    result = result + 2;
+	} else if (this.specialNodeType == SpecialNodeType.DROPOFF){
+	    result = result + 3;
+	} else if (this.specialNodeType == SpecialNodeType.FINISH){
+	    result = result + 4;
+	} else {
+	    result = result + 5;
+	}
+	return result;
     }
 }

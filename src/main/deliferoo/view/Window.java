@@ -217,7 +217,6 @@ public class Window {
 	this.deliveryDetailView.updateDeliveryDetail(delivery, this.deliveryColorMap);
     }
 
-
     /**
      * Update the displayed message
      * 
@@ -260,7 +259,7 @@ public class Window {
 	BorderPane border = new BorderPane();
 	border.setTop(createMenu(stage));
 	border.setRight(createSideBar());
-	border.setCenter(this.mapView);
+	border.setLeft(this.mapView);
 	return new Scene(border);
     }
 

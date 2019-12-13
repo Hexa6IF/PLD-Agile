@@ -36,6 +36,7 @@ public abstract class TSP {
     private TSPCallback tspCallback;
     private Boolean calculationShouldContinue;
     private Number speed;
+    
 
     /**
      * Constructor for TSP
@@ -55,6 +56,8 @@ public abstract class TSP {
      * @param deliveries list of deliveries to calculate for
      */
     public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
+//	System.out.println("==TSP==");
+//	System.out.println(deliveries);
 	this.initClassVar(timeLimit, graph, deliveries);
 	Long startTime = System.currentTimeMillis();
 	this.cost = this.createCostFromGraph();
@@ -84,6 +87,9 @@ public abstract class TSP {
 	this.bestSolutionCost = Integer.MAX_VALUE;
 	int nbNodes = this.deliveries.size() * 2;
 	this.bestSolution = new ArrayList<SpecialNode>(nbNodes);
+//	for (Delivery delivery : deliveries) {
+//	    
+//	}
     }
 
     /**
@@ -196,7 +202,8 @@ public abstract class TSP {
 		Long costCurrentToNext = cost.get(currentNode).get(nextNode).longValue();
 		undiscovered.remove(nextNode);
 		if (nextNodeIsPickup) {
-		    nextNodeDropOff = nextNode.getDelivery().getDeliveryNode();
+		    Integer deliveryIndex = nextNode.getDelivery().getDeliveryIndex();
+		    nextNodeDropOff = this.deliveries.get(deliveryIndex).getDeliveryNode();
 		    undiscovered.add(nextNodeDropOff);
 		}
 		branchAndBound(nextNode, undiscovered, discovered, discoveredCost + costCurrentToNext.intValue(), cost,
