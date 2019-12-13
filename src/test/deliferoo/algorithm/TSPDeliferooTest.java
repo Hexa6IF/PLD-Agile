@@ -19,12 +19,12 @@ public class TSPDeliferooTest {
 
     @Test
     public void testSearchSolution() {
-	TSPDeliferoo tsp = new TSPDeliferoo();
+	TSPSimple tsp = new TSPSimple();
 	final Integer timeLimit = 100000;
 	
 	XMLParser parser = XMLParser.getInstance();
-	FullMap map = parser.parseMap(new File("src/main/resources/petitPlan.xml"));
-	List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandePetit2.xml"), map);
+	FullMap map = parser.parseMap(new File("src/main/resources/moyenPlan.xml"));
+	List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandeMoyen5.xml"), map);
 	Map<String, Map<String, BestPath>> graph = new HashMap<String, Map<String, BestPath>>();	
 	
 	graph = Dijkstra.calculateAllShortestPaths(deliveries, map);

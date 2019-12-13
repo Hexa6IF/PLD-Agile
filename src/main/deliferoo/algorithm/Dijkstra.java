@@ -138,8 +138,8 @@ public class Dijkstra {
 	    String startId = edge.getStart().getNodeId();
 	    String endId = edge.getEnd().getNodeId();
 	    
-	    neighbors.get(startId).put(endId, edge);
 	    neighbors.get(endId).put(startId, edge);	    
+	    neighbors.get(startId).put(endId, edge);
 	}
 	
 	return neighbors;

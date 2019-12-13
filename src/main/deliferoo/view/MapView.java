@@ -63,6 +63,7 @@ public class MapView extends Pane {
     private List<Line> roundLine;
     private Map<Integer, Set<Shape>> markers;
     private List<Rectangle> intersections;
+    private List<Line> arrows;
     List<Delivery> deliveries;
 
     /**
@@ -83,6 +84,7 @@ public class MapView extends Pane {
 	this.roundLine = new ArrayList<Line>();
 	this.markers = new HashMap<Integer, Set<Shape>>();
 	this.intersections = new ArrayList<Rectangle>();
+	this.arrows = new ArrayList<Line>();
 	this.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
 
     }
@@ -210,60 +212,120 @@ public class MapView extends Pane {
     public void drawRound(Round round) {
 	Color c = Color.web("#4a80f5");
 	this.getChildren().removeAll(this.roundLine);
+	this.getChildren().removeAll(this.arrows);
+	this.arrows.clear();
 	this.roundLine = new ArrayList<Line>();
+	System.out.println(round.getResultPath().size());
 	for (BestPath bestPath : round.getResultPath()) {
 	    List<Edge> path = bestPath.getPath();
-	    Edge longestEdge=path.get(0);
+//	    Edge longestEdge=path.get(0);
+	    Edge edgeArrow = path.get(path.size()/2);
 	    for (Edge edge : path) {
 		Line road = drawPath(edge,c, 8);
 		road.toBack();
 		this.roundLine.add(road); 
-		if(edge.getDistance()>longestEdge.getDistance()) {
-		    longestEdge=edge;
-		}
-		}
-	     Node end=longestEdge.getEnd();
-	    Node start=longestEdge.getStart();
+//		if(edge.getDistance()>=longestEdge.getDistance()) {
+//		    longestEdge=edge;
+//		}
+	    }
+	    Node end=edgeArrow.getEnd();
+	    Node start=edgeArrow.getStart();
 	    Pair<Double, Double> end1=calculateRelativePosition(end);
 	    Pair<Double, Double> start1=calculateRelativePosition(start);
-	    System.out.println("start end coeff "+(end1.getKey()-start1.getKey()/end1.getValue()-start1.getValue());
-            drawArrowHead(start1,end1);	
+//	    System.out.println("start end coeff "+(end1.getValue()-start1.getValue()/end1.getKey()-start1.getKey()));
+	    System.out.println("start : "+start1.toString());
+	    System.out.println("end : "+end1.toString());
+	    System.out.println(path.toString());
+	    System.out.println("");
+	    Double middle_x = end1.getKey() - ((end1.getKey()-start1.getKey())/2);
+	    Double middle_y = end1.getValue() - ((end1.getValue()-start1.getValue())/2);
+	    Pair<Double, Double> middle = new Pair<Double, Double>(middle_x, middle_y);
+            drawArrowHead(start1,middle);	
 	    }
 	}
     private void drawArrowHead(Pair<Double, Double> start,Pair<Double, Double> end)
     {
 	Color c = Color.web("#4a80f5");
-	double l=20;
+	double ARROW_SIZE=20;
 	Line righthead;
 	Line lefthead;
-	double x=end.getKey();    
-	double y=end.getValue();
-	double x1=start.getKey();    
-	double y1=start.getValue();
+	double end_x=end.getKey();    
+	double end_y=end.getValue();
+	double start_x=start.getKey();    
+	double start_y=start.getValue();
 	
-	double phi = Math.toRadians(10);
-	double alpha = Math.atan2(y-y1,x-x1);
-	/*if((x>x1&&y>y1)||(x<x1&&y>y1))
-	{
-	    alpha = alpha+Math.PI;
-	    phi=phi+Math.PI;
-	}*/
-	System.out.println("alpha is "+Math.toDegrees(alpha));
-	double gamma=alpha-phi; 
-        double x2=x+l*Math.cos(gamma);
-	double y2=y+l*Math.sin(gamma);
-	double x3=x+l*Math.sin(gamma);
-	double y3=y+l*Math.cos(gamma);
-            /*x = x2 -(20*Math.cos(rho));
-            y = y2- (20*Math.sin(rho));
-            rho = theta - phi;*/
-          righthead=new Line(x,y,x2,y2);
+	final Double arrowAngle = 10.0;
+//	double phi = Math.toRadians(arrowAngle);
+//	double alpha = Math.atan2(end_y-start_y,end_x-start_x);
+//	System.out.println("alpha is "+Math.toDegrees(alpha));
+//	double gammaRight;
+//	double gammaLeft;
+//	if (alpha>=0) {
+//	    gammaRight = alpha-phi;
+//	    gammaLeft = alpha+phi;
+//	}
+//	else {
+//	    gammaRight = alpha+phi;
+//	    gammaLeft = alpha-phi;
+//	}
+//	
+//	System.out.println("gammaRight is "+Math.toDegrees(gammaRight));
+//	System.out.println("gammaLeft is "+Math.toDegrees(gammaLeft));
+//
+//	double right_x;
+//	double right_y;
+//	double left_x;
+//	double left_y;
+//	if (alpha >= 0 && alpha <= Math.PI/2) {
+//	    right_x = end_x - l*Math.sin(gammaRight);
+//	    right_y=end_y-l*Math.cos(gammaRight);
+//	    left_x=end_x-l*Math.sin(gammaLeft);
+//	    left_y=end_y-l*Math.cos(gammaLeft);
+//	}
+//	else if (alpha > Math.PI/2 && alpha <= Math.PI) {
+//	    right_x = end_x + l*Math.sin(gammaRight);
+//	    right_y=end_y+l*Math.cos(gammaRight);
+//	    left_x=end_x+l*Math.sin(gammaLeft);
+//	    left_y=end_y+l*Math.cos(gammaLeft);
+//	}
+//	else if (alpha > -1.0*Math.PI/2 && alpha < 0) {
+//	    right_x = end_x - l*Math.sin(gammaRight);
+//	    right_y=end_y+l*Math.cos(gammaRight);
+//	    left_x=end_x+l*Math.sin(gammaLeft);
+//	    left_y=end_y+l*Math.cos(gammaLeft);
+//	}
+//	else {
+//	    right_x = end_x - l*Math.sin(gammaRight);
+//	    right_y=end_y-l*Math.cos(gammaRight);
+//	    left_x=end_x-l*Math.sin(gammaLeft);
+//	    left_y=end_y-l*Math.cos(gammaLeft);
+//	}
+//	System.out.println("right x : "+right_x);
+//	System.out.println("right y : "+right_y);
+//	System.out.println("left x : "+left_x);
+//	System.out.println("left y : "+left_y);
+	//ArrowHead
+        double angle = Math.atan2((end_y - start_y), (end_x - start_x)) - Math.PI / 2.0;
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
+        //point1
+        double x1 = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROW_SIZE + end_x;
+        double y1 = (- 1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROW_SIZE + end_y;
+        //point2
+        double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * ARROW_SIZE + end_x;
+        double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * ARROW_SIZE + end_y;
+        
+          //righthead=new Line(right_x,right_y,end_x,end_y);
+        righthead=new Line(x1,y1,end_x,end_y);
 	  righthead.setStroke(c);
 	  righthead.setStrokeWidth(3);
-	  lefthead=new Line(x,y,x3,y3);
+	  //lefthead=new Line(left_x,left_y,end_x,end_y);
+	  lefthead=new Line(x2,y2,end_x,end_y);
 	  lefthead.setStroke(c);
 	  lefthead.setStrokeWidth(3);
-          this.getChildren().addAll(righthead,lefthead);
+	  this.arrows.add(righthead);
+	  this.arrows.add(lefthead);
+          this.getChildren().addAll(righthead, lefthead);
  }
     
 

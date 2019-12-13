@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 
+import javafx.util.Pair;
 import model.FullMap;
 import view.Window;
 import xml.XMLParser;
