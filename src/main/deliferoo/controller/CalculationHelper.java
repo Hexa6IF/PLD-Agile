@@ -39,7 +39,7 @@ public class CalculationHelper {
 		String specialNodeCurrentIndex = specialNodeCurrent.getNode().getNodeId();
 		Double timeSpent = bestPaths.get(specialNodePreviousIndex).get(specialNodeCurrentIndex).getDistance()
 			/ cyclist.getSpeed().doubleValue();
-		timeSpent += specialNodeCurrent.getDuration();
+		timeSpent += specialNodePrevious.getDuration();
 		LocalTime previousPassageTime = specialNodePrevious.getPassageTime();
 		LocalTime currentPassageTime = previousPassageTime.plusMinutes(timeSpent.longValue());
 		specialNodeCurrent.setPassageTime(currentPassageTime);
