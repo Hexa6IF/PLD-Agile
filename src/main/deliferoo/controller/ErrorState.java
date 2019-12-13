@@ -12,18 +12,22 @@ import xml.XMLParser;
  *  Initial state
  *  Waiting to load map
  *  
- * @author sadsitha
+ * @author marie
  */
-public class InitState implements State {
+public class ErrorState implements State {
     /**
      * State class constructor
      */
-    public InitState() {}
+    public ErrorState() {}
 
     @Override
     public void init(Window window, Controller controller) {
 	window.disableButtons(true, true, true, true, true, true, true, true);
-	window.updateMessage("Welcome. Please load a map file to continue.");
+	File fXmlFile = new File("././src/main/resources/pikachu.xml");
+	FullMap map1 = XMLParser.getInstance().parseMap(fXmlFile);
+	window.updateMap(map1);
+	window.updateDeliveries(new ArrayList<Delivery>());
+	controller.setCurrentMap(map1);
     }
     
     @Override
@@ -38,17 +42,29 @@ public class InitState implements State {
 		} catch (Exception e) {
 		    window.updateMessage("Error in loaded XML file. Please correct it or load another file.");
 		    window.clearMap();
-		    controller.setCurrentState(controller.ERROR_STATE);
+		    File fXmlFile = new File("././src/main/resources/pikachu.xml");
+		    FullMap map1 = XMLParser.getInstance().parseMap(fXmlFile);
+		    window.updateMap(map1);
+		    window.updateDeliveries(new ArrayList<Delivery>());
+		    controller.setCurrentMap(map1);
 		}
 	    } else {
 		window.updateMessage("The loaded XML file does not match the expected format. Please correct it or load another file.");
 		window.clearMap();
-		controller.setCurrentState(controller.ERROR_STATE);
+		File fXmlFile = new File("././src/main/resources/pikachu.xml");
+		    FullMap map1 = XMLParser.getInstance().parseMap(fXmlFile);
+		    window.updateMap(map1);
+		    window.updateDeliveries(new ArrayList<Delivery>());
+		    controller.setCurrentMap(map1);
 	    }
 	} catch (Exception e) {
 	    window.updateMessage("Error in loaded XML file. Please correct it or load another file.");
 	    window.clearMap();
-	    controller.setCurrentState(controller.ERROR_STATE);
+	    File fXmlFile = new File("././src/main/resources/pikachu.xml");
+	    FullMap map1 = XMLParser.getInstance().parseMap(fXmlFile);
+	    window.updateMap(map1);
+	    window.updateDeliveries(new ArrayList<Delivery>());
+	    controller.setCurrentMap(map1);
 	}
     }
 

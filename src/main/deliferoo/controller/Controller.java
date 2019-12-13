@@ -55,6 +55,7 @@ public class Controller implements TSPCallback{
     protected final RoundCalculatedState ROUND_CALCULATED_STATE = new RoundCalculatedState();
     protected final ModifyDeliveryState MODIFY_DELIVERY_STATE = new ModifyDeliveryState();
     protected final CalculatingRoundState CALCULATING_ROUND_STATE = new CalculatingRoundState();
+    protected final ErrorState ERROR_STATE = new ErrorState();
 
     /**
      * Creates the controller of the application
