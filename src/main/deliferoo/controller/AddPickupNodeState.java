@@ -41,8 +41,13 @@ public class AddPickupNodeState implements State {
     
     @Override
     public void confirmButtonClick(Window window, Controller controller) {
-	controller.getTempDelivery().getPickupNode().setDuration(window.getPickupDuration());
-	controller.setCurrentState(controller.ADD_DROPOFF_NODE_STATE);
+	try {
+	    controller.getTempDelivery().getPickupNode().setDuration(window.getPickupDuration());
+	    controller.setCurrentState(controller.ADD_DROPOFF_NODE_STATE);
+	}
+	catch (Exception e) {
+	    window.updateMessage("Please select a node and enter the duration before confirming");
+	}
     }
     
     @Override

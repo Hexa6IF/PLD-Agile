@@ -30,9 +30,14 @@ public class AddDropoffNodeState implements State{
     
     @Override
     public void confirmButtonClick(Window window, Controller controller) {
-	controller.getTempDelivery().getDeliveryNode().setDuration(window.getDropoffDuration());
-	window.updateDeliveryDetail(controller.getTempDelivery());
-	controller.setCurrentState(controller.ADD_TO_ROUND_STATE);
+	try {
+	    controller.getTempDelivery().getDeliveryNode().setDuration(window.getDropoffDuration());
+	    window.updateDeliveryDetail(controller.getTempDelivery());
+	    controller.setCurrentState(controller.ADD_TO_ROUND_STATE);
+	}
+	catch (Exception e) {
+	    window.updateMessage("Please select a node and enter the duration before confirming");
+	}
     }
     
     @Override
