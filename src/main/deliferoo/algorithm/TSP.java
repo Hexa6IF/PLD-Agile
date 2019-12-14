@@ -17,8 +17,8 @@ import model.SpecialNode;
 import model.SpecialNodeType;
 
 /**
- * Class that implements the TSP resolution.
- * It is based TSPTemplate given on Moodle
+ * Class that implements the TSP resolution. It is based TSPTemplate given on
+ * Moodle
  * 
  * @author Louis
  * @author sadsitha
@@ -36,7 +36,6 @@ public abstract class TSP {
     private TSPCallback tspCallback;
     private Boolean calculationShouldContinue;
     private Number speed;
-    
 
     /**
      * Constructor for TSP
@@ -56,10 +55,8 @@ public abstract class TSP {
      * @param deliveries list of deliveries to calculate for
      */
     public void searchSolution(int timeLimit, Map<String, Map<String, BestPath>> graph, List<Delivery> deliveries) {
-//	System.out.println("==TSP==");
-//	System.out.println(deliveries);
 	this.initClassVar(timeLimit, graph, deliveries);
-	Long startTime = System.currentTimeMillis();
+//	Long startTime = System.currentTimeMillis();
 	this.cost = this.createCostFromGraph();
 	List<SpecialNode> undiscovered = this.initUndiscovered();
 	List<SpecialNode> discovered = new ArrayList<SpecialNode>();
@@ -67,8 +64,8 @@ public abstract class TSP {
 	discovered.add(startNode);
 	sortUndiscovered(startNode, undiscovered);
 	branchAndBound(startNode, undiscovered, discovered, 0, this.cost, System.currentTimeMillis(), timeLimit);
-	Long endTime = System.currentTimeMillis();
-	System.out.println((endTime - startTime));
+//	Long endTime = System.currentTimeMillis();
+//	System.out.println((endTime - startTime));
 	if (this.tspCallback != null)
 	    this.tspCallback.calculationsCompleted(); // indicate that calculation is complete
     }
@@ -87,9 +84,6 @@ public abstract class TSP {
 	this.bestSolutionCost = Integer.MAX_VALUE;
 	int nbNodes = this.deliveries.size() * 2;
 	this.bestSolution = new ArrayList<SpecialNode>(nbNodes);
-//	for (Delivery delivery : deliveries) {
-//	    
-//	}
     }
 
     /**
@@ -118,8 +112,10 @@ public abstract class TSP {
 	Map<SpecialNode, Map<SpecialNode, Integer>> cost = new HashMap<SpecialNode, Map<SpecialNode, Integer>>();
 	Set<SpecialNode> specialNodes = new HashSet<SpecialNode>();
 	for (Delivery delivery : this.deliveries) {
-	    specialNodes.add(delivery.getPickupNode());
-	    specialNodes.add(delivery.getDeliveryNode());
+	    if (delivery != null) {
+		specialNodes.add(delivery.getPickupNode());
+		specialNodes.add(delivery.getDeliveryNode());
+	    }
 	}
 	for (SpecialNode specialNode1 : specialNodes) {
 	    String specialNode1Id = specialNode1.getNode().getNodeId();
@@ -154,24 +150,28 @@ public abstract class TSP {
     /**
      * Create an iterator for iterating over undiscovered specialNodes
      * 
-     * @param currentNode	The node being visited currently
-     * @param undiscovered	The list of undiscovered specialNodes
-     * @return An iterator capable of iterating over the list of undiscovered specialNodes
+     * @param currentNode  The node being visited currently
+     * @param undiscovered The list of undiscovered specialNodes
+     * @return An iterator capable of iterating over the list of undiscovered
+     *         specialNodes
      */
     private Iterator<SpecialNode> iterator(SpecialNode currentNode, List<SpecialNode> undiscovered) {
 	return new IteratorSeq(undiscovered, currentNode);
     }
-    
+
     /**
      * Method that implements the branch and bound algorithm for a TSP
      * 
-     * @param currentNode	The last specialNode visited
-     * @param undiscovered	The list of specialNodes that have not yet been visited
-     * @param discovered	The list of specialNodes that have been visited (including currentNode)
-     * @param discoveredCost	The sum of costs to travel through all the discovered specialNodes
-     * @param cost		The map of costs to travel from one specialNode to another
-     * @param startTime		The start time of the algorithm execution
-     * @param timeLimit		The time limit for the resolution of the problem
+     * @param currentNode    The last specialNode visited
+     * @param undiscovered   The list of specialNodes that have not yet been visited
+     * @param discovered     The list of specialNodes that have been visited
+     *                       (including currentNode)
+     * @param discoveredCost The sum of costs to travel through all the discovered
+     *                       specialNodes
+     * @param cost           The map of costs to travel from one specialNode to
+     *                       another
+     * @param startTime      The start time of the algorithm execution
+     * @param timeLimit      The time limit for the resolution of the problem
      */
     private void branchAndBound(SpecialNode currentNode, List<SpecialNode> undiscovered, List<SpecialNode> discovered,
 	    int discoveredCost, Map<SpecialNode, Map<SpecialNode, Integer>> cost, long startTime, int timeLimit) {
@@ -181,9 +181,9 @@ public abstract class TSP {
 
 	if (!this.calculationShouldContinue || (System.currentTimeMillis() - startTime > timeLimit)) {
 	    timeLimitReached = true;
-	} else if (undiscovered.size() == 0) { // tous les sommets ont ete visites
+	} else if (undiscovered.size() == 0) { // all nodes have been visited
 	    discoveredCost += cost.get(currentNode).get(finishNode);
-	    if (discoveredCost < bestSolutionCost) { // on a trouve une solution meilleure que bestSolution
+	    if (discoveredCost < bestSolutionCost) { // we have found a solution better than the current best solution
 		this.bestSolution.clear();
 		this.bestSolution.addAll(discovered);
 		this.bestSolution.add(finishNode);
@@ -218,8 +218,8 @@ public abstract class TSP {
     }
 
     /**
-     * Sort undiscovered special node list in ascending order of cost from last
-     * seen special node
+     * Sort undiscovered special node list in ascending order of cost from last seen
+     * special node
      * 
      * @param lastDiscovered
      * @param undiscovered
@@ -239,7 +239,7 @@ public abstract class TSP {
     /**
      * Register the callback class
      * 
-     * @param tspCallback	The instance of TSPCallback to call callback methods on
+     * @param tspCallback The instance of TSPCallback to call callback methods on
      */
     public void registerCallBack(TSPCallback tspCallback) {
 	this.tspCallback = tspCallback;
@@ -251,7 +251,7 @@ public abstract class TSP {
     public void stopCalculation() {
 	this.calculationShouldContinue = false;
     }
-    
+
     /**
      * @return true if the algorithm's computing time is greater than the time limit
      *         set by the user

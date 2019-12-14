@@ -22,11 +22,13 @@ public class AddToRoundState implements State{
     public void init(Window window, Controller controller) {	
 	window.disableButtons(true, true, true, true, true, true, true, false);
 	window.updateMessage("Select node after which the pickup will be done.");
+	window.setDisableTableBoxView(true);
     }
     
     @Override
     public void selectDeliveryClick(Window window, Controller controller, Integer deliveryIndex, SpecialNodeType type) {
 	
+	window.setDisableTableBoxView(false);
 	Delivery td = controller.getTempDelivery();
 	List<SpecialNode> tr = new ArrayList<>(controller.getCyclist().getRound());
 	
@@ -57,6 +59,7 @@ public class AddToRoundState implements State{
     
     @Override
     public void cancelButtonClick(Window window, Controller controller) {
+	window.setDisableTableBoxView(false);
 	window.updateSelectedDelivery(controller.getCyclist().getDeliveries().get(0));
 	window.setDurationEdit(false, false);
 	window.clearTempMarkers();

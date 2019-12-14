@@ -297,6 +297,15 @@ public class Window {
 	sideBar.getChildren().addAll(this.overviewPanel, this.deliveryDetailView, this.controlPanel, this.tableBoxView);
 	return sideBar;
     }
+    
+    /**
+     * Sets the disbaled state of table box view
+     * 
+     * @param isDisable
+     */
+    public void setDisableTableBoxView(Boolean isDisable) {
+	this.tableBoxView.setDisable(isDisable);
+    }
 
     public void enableDeliveryModification(Integer deliveryIndex) {
 	if(deliveryIndex != 0) {
