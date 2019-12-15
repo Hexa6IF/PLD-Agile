@@ -12,120 +12,120 @@ import java.util.Map;
  */
 public class FullMap {
 
-    private Double minLong;
-    private Double maxLong;
-    private Double minLat;
-    private Double maxLat;
-    private Map<String, Node> nodeMap;
-    private List<Edge> edgeList;
+	private Double minLong;
+	private Double maxLong;
+	private Double minLat;
+	private Double maxLat;
+	private Map<String, Node> nodeMap;
+	private List<Edge> edgeList;
 
-    /**
-     * @param minLong
-     * @param maxLong
-     * @param minLat
-     * @param maxLat
-     * @param nodeMap
-     * @param edgeList
-     */
-    public FullMap(Double minLong, Double maxLong, Double minLat, Double maxLat, Map<String, Node> nodeMap,
-	    List<Edge> edgeList) {
-	this.minLong = minLong;
-	this.maxLong = maxLong;
-	this.minLat = minLat;
-	this.maxLat = maxLat;
-	this.nodeMap = nodeMap;
-	this.edgeList = edgeList;
-    }
+	/**
+	 * @param minLong
+	 * @param maxLong
+	 * @param minLat
+	 * @param maxLat
+	 * @param nodeMap
+	 * @param edgeList
+	 */
+	public FullMap(Double minLong, Double maxLong, Double minLat, Double maxLat, Map<String, Node> nodeMap,
+			List<Edge> edgeList) {
+		this.minLong = minLong;
+		this.maxLong = maxLong;
+		this.minLat = minLat;
+		this.maxLat = maxLat;
+		this.nodeMap = nodeMap;
+		this.edgeList = edgeList;
+	}
 
-    /**
-     * @return the minLong
-     */
-    public Double getMinLong() {
-        return minLong;
-    }
+	/**
+	 * @return the minLong
+	 */
+	public Double getMinLong() {
+		return minLong;
+	}
 
-    /**
-     * @param minLong the minLong to set
-     */
-    public void setMinLong(Double minLong) {
-        this.minLong = minLong;
-    }
+	/**
+	 * @param minLong the minLong to set
+	 */
+	public void setMinLong(Double minLong) {
+		this.minLong = minLong;
+	}
 
-    /**
-     * @return the maxLong
-     */
-    public Double getMaxLong() {
-        return maxLong;
-    }
+	/**
+	 * @return the maxLong
+	 */
+	public Double getMaxLong() {
+		return maxLong;
+	}
 
-    /**
-     * @param maxLong the maxLong to set
-     */
-    public void setMaxLong(Double maxLong) {
-        this.maxLong = maxLong;
-    }
+	/**
+	 * @param maxLong the maxLong to set
+	 */
+	public void setMaxLong(Double maxLong) {
+		this.maxLong = maxLong;
+	}
 
-    /**
-     * @return the minLat
-     */
-    public Double getMinLat() {
-        return minLat;
-    }
+	/**
+	 * @return the minLat
+	 */
+	public Double getMinLat() {
+		return minLat;
+	}
 
-    /**
-     * @param minLat the minLat to set
-     */
-    public void setMinLat(Double minLat) {
-        this.minLat = minLat;
-    }
+	/**
+	 * @param minLat the minLat to set
+	 */
+	public void setMinLat(Double minLat) {
+		this.minLat = minLat;
+	}
 
-    /**
-     * @return the maxLat
-     */
-    public Double getMaxLat() {
-        return maxLat;
-    }
+	/**
+	 * @return the maxLat
+	 */
+	public Double getMaxLat() {
+		return maxLat;
+	}
 
-    /**
-     * @param maxLat the maxLat to set
-     */
-    public void setMaxLat(Double maxLat) {
-        this.maxLat = maxLat;
-    }
-    
-    public Double getRangeLongitude() {
-	return this.maxLong - this.minLong;
-    }
-    
-    public Double getRangeLatitude() {
-	return this.maxLat - this.minLat;
-    }
+	/**
+	 * @param maxLat the maxLat to set
+	 */
+	public void setMaxLat(Double maxLat) {
+		this.maxLat = maxLat;
+	}
 
-    /**
-     * @return the nodeMap
-     */
-    public Map<String, Node> getNodeMap() {
-        return nodeMap;
-    }
+	public Double getRangeLongitude() {
+		return this.maxLong - this.minLong;
+	}
 
-    /**
-     * @param nodeMap the nodeMap to set
-     */
-    public void setNodeMap(Map<String, Node> nodeMap) {
-        this.nodeMap = nodeMap;
-    }
+	public Double getRangeLatitude() {
+		return this.maxLat - this.minLat;
+	}
 
-    /**
-     * @return the edgeList
-     */
-    public List<Edge> getEdgeList() {
-        return edgeList;
-    }
+	/**
+	 * @return the nodeMap
+	 */
+	public Map<String, Node> getNodeMap() {
+		return nodeMap;
+	}
 
-    /**
-     * @param edgeList the edgeList to set
-     */
-    public void setEdgeList(List<Edge> edgeList) {
-        this.edgeList = edgeList;
-    }
+	/**
+	 * @param nodeMap the nodeMap to set
+	 */
+	public void setNodeMap(Map<String, Node> nodeMap) {
+		this.nodeMap = nodeMap;
+	}
+
+	/**
+	 * @return the edgeList
+	 */
+	public List<Edge> getEdgeList() {
+		return edgeList;
+	}
+
+	/**
+	 * @param edgeList the edgeList to set
+	 */
+	public void setEdgeList(List<Edge> edgeList) {
+		this.edgeList = edgeList;
+	}
 }

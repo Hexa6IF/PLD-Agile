@@ -13,94 +13,94 @@ import model.SpecialNodeType;
  *
  */
 public class SpecialNodeTextView {
-    
-    private Integer deliveryIndex;
-    private Color color;
-    private SpecialNodeType type;
-    private Double duration;
-    private LocalTime time;
-    
-/**
- * Constructor
- * 
- * @param specialNode
- * @param color
- */
-    public SpecialNodeTextView(SpecialNode specialNode, Color color) {
-	this.deliveryIndex = specialNode.getDelivery().getDeliveryIndex();
-	this.color = color;
-	this.type = specialNode.getSpecialNodeType();
-	this.duration = specialNode.getDuration();
-	this.time = specialNode.getPassageTime();
-    }
 
-    /**
-     * @return the color
-     */
-    public Color getColor() {
-	return color;
-    }
+	private Integer deliveryIndex;
+	private Color color;
+	private SpecialNodeType type;
+	private Double duration;
+	private LocalTime time;
 
-    /**
-     * @param color the color to set
-     */
-    public void setColor(Color color) {
-	this.color = color;
-    }
+	/**
+	 * Constructor
+	 * 
+	 * @param specialNode
+	 * @param color
+	 */
+	public SpecialNodeTextView(SpecialNode specialNode, Color color) {
+		this.deliveryIndex = specialNode.getDelivery().getDeliveryIndex();
+		this.color = color;
+		this.type = specialNode.getSpecialNodeType();
+		this.duration = specialNode.getDuration();
+		this.time = specialNode.getPassageTime();
+	}
 
-    /**
-     * @return the type
-     */
-    public SpecialNodeType getType() {
-	return type;
-    }
+	/**
+	 * @return the color
+	 */
+	public Color getColor() {
+		return color;
+	}
 
-    /**
-     * @param type the type to set
-     */
-    public void setType(SpecialNodeType type) {
-	this.type = type;
-    }
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(Color color) {
+		this.color = color;
+	}
 
-    /**
-     * @return the duration
-     */
-    public Double getDuration() {
-	return duration;
-    }
+	/**
+	 * @return the type
+	 */
+	public SpecialNodeType getType() {
+		return type;
+	}
 
-    /**
-     * @param duration the duration to set
-     */
-    public void setDuration(Double duration) {
-	this.duration = duration;
-    }
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(SpecialNodeType type) {
+		this.type = type;
+	}
 
-    /**
-     * @return the time
-     */
-    public LocalTime getTime() {
-	return time;
-    }
+	/**
+	 * @return the duration
+	 */
+	public Double getDuration() {
+		return duration;
+	}
 
-    /**
-     * @param time the time to set
-     */
-    public void setTime(LocalTime time) {
-	this.time = time;
-    }
+	/**
+	 * @param duration the duration to set
+	 */
+	public void setDuration(Double duration) {
+		this.duration = duration;
+	}
 
-    /**
-     * @return the deliveryIndex
-     */
-    public Integer getDeliveryIndex() {
-	return deliveryIndex;
-    }
+	/**
+	 * @return the time
+	 */
+	public LocalTime getTime() {
+		return time;
+	}
 
-    /**
-     * @param deliveryIndex the deliveryIndex to set
-     */
-    public void setDeliveryIndex(Integer deliveryIndex) {
-	this.deliveryIndex = deliveryIndex;
-    }
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(LocalTime time) {
+		this.time = time;
+	}
+
+	/**
+	 * @return the deliveryIndex
+	 */
+	public Integer getDeliveryIndex() {
+		return deliveryIndex;
+	}
+
+	/**
+	 * @param deliveryIndex the deliveryIndex to set
+	 */
+	public void setDeliveryIndex(Integer deliveryIndex) {
+		this.deliveryIndex = deliveryIndex;
+	}
 }

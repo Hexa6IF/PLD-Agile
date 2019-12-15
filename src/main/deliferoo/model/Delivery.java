@@ -7,76 +7,76 @@ package model;
  * @author louis
  */
 public class Delivery {
-    private SpecialNode deliveryNode;
-    private SpecialNode pickupNode;
-    private Integer deliveryIndex;
-    
-    public Delivery() {
-	
-    }
+	private SpecialNode deliveryNode;
+	private SpecialNode pickupNode;
+	private Integer deliveryIndex;
 
-    /**
-     * @param deliveryNode
-     * @param pickupNode
-     * @param deliveryIndex
-     */
-    public Delivery(SpecialNode deliveryNode, SpecialNode pickupNode, Integer deliveryIndex) {
-	this.deliveryNode = deliveryNode;
-	this.pickupNode = pickupNode;
-	this.deliveryIndex = deliveryIndex;
-    }
-    
-    public Delivery(Delivery delivery) {
-	this.deliveryNode = new SpecialNode(delivery.getDeliveryNode());
-	this.pickupNode = new SpecialNode(delivery.getPickupNode());
-	this.deliveryIndex = delivery.getDeliveryIndex();
-    }
+	public Delivery() {
 
-    /**
-     * @return the deliveryNode
-     */
-    public SpecialNode getDeliveryNode() {
-	return deliveryNode;
-    }
+	}
 
-    /**
-     * @param deliveryNode the deliveryNode to set
-     */
-    public void setDeliveryNode(SpecialNode deliveryNode) {
-	this.deliveryNode = deliveryNode;
-    }
+	/**
+	 * @param deliveryNode
+	 * @param pickupNode
+	 * @param deliveryIndex
+	 */
+	public Delivery(SpecialNode deliveryNode, SpecialNode pickupNode, Integer deliveryIndex) {
+		this.deliveryNode = deliveryNode;
+		this.pickupNode = pickupNode;
+		this.deliveryIndex = deliveryIndex;
+	}
 
-    /**
-     * @return the pickupNode
-     */
-    public SpecialNode getPickupNode() {
-	return pickupNode;
-    }
+	public Delivery(Delivery delivery) {
+		this.deliveryNode = new SpecialNode(delivery.getDeliveryNode());
+		this.pickupNode = new SpecialNode(delivery.getPickupNode());
+		this.deliveryIndex = delivery.getDeliveryIndex();
+	}
 
-    /**
-     * @param pickupNode the pickupNode to set
-     */
-    public void setPickupNode(SpecialNode pickupNode) {
-	this.pickupNode = pickupNode;
-    }
+	/**
+	 * @return the deliveryNode
+	 */
+	public SpecialNode getDeliveryNode() {
+		return deliveryNode;
+	}
 
-    /**
-     * @return the deliveryIndex
-     */
-    public Integer getDeliveryIndex() {
-	return this.deliveryIndex;
-    }
+	/**
+	 * @param deliveryNode the deliveryNode to set
+	 */
+	public void setDeliveryNode(SpecialNode deliveryNode) {
+		this.deliveryNode = deliveryNode;
+	}
 
-    @Override
-    public String toString() {
-	return "Delivery [deliveryNode=" + deliveryNode.toString() + ", pickupNode=" + pickupNode.toString()
-		+ ", deliveryIndex=" + deliveryIndex + "]";
-    }
+	/**
+	 * @return the pickupNode
+	 */
+	public SpecialNode getPickupNode() {
+		return pickupNode;
+	}
 
-    /**
-     * @param deliveryIndex the deliveryIndex to set
-     */
-    public void setDeliveryIndex(Integer deliveryIndex) {
-	this.deliveryIndex = deliveryIndex;
-    }
+	/**
+	 * @param pickupNode the pickupNode to set
+	 */
+	public void setPickupNode(SpecialNode pickupNode) {
+		this.pickupNode = pickupNode;
+	}
+
+	/**
+	 * @return the deliveryIndex
+	 */
+	public Integer getDeliveryIndex() {
+		return this.deliveryIndex;
+	}
+
+	@Override
+	public String toString() {
+		return "Delivery [deliveryNode=" + deliveryNode.toString() + ", pickupNode=" + pickupNode.toString()
+				+ ", deliveryIndex=" + deliveryIndex + "]";
+	}
+
+	/**
+	 * @param deliveryIndex the deliveryIndex to set
+	 */
+	public void setDeliveryIndex(Integer deliveryIndex) {
+		this.deliveryIndex = deliveryIndex;
+	}
 }

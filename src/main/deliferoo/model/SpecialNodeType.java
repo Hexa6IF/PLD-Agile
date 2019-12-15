@@ -1,12 +1,10 @@
 package model;
+
 /**
  * Enumeration of the types that a SpecialNode can take
  * 
- * @author 
+ * @author
  */
 public enum SpecialNodeType {
-	DROPOFF,
-	PICKUP,
-	START,
-	FINISH
+	DROPOFF, PICKUP, START, FINISH
 }

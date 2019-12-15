@@ -8,18 +8,18 @@ import javafx.stage.Stage;
  * @author sadsitha
  */
 public class App extends Application {
-    
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-	new Controller();
-    }
 
-    /**
-     * Main method
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-	launch(args);
-    }
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		new Controller();
+	}
+
+	/**
+	 * Main method
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		launch(args);
+	}
 }

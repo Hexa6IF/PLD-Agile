@@ -12,17 +12,18 @@ public class IteratorSeq implements Iterator<SpecialNode> {
 
 	/**
 	 * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
+	 * 
 	 * @param undiscovered
 	 * @param currentNode
 	 */
-	public IteratorSeq(Collection<SpecialNode> undiscovered, SpecialNode currentNode){
+	public IteratorSeq(Collection<SpecialNode> undiscovered, SpecialNode currentNode) {
 		this.candidates = new SpecialNode[undiscovered.size()];
 		nbCandidates = 0;
-		for (SpecialNode s : undiscovered){
+		for (SpecialNode s : undiscovered) {
 			candidates[nbCandidates++] = s;
 		}
 	}
-	
+
 	@Override
 	public boolean hasNext() {
 		return nbCandidates > 0;
@@ -34,6 +35,7 @@ public class IteratorSeq implements Iterator<SpecialNode> {
 	}
 
 	@Override
-	public void remove() {}
+	public void remove() {
+	}
 
 }

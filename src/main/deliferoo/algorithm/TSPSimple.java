@@ -12,14 +12,14 @@ import model.SpecialNode;
  */
 public class TSPSimple extends TSP {
 
-    public TSPSimple(Number speed) {
-	super(speed);
-    }
+	public TSPSimple(Number speed) {
+		super(speed);
+	}
 
-    @Override
-    int bound(SpecialNode currentNode, SpecialNode startNode, List<SpecialNode> undiscovered,
-	    Map<SpecialNode, Map<SpecialNode, Integer>> cost) {
-	return 0;
-    }
+	@Override
+	int bound(SpecialNode currentNode, SpecialNode startNode, List<SpecialNode> undiscovered,
+			Map<SpecialNode, Map<SpecialNode, Integer>> cost) {
+		return 0;
+	}
 
 }

@@ -8,13 +8,13 @@ package controller;
  */
 public interface Command {
 
-    /**
-     * Execute the current command
-     */
-    void doCmd();
+	/**
+	 * Execute the current command
+	 */
+	void doCmd();
 
-    /**
-     * Execute the inverse of the current command
-     */
-    void undoCmd();
+	/**
+	 * Execute the inverse of the current command
+	 */
+	void undoCmd();
 }
