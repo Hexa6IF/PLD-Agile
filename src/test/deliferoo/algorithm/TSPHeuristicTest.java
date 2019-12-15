@@ -19,26 +19,6 @@ import xml.XMLParser;
 
 public class TSPHeuristicTest {
 
-	/* Test Louis
-	 * 
-    @Test
-    public void testSearchSolution() {
-	TSP tsp = new TSPHeuristic();
-	//TSP tsp = new TSPSimple();
-	final Integer timeLimit = 1000000;
-	XMLParser parser = XMLParser.getInstance();
-	//FullMap map = parser.parseMap(new File("src/main/resources/petitPlan.xml"));
-	FullMap map = parser.parseMap(new File("src/main/resources/grandPlan.xml"));
-	//List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandePetit2.xml"), map);
-	List<Delivery> deliveries = parser.parseDeliveries(new File("src/main/resources/demandeGrand9.xml"), map);
-	Map<String, Map<String, BestPath>> graph = new HashMap<String, Map<String, BestPath>>();	
-	
-	graph = Dijkstra.calculateAllShortestPaths(deliveries, map);
-	tsp.searchSolution(timeLimit, graph, deliveries);
-	List<BestPath> solution = tsp.getBestPathSolution();
-	Integer totalCost = tsp.getBestSolutionCost();
-    }
-    */
     @Test
     public void testTimerGetBestPath() {
 
